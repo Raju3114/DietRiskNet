@@ -1,0 +1,154 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: 240 6% 5%;
+    --foreground: 210 20% 98%;
+    --card: 240 5% 9%;
+    --card-foreground: 210 20% 98%;
+    --popover: 240 5% 9%;
+    --popover-foreground: 210 20% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 20% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 20% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 240 5.9% 12%;
+    --input: 240 5.9% 12%;
+    --ring: 224.3 76.3% 48%;
+    --radius: 1rem;
+  }
+
+  .dark {
+    --background: 240 6% 5%;
+    --foreground: 210 20% 98%;
+    --card: 240 5% 9%;
+    --card-foreground: 210 20% 98%;
+    --popover: 240 5% 9%;
+    --popover-foreground: 210 20% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 20% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 20% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 240 5.9% 12%;
+    --input: 240 5.9% 12%;
+    --ring: 224.3 76.3% 48%;
+  }
+}
+
+@theme {
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-input: rgba(255, 255, 255, 0.08);
+  --color-ring: #2563EB;
+  --color-background: #09090B;
+  --color-foreground: #ffffff;
+  
+  --color-primary: #2563EB;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #111827;
+  --color-secondary-foreground: #CBD5E1;
+  --color-destructive: #EF4444;
+  --color-destructive-foreground: #ffffff;
+  --color-muted: #111827;
+  --color-muted-foreground: #CBD5E1;
+  --color-accent: #2563EB;
+  --color-accent-foreground: #ffffff;
+  --color-popover: #111827;
+  --color-popover-foreground: #ffffff;
+  --color-card: #161B22;
+  --color-card-foreground: #ffffff;
+  
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  /* Brand and Accents - Clinical AI Palette */
+  --color-brand-blue: #2563EB;
+  --color-brand-blue-hover: #1d4ed8;
+  --color-brand-emerald: #10B981;
+  --color-brand-cyan: #06B6D4;
+  --color-brand-orange: #F59E0B;
+  --color-brand-red: #EF4444;
+  --color-nutrition-green: #22C55E;
+  --color-healthy-lime: #84CC16;
+  --color-secondary-text: #CBD5E1;
+  
+  /* Charcoal shades mapped to specific background and card definitions */
+  --color-charcoal-dark: #09090B;
+  --color-charcoal-medium: #111827;
+  --color-charcoal-light: #161B22;
+  --color-charcoal-border: rgba(255, 255, 255, 0.08);
+}
+
+body {
+  background-color: #09090B;
+  color: #ffffff;
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+/* Glassmorphism custom panels */
+.glass-panel {
+  background: rgba(18, 18, 22, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.dark .glass {
+  background: rgba(18, 18, 22, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Glowing effects for premium indicators */
+.glow-blue {
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.15);
+}
+
+.glow-emerald {
+  box-shadow: 0 0 25px rgba(16, 185, 129, 0.15);
+}
+
+.glow-cyan {
+  box-shadow: 0 0 25px rgba(6, 182, 212, 0.15);
+}
+
+.glow-orange {
+  box-shadow: 0 0 25px rgba(249, 115, 22, 0.15);
+}
+
+.glow-red {
+  box-shadow: 0 0 25px rgba(239, 68, 68, 0.15);
+}
+
+.glow-purple {
+  box-shadow: 0 0 25px rgba(168, 85, 247, 0.12);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.2);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.4);
+}

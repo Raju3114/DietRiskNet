@@ -1,0 +1,10 @@
+{
+    "weights": {
+        "DCI": 0.25,
+        "NIS": 0.25,
+        "Diabetes": 0.2,
+        "Obesity": 0.15,
+        "Hypertension": 0.1,
+        "Deficiency": 0.05
+    }
+}

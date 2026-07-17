@@ -1,0 +1,18 @@
+{
+    "High Consistency": [
+        0.85,
+        1.0
+    ],
+    "Moderate Consistency": [
+        0.7,
+        0.85
+    ],
+    "Low Consistency": [
+        0.5,
+        0.7
+    ],
+    "Very Low Consistency": [
+        0.0,
+        0.5
+    ]
+}

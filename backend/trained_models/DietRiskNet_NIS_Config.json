@@ -1,0 +1,32 @@
+{
+    "RDI": {
+        "Calories": 2000,
+        "Protein": 60,
+        "Carbs": 300,
+        "Fat": 65,
+        "Sodium": 2300,
+        "Fiber": 30
+    },
+    "Thresholds": {
+        "Balanced Diet": [
+            0.0,
+            0.2
+        ],
+        "Mild Imbalance": [
+            0.2,
+            0.4
+        ],
+        "Moderate Imbalance": [
+            0.4,
+            0.6
+        ],
+        "High Imbalance": [
+            0.6,
+            0.8
+        ],
+        "Severe Imbalance": [
+            0.8,
+            999
+        ]
+    }
+}

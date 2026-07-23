@@ -16,8 +16,19 @@ def crop_image(image_path_or_bytes: Union[str, bytes], box: tuple) -> bytes:
             image = Image.open(io.BytesIO(image_path_or_bytes))
             
         x1, y1, x2, y2 = box
-        # PIL crop expects (left, upper, right, lower)
-        cropped_img = image.crop((x1, y1, x2, y2))
+        width, height = image.size
+        # Clamp coordinates to image boundaries
+        x1 = max(0.0, min(float(x1), float(width)))
+        y1 = max(0.0, min(float(y1), float(height)))
+        x2 = max(0.0, min(float(x2), float(width)))
+        y2 = max(0.0, min(float(y2), float(height)))
+        
+        if x2 <= x1 or y2 <= y1:
+            app_logger.warning(f"Invalid crop coordinates {(x1, y1, x2, y2)} for image size {image.size}. Falling back to full image.")
+            cropped_img = image
+        else:
+            # PIL crop expects (left, upper, right, lower)
+            cropped_img = image.crop((x1, y1, x2, y2))
         
         output_buffer = io.BytesIO()
         cropped_img.save(output_buffer, format="PNG")

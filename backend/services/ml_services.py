@@ -91,7 +91,22 @@ class FoodClassificationService:
             
             checkpoint = torch.load(model_path, map_location=self.device)
             self.class_names = checkpoint.get("class_names", [])
-            state_dict = checkpoint["model_state_dict"]
+            if not self.class_names:
+                import json
+                classes_path = os.path.join(settings.MODELS_DIR, "efficientnet_classes.json")
+                if os.path.exists(classes_path):
+                    with open(classes_path, "r", encoding="utf-8") as f:
+                        self.class_names = json.load(f)
+                    ml_logger.info(f"Loaded class names from {classes_path}")
+                else:
+                    raise FileNotFoundError(f"class_names not in checkpoint and {classes_path} not found.")
+
+            if "model_state_dict" in checkpoint:
+                state_dict = checkpoint["model_state_dict"]
+            elif "model" in checkpoint:
+                state_dict = checkpoint["model"]
+            else:
+                state_dict = checkpoint
             
             # Dynamically determine the architecture (B0 vs B3) based on state dict shape
             # B3 stem conv_stem.weight out_channels is 40, B0 is 32.

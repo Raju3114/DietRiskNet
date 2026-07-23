@@ -36,6 +36,21 @@ fusion_service = RiskFusionService()
 explain_diet_service = ExplainDietService()
 meal_db_service = MealService()
 
+DEFAULT_SERVING_WEIGHTS = {
+    "idli": 60.0,
+    "masala_dosa": 180.0,
+    "plain_dosa": 150.0,
+    "chapati": 40.0,
+    "rice": 180.0,
+    "fried_rice": 250.0,
+    "burger": 220.0,
+    "pizza": 150.0,
+    "samosa": 100.0,
+    "jalebi": 50.0,
+    "tea": 150.0,
+    "coffee": 150.0
+}
+
 @router.post("/upload")
 def upload_file(file: UploadFile = File(...), current_user: User = Depends(get_current_user)):
     ext = os.path.splitext(file.filename)[1].lower()
@@ -202,18 +217,14 @@ def analyze_meal(file: UploadFile = File(...), notes: str = Form(""), db: Sessio
                 food_name = classification["class_name"]
                 conf = classification["confidence"]
             except Exception as e:
-                api_logger.error(f"Classification crop failed, defaulting class name. Error: {e}")
-                food_name = "Chapati" # default fallback
-                conf = 0.5
+                api_logger.error(f"Classification crop failed for box {(x1, y1, x2, y2)}. Skipping detection. Error: {e}")
+                continue
                 
             fact = nutrition_service.lookup(food_name)
             
-            # Simple heuristic weight estimate based on box size relative to typical image sizes
-            area = (x2 - x1) * (y2 - y1)
-            weight = max(50.0, min(500.0, (area / 10000.0) * 100.0))
-            if weight == 50.0:
-                # If area is 0 or full image crop, set a standard weight
-                weight = 150.0
+            # Lookup the serving size
+            lookup_name = food_name.lower().strip().replace(" ", "_")
+            weight = DEFAULT_SERVING_WEIGHTS.get(lookup_name, 100.0)
                 
             scale = weight / 100.0
             

@@ -47,7 +47,7 @@ export default function ResearchPage() {
             <h2 className="text-sm font-bold text-white uppercase tracking-wider">1. Vision-Language Crop Segmentation</h2>
           </div>
           <p className="text-xs text-zinc-400 leading-relaxed font-semibold">
-            DietRiskNet implements a dual-stage vision architecture. First, a custom **YOLOv8** model performs multi-class object detection, generating localized bounding box coordinate matrices for food items in a single scan. Each recognized region is then cropped and processed through a fine-tuned **EfficientNet-B0** convolutional neural network, classifying crops into 360 unique food types.
+            DietRiskNet implements a dual-stage vision architecture. First, a custom **YOLOv8** model performs multi-class object detection, generating localized bounding box coordinate matrices for food items in a single scan. Each recognized region is then cropped and processed through a fine-tuned **EfficientNet-B3** convolutional neural network, classifying crops into 118 unique food types.
           </p>
           <div className="p-5.5 rounded-2xl bg-charcoal-medium/50 border border-charcoal-border space-y-3.5 shadow-md">
             <span className="text-[9px] font-extrabold text-zinc-400 uppercase tracking-widest block">Model Specifications</span>
@@ -58,7 +58,7 @@ export default function ResearchPage() {
               </li>
               <li className="flex items-start space-x-3">
                 <CheckCircle className="h-4 w-4 text-brand-cyan mt-0.5 shrink-0" />
-                <span className="font-semibold text-zinc-305">EfficientNet Backbone: Configurable (defaults to B0 with 360 food classification matrices)</span>
+                <span className="font-semibold text-zinc-305">EfficientNet Backbone: Configurable (defaults to B3 with 118 food classification matrices)</span>
               </li>
               <li className="flex items-start space-x-3">
                 <CheckCircle className="h-4 w-4 text-brand-cyan mt-0.5 shrink-0" />

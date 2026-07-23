@@ -25,7 +25,7 @@ export default function UploadPage() {
     'Compiling bounding box coordinates matrix...',
     'Cropping food item region matrices...',
     'Running EfficientNet Deep Classifier...',
-    'Classifying items into 360 nutritional bounds...',
+    'Classifying items into 118 nutritional bounds...',
     'Mapping to Indian food composition table database...',
     'Calculating cumulative NIS imbalance values...',
     'Generating Timing and Portion Consistency Index (DCI)...',

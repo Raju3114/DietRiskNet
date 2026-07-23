@@ -8,6 +8,7 @@ import {
   ArrowRight, ShieldAlert, Sparkles, Scale, Beef, Wheat, Droplet, Flame, Eye, Activity
 } from 'lucide-react';
 import Link from 'next/link';
+import { API_BASE } from '../../services/api';
 
 export default function AnalysisPage() {
   const router = useRouter();
@@ -28,8 +29,9 @@ export default function AnalysisPage() {
   const { items, nutrition, dci, dci_level, nis, nis_level, image_path } = currentAnalysis;
 
   // Resolve backend server uploads path (remove static prefix or append base URL)
+  const backendBase = API_BASE.replace(/\/api$/, '');
   const fullImageUrl = image_path 
-    ? (image_path.startsWith('http') ? image_path : `http://localhost:8000${image_path}`)
+    ? (image_path.startsWith('http') ? image_path : `${backendBase}${image_path}`)
     : '/favicon.ico';
 
   const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {

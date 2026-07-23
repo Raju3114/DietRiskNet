@@ -13,7 +13,10 @@ class Settings(BaseSettings):
     DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./dietrisknet.db")
 
     # Paths to ML Models
-    MODELS_DIR: str = os.getenv("MODELS_DIR", r"d:\DietRiskNet\backend\trained_models")
+    MODELS_DIR: str = os.getenv(
+        "MODELS_DIR",
+        os.path.abspath(os.path.join(os.path.dirname(__file__), "trained_models"))
+    )
     YOLO_MODEL_PATH: str = os.path.join(MODELS_DIR, "DietRiskNet_FoodDetector_YOLOv8.pt")
     
     # Food Classifier Model (Configurable via Environment Variable!)
@@ -31,10 +34,16 @@ class Settings(BaseSettings):
     RISK_FUSION_CONFIG_PATH: str = os.path.join(MODELS_DIR, "DietRiskNet_RiskFusion_Config.json")
 
     # Nutrition database
-    NUTRITION_CSV_PATH: str = os.getenv("NUTRITION_CSV_PATH", r"d:\DietRiskNet\nutrition\indian_food_nutrition_processed.csv")
+    NUTRITION_CSV_PATH: str = os.getenv(
+        "NUTRITION_CSV_PATH",
+        os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "nutrition", "indian_food_nutrition_processed.csv"))
+    )
 
     # File uploads directory
-    UPLOAD_DIR: str = os.getenv("UPLOAD_DIR", r"d:\DietRiskNet\backend\uploads")
+    UPLOAD_DIR: str = os.getenv(
+        "UPLOAD_DIR",
+        os.path.abspath(os.path.join(os.path.dirname(__file__), "uploads"))
+    )
 
     class Config:
         case_sensitive = True

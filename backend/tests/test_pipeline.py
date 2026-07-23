@@ -63,7 +63,7 @@ def run_verification_test():
     print("[3/9] All ML & clinical services loaded successfully.")
 
     # 4. Load real sample food image
-    sample_image_path = r"d:\DietRiskNet\datasets\sample_meal.png"
+    sample_image_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "datasets", "sample_meal.png"))
     if not os.path.exists(sample_image_path):
         print(f"ERROR: Sample meal image not found at {sample_image_path}!")
         sys.exit(1)

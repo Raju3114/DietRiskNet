@@ -3,7 +3,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 # Create logs directory
-LOGS_DIR = r"d:\DietRiskNet\backend\logs"
+LOGS_DIR = os.getenv("LOGS_DIR", os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "logs")))
 os.makedirs(LOGS_DIR, exist_ok=True)
 
 # Central formatter

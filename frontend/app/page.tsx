@@ -66,13 +66,13 @@ export default function LandingPage() {
         <div className="absolute bottom-20 left-1/3 w-[300px] h-[300px] bg-brand-cyan/5 rounded-full blur-[100px] pointer-events-none" />
         <div className="absolute top-1/3 right-1/4 w-[250px] h-[250px] bg-brand-emerald/4 rounded-full blur-[80px] pointer-events-none" />
 
-        <motion.div 
+        <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
           className="flex flex-col items-center"
         >
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full border border-brand-blue/20 bg-brand-blue/5 text-brand-blue text-[9px] font-bold uppercase tracking-widest mb-8 z-10 glow-blue"
           >
@@ -80,7 +80,7 @@ export default function LandingPage() {
             <span>Clinical AI Predictive Systems Platform</span>
           </motion.div>
 
-          <motion.h1 
+          <motion.h1
             variants={itemVariants}
             className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-8 z-10 leading-[1.1] max-w-4xl"
           >
@@ -90,14 +90,14 @@ export default function LandingPage() {
             </span>
           </motion.h1>
 
-          <motion.p 
+          <motion.p
             variants={itemVariants}
             className="text-xs md:text-sm text-zinc-400 max-w-2xl mb-12 z-10 leading-relaxed font-semibold uppercase tracking-wider"
           >
             An advanced clinical diagnostics system. Detect nutritional profiles via YOLOv8 crops, map composition tables, compile DCI/NIS indices, and predict metabolic risks.
           </motion.p>
 
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 z-10 mb-24"
           >
@@ -111,7 +111,7 @@ export default function LandingPage() {
           </motion.div>
 
           {/* Interactive 7-Stage Workflow Visualization */}
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="w-full max-w-5xl z-10 mb-28 text-left"
           >
@@ -119,12 +119,12 @@ export default function LandingPage() {
               <span className="text-[9px] text-brand-blue font-extrabold uppercase tracking-widest block mb-2">Automated Inference</span>
               <h2 className="text-xl md:text-2xl font-bold uppercase tracking-wider text-white">Interactive Processing Pipeline</h2>
             </div>
-            
+
             <div className="grid grid-cols-2 md:grid-cols-7 gap-3.5 relative">
               {[
                 { step: "01", name: "Upload Meal", icon: Brain, desc: "Patient submits meal asset.", color: "text-brand-blue border-brand-blue/20 bg-brand-blue/5 glow-blue" },
                 { step: "02", name: "YOLO Detection", icon: Activity, desc: "Localization of crop boundaries.", color: "text-brand-cyan border-brand-cyan/20 bg-brand-cyan/5 glow-cyan" },
-                { step: "03", name: "EfficientNet", icon: Sparkles, desc: "B0 classifier identifies 360 items.", color: "text-brand-orange border-brand-orange/20 bg-brand-orange/5 glow-orange" },
+                { step: "03", name: "EfficientNet", icon: Sparkles, desc: "EfficientNet-B3 classifier identifies 118 food classes.", color: "text-brand-orange border-brand-orange/20 bg-brand-orange/5 glow-orange" },
                 { step: "04", name: "Nutrition Lookup", icon: CheckCircle2, desc: "RDI mapping from database.", color: "text-brand-emerald border-brand-emerald/20 bg-brand-emerald/5 glow-emerald" },
                 { step: "05", name: "Disease Risk", icon: ShieldAlert, desc: "XGBoost diagnostic classifiers.", color: "text-brand-red border-brand-red/20 bg-brand-red/5 glow-red" },
                 { step: "06", name: "Risk Fusion", icon: Activity, desc: "Weighted clinical score formula.", color: "text-brand-blue border-brand-blue/20 bg-brand-blue/5 glow-blue" },
@@ -147,7 +147,7 @@ export default function LandingPage() {
           </motion.div>
 
           {/* Research & Tech Showcase */}
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="grid grid-cols-1 md:grid-cols-3 gap-6.5 w-full z-10"
           >

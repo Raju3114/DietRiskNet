@@ -26,25 +26,38 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('[RegisterPage] Form submitted.');
+    console.log('[RegisterPage] Email:', email);
+    console.log('[RegisterPage] Full Name:', fullName);
     setLoading(true);
     setError('');
 
     try {
+      console.log('[RegisterPage] Triggering api.register...');
       const res = await api.register({
         email,
         password,
         full_name: fullName,
       });
+      console.log('[RegisterPage] api.register resolved successfully:', res);
+      
+      console.log('[RegisterPage] Calling setAuth...');
       setAuth(res.access_token, res.refresh_token, {
         id: res.user_id,
         email: res.email,
         full_name: res.full_name,
       });
+      console.log('[RegisterPage] setAuth succeeded.');
+      
+      console.log('[RegisterPage] Redirecting to /dashboard...');
       router.push('/dashboard');
+      console.log('[RegisterPage] router.push executed.');
     } catch (err) {
+      console.error('[RegisterPage] Exception caught in handleSubmit:', err);
       const error = err instanceof Error ? err : new Error(String(err));
       setError(error.message || 'Registration failed. Try a different email.');
     } finally {
+      console.log('[RegisterPage] Finally block reached. Setting loading to false.');
       setLoading(false);
     }
   };

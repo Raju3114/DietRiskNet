@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuthStore, useAppStore } from '../lib/store';
@@ -16,6 +16,11 @@ export default function Sidebar() {
   const { user, clearAuth } = useAuthStore();
   const { theme, toggleTheme } = useAppStore();
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const menuItems = [
     { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
@@ -50,7 +55,13 @@ export default function Sidebar() {
             onClick={toggleTheme} 
             className="p-2 rounded-lg bg-charcoal-medium border border-charcoal-border text-zinc-300 hover:text-white transition-colors"
           >
-            {theme === 'dark' ? <Sun className="h-4.5 w-4.5 text-amber-500" /> : <Moon className="h-4.5 w-4.5 text-brand-blue" />}
+            {!mounted ? (
+              <div className="h-4.5 w-4.5" />
+            ) : theme === 'dark' ? (
+              <Sun className="h-4.5 w-4.5 text-amber-500" />
+            ) : (
+              <Moon className="h-4.5 w-4.5 text-brand-blue" />
+            )}
           </button>
           <button onClick={toggleMobileMenu} className="p-2 rounded-lg bg-charcoal-medium border border-charcoal-border text-zinc-300 hover:text-white transition-colors">
             {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -132,10 +143,18 @@ export default function Sidebar() {
             className="flex items-center justify-between w-full px-4 py-3 rounded-xl hover:bg-charcoal-medium/55 text-[10px] font-bold uppercase tracking-wider text-zinc-400 hover:text-white transition-colors border border-transparent hover:border-charcoal-border/50"
           >
             <span className="flex items-center space-x-3.5">
-              {theme === 'dark' ? <Sun className="h-4 w-4 text-brand-orange" /> : <Moon className="h-4 w-4 text-brand-blue" />}
-              <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+              {!mounted ? (
+                <div className="h-4 w-4" />
+              ) : theme === 'dark' ? (
+                <Sun className="h-4 w-4 text-brand-orange" />
+              ) : (
+                <Moon className="h-4 w-4 text-brand-blue" />
+              )}
+              <span>{!mounted ? 'Mode' : theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
             </span>
-            <span className="text-[8px] px-2 py-0.5 rounded bg-charcoal-medium/80 border border-charcoal-border text-zinc-450 uppercase">{theme}</span>
+            <span className="text-[8px] px-2 py-0.5 rounded bg-charcoal-medium/80 border border-charcoal-border text-zinc-450 uppercase">
+              {!mounted ? '...' : theme}
+            </span>
           </button>
           
           <button 

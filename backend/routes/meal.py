@@ -13,28 +13,17 @@ from backend.schemas.schemas import (
     NutritionAnalysisResponse, CalculateDCIRequest, CalculateDCIResponse,
     CalculateNISRequest, CalculateNISResponse, MealAnalysisResponse, MealItemBase, BoundingBox
 )
-from backend.services.ml_services import FoodDetectionService, FoodClassificationService
-from backend.services.nutrition_service import NutritionService
-from backend.services.indices_services import DCIService, NISService
-from backend.services.prediction_service import DiseasePredictionService
-from backend.services.risk_fusion_service import RiskFusionService
-from backend.services.recommendation_service import ExplainDietService
-from backend.services.user_services import MealService
+from backend.services.ml_services import detector_service, classifier_service
+from backend.services.nutrition_service import nutrition_service
+from backend.services.indices_services import dci_service, nis_service
+from backend.services.prediction_service import prediction_service
+from backend.services.risk_fusion_service import fusion_service
+from backend.services.recommendation_service import explain_diet_service
+from backend.services.user_services import meal_db_service
 from backend.utils.image_utils import crop_image
 from backend.utils.logger import api_logger
 
 router = APIRouter(prefix="", tags=["Meal Pipeline"])
-
-# Instantiate services
-detector_service = FoodDetectionService()
-classifier_service = FoodClassificationService()
-nutrition_service = NutritionService()
-dci_service = DCIService()
-nis_service = NISService()
-prediction_service = DiseasePredictionService()
-fusion_service = RiskFusionService()
-explain_diet_service = ExplainDietService()
-meal_db_service = MealService()
 
 DEFAULT_SERVING_WEIGHTS = {
     "idli": 60.0,

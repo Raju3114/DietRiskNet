@@ -8,17 +8,12 @@ from backend.schemas.schemas import (
     RiskFusionRequest, RiskFusionResponse,
     ExplainDietRequest, ExplainDietResponse
 )
-from backend.services.prediction_service import DiseasePredictionService
-from backend.services.risk_fusion_service import RiskFusionService
-from backend.services.recommendation_service import ExplainDietService
+from backend.services.prediction_service import prediction_service as pred_service
+from backend.services.risk_fusion_service import fusion_service as rf_service
+from backend.services.recommendation_service import explain_diet_service as rec_service
 from backend.utils.logger import api_logger
 
 router = APIRouter(prefix="", tags=["ML Predictions & Recommendations"])
-
-# Instantiate services
-pred_service = DiseasePredictionService()
-rf_service = RiskFusionService()
-rec_service = ExplainDietService()
 
 @router.post("/predict-diabetes", response_model=DiseasePredictionResponse)
 def predict_diabetes(data: DiseasePredictionRequest):

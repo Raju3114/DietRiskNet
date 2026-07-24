@@ -1,21 +1,18 @@
 import os
 from typing import Union
-import torch
-import torchvision.transforms as T
 from PIL import Image
 import io
-from ultralytics import YOLO
-import timm
+import gc
 from backend.config import settings
 from backend.utils.logger import ml_logger
 
 class FoodDetectionService:
     def __init__(self):
         self.model = None
-        self.load_model()
 
     def load_model(self):
         try:
+            from ultralytics import YOLO
             ml_logger.info(f"Loading YOLOv8 detector from {settings.YOLO_MODEL_PATH}")
             self.model = YOLO(settings.YOLO_MODEL_PATH)
             ml_logger.info("YOLOv8 detector loaded successfully.")
@@ -68,11 +65,19 @@ class FoodClassificationService:
     def __init__(self):
         self.model = None
         self.class_names = []
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.load_model()
+        self.device = None
 
     def load_model(self):
         try:
+            import torch
+            import timm
+            
+            # Optimize Torch threads and gradients
+            torch.set_num_threads(1)
+            torch.set_grad_enabled(False)
+            
+            self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+            
             model_file = settings.FOOD_CLASSIFIER_MODEL
             model_path = os.path.join(settings.MODELS_DIR, model_file)
             
@@ -109,7 +114,6 @@ class FoodClassificationService:
                 state_dict = checkpoint
             
             # Dynamically determine the architecture (B0 vs B3) based on state dict shape
-            # B3 stem conv_stem.weight out_channels is 40, B0 is 32.
             arch = "efficientnet_b0"
             if "conv_stem.weight" in state_dict:
                 out_channels = state_dict["conv_stem.weight"].shape[0]
@@ -130,6 +134,11 @@ class FoodClassificationService:
             # Set target crop size based on loaded architecture
             self.crop_size = 300 if arch == "efficientnet_b3" else 224
             
+            # Immediately delete temporary loader maps and collect garbage
+            del checkpoint
+            del state_dict
+            gc.collect()
+            
             ml_logger.info(f"Classifier model loaded successfully with {len(self.class_names)} classes.")
         except Exception as e:
             ml_logger.error(f"Failed to load Classifier: {e}")
@@ -143,6 +152,9 @@ class FoodClassificationService:
         if self.model is None:
             self.load_model()
         try:
+            import torch
+            import torchvision.transforms as T
+            
             # Load and preprocess crop
             img = Image.open(io.BytesIO(crop_image_bytes)).convert("RGB")
             
@@ -167,6 +179,13 @@ class FoodClassificationService:
                 predicted_class = self.class_names[class_index]
                 
             ml_logger.info(f"Classified food: {predicted_class} with confidence {confidence_score:.4f}")
+            
+            # Force cleanup of temporary tensors
+            del input_tensor
+            del outputs
+            del probabilities
+            gc.collect()
+            
             return {
                 "class_name": predicted_class,
                 "confidence": confidence_score
@@ -174,3 +193,7 @@ class FoodClassificationService:
         except Exception as e:
             ml_logger.error(f"Error in food classification inference: {e}")
             raise e
+
+# Singletons for the ML Services
+detector_service = FoodDetectionService()
+classifier_service = FoodClassificationService()

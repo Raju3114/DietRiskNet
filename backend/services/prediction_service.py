@@ -1,16 +1,17 @@
 import os
 import pickle
-import pandas as pd
-import numpy as np
+import gc
 from backend.config import settings
 from backend.utils.logger import ml_logger
 
 class DiseasePredictionService:
     def __init__(self):
         self.models = {}
-        self.load_models()
 
     def load_models(self):
+        if self.models:
+            return
+            
         model_files = {
             "diabetes": settings.DIABETES_MODEL_PATH,
             "obesity": settings.OBESITY_MODEL_PATH,
@@ -30,6 +31,7 @@ class DiseasePredictionService:
             except Exception as e:
                 ml_logger.error(f"Failed to load {key} XGBoost model: {e}")
                 raise e
+        gc.collect()
 
     def predict_all(self, age: int, gender: str, height: float, weight: float, 
                     meal_nutrition_dict: dict, dci: float, nis: float, 
@@ -37,6 +39,9 @@ class DiseasePredictionService:
         """
         Executes all four XGBoost prediction pipelines and returns risk scores.
         """
+        if not self.models:
+            self.load_models()
+
         # Calculate BMI
         bmi = 22.0
         if height > 0:
@@ -62,10 +67,13 @@ class DiseasePredictionService:
         }
 
     def predict_diabetes(self, age: int, gender: str, bmi: float, existing_conditions: list) -> float:
+        if not self.models:
+            self.load_models()
         model = self.models.get("diabetes")
         if model is None:
             return 0.1
         try:
+            import pandas as pd
             # Features: ['gender', 'age', 'hypertension', 'heart_disease', 'smoking_history', 'bmi', 'HbA1c_level', 'blood_glucose_level']
             has_hypertension = 1 if "hypertension" in existing_conditions else 0
             has_heart_disease = 1 if "heart_disease" in existing_conditions else 0
@@ -99,14 +107,18 @@ class DiseasePredictionService:
 
     def predict_obesity(self, age: int, gender: str, height: float, weight: float, bmi: float, 
                         meal_nutrition_dict: dict) -> float:
+        if not self.models:
+            self.load_models()
         model = self.models.get("obesity")
         if model is None:
             return 0.1
         try:
+            import pandas as pd
+            import numpy as np
             # Features: ['Gender', 'Age', 'Height', 'Weight', 'family_history', 'FAVC', 'FCVC', 'NCP', 'CAEC', 'SMOKE', 'CH2O', 'SCC', 'FAF', 'TUE', 'CALC', 'MTRANS']
-            # AVC: High caloric food consumption. If calories > 700 -> 'yes'
+            # FAVC: High caloric food consumption. If calories > 700 -> 'yes'
             favc = 'yes' if meal_nutrition_dict.get("calories", 0) > 700 else 'no'
-            # CVC: Vegetable frequency. Based on fiber. If fiber > 5g -> 3.0, if > 2g -> 2.0, else 1.0
+            # FCVC: Vegetable frequency. Based on fiber. If fiber > 5g -> 3.0, if > 2g -> 2.0, else 1.0
             fiber = meal_nutrition_dict.get("fiber", 0)
             fcvc = 3.0 if fiber > 5.0 else (2.0 if fiber > 2.0 else 1.0)
             
@@ -144,10 +156,13 @@ class DiseasePredictionService:
 
     def predict_hypertension(self, age: int, bmi: float, meal_nutrition_dict: dict, 
                              existing_conditions: list) -> float:
+        if not self.models:
+            self.load_models()
         model = self.models.get("hypertension")
         if model is None:
             return 0.1
         try:
+            import pandas as pd
             # Features: ['Age', 'Salt_Intake', 'Stress_Score', 'BP_History', 'Sleep_Duration', 'BMI', 'Medication', 'Family_History', 'Exercise_Level', 'Smoking_Status']
             # Sodium is in mg. Convert to estimated salt intake in grams (1g salt ~ 400mg sodium)
             sodium = meal_nutrition_dict.get("sodium", 0.0)
@@ -182,10 +197,14 @@ class DiseasePredictionService:
 
     def predict_deficiency(self, age: int, gender: str, bmi: float, meal_nutrition_dict: dict, 
                            existing_conditions: list) -> float:
+        if not self.models:
+            self.load_models()
         model = self.models.get("deficiency")
         if model is None:
             return 0.1
         try:
+            import pandas as pd
+            import numpy as np
             # Features: ['age', 'gender', 'bmi', 'smoking_status', 'alcohol_consumption', 'exercise_level', 'diet_type', 'sun_exposure', 'income_level', 'latitude_region', ...]
             # Compare meal nutrient levels to RDI and calculate RDA percentages
             vit_c_pct = min(100.0, (meal_nutrition_dict.get("vitamin_c", 0.0) / 90.0) * 100.0)
@@ -223,7 +242,7 @@ class DiseasePredictionService:
                 'has_night_blindness': 0,
                 'has_fatigue': 0,
                 'has_bleeding_gums': 0,
-                'has_bone_paint': 0, # wait! Let's look at the exact spelling in the dataset
+                'has_bone_paint': 0,
                 'has_bone_pain': 0,
                 'has_muscle_weakness': 0,
                 'has_numbness_tingling': 0,
@@ -232,17 +251,12 @@ class DiseasePredictionService:
                 'has_multiple_deficiencies': has_deficiency
             }
             
-            # The columns in the dataset keys:
-            # Let's inspect the model features in we printed:
-            # 'has_bone_pain' was correct in printout.
-            # Let's clean standard fields to match exact feature_names_in_
             features = model.feature_names_in_
             filtered_inp = {}
             for f in features:
                 if f in inp:
                     filtered_inp[f] = inp[f]
                 else:
-                    # Default backup
                     filtered_inp[f] = 0.0
                     
             df = pd.DataFrame([filtered_inp])
@@ -256,3 +270,6 @@ class DiseasePredictionService:
         except Exception as e:
             ml_logger.error(f"Error predicting nutritional deficiency: {e}")
             return 0.1
+
+# Singleton instance of the DiseasePredictionService
+prediction_service = DiseasePredictionService()

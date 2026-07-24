@@ -102,3 +102,6 @@ class ExplainDietService:
             })
 
         return recommendations
+
+# Singleton instance of ExplainDietService
+explain_diet_service = ExplainDietService()

@@ -150,3 +150,7 @@ class NISService:
                 break
                 
         return nis_score, nis_level
+
+# Singleton instances of indices services
+dci_service = DCIService()
+nis_service = NISService()

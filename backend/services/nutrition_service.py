@@ -195,3 +195,6 @@ class NutritionService:
             "vitamin_c": 0.0,
             "folate": 0.0
         }
+
+# Singleton instance of NutritionService
+nutrition_service = NutritionService()

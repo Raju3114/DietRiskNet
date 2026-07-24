@@ -2,77 +2,89 @@
 
 @layer base {
   :root {
-    --background: 240 6% 5%;
-    --foreground: 210 20% 98%;
-    --card: 240 5% 9%;
-    --card-foreground: 210 20% 98%;
-    --popover: 240 5% 9%;
-    --popover-foreground: 210 20% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 20% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 20% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 20% 98%;
-    --border: 240 5.9% 12%;
-    --input: 240 5.9% 12%;
-    --ring: 224.3 76.3% 48%;
+    --background: #f9fafb;
+    --foreground: #111827;
+    --card: #ffffff;
+    --card-foreground: #111827;
+    --popover: #ffffff;
+    --popover-foreground: #111827;
+    --primary: #2563EB;
+    --primary-foreground: #ffffff;
+    --secondary: #f3f4f6;
+    --secondary-foreground: #1f2937;
+    --muted: #f3f4f6;
+    --muted-foreground: #6b7280;
+    --accent: #2563EB;
+    --accent-foreground: #ffffff;
+    --destructive: #EF4444;
+    --destructive-foreground: #ffffff;
+    --border: #e5e7eb;
+    --input: #e5e7eb;
     --radius: 1rem;
+    
+    --charcoal-dark: #ffffff;
+    --charcoal-medium: #f3f4f6;
+    --charcoal-light: #f9fafb;
+    --charcoal-border: #e5e7eb;
+    --secondary-text: #4b5563;
+    
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --glass-border: rgba(0, 0, 0, 0.08);
   }
 
   .dark {
-    --background: 240 6% 5%;
-    --foreground: 210 20% 98%;
-    --card: 240 5% 9%;
-    --card-foreground: 210 20% 98%;
-    --popover: 240 5% 9%;
-    --popover-foreground: 210 20% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 20% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 20% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 20% 98%;
-    --border: 240 5.9% 12%;
-    --input: 240 5.9% 12%;
-    --ring: 224.3 76.3% 48%;
+    --background: #09090B;
+    --foreground: #ffffff;
+    --card: #161B22;
+    --card-foreground: #ffffff;
+    --popover: #111827;
+    --popover-foreground: #ffffff;
+    --primary: #2563EB;
+    --primary-foreground: #ffffff;
+    --secondary: #111827;
+    --secondary-foreground: #CBD5E1;
+    --muted: #111827;
+    --muted-foreground: #CBD5E1;
+    --accent: #2563EB;
+    --accent-foreground: #ffffff;
+    --destructive: #EF4444;
+    --destructive-foreground: #ffffff;
+    --border: rgba(255, 255, 255, 0.08);
+    --input: rgba(255, 255, 255, 0.08);
+    
+    --charcoal-dark: #09090B;
+    --charcoal-medium: #111827;
+    --charcoal-light: #161B22;
+    --charcoal-border: rgba(255, 255, 255, 0.08);
+    --secondary-text: #CBD5E1;
+    
+    --glass-bg: rgba(18, 18, 22, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.06);
   }
 }
 
 @theme {
-  --color-border: rgba(255, 255, 255, 0.08);
-  --color-input: rgba(255, 255, 255, 0.08);
-  --color-ring: #2563EB;
-  --color-background: #09090B;
-  --color-foreground: #ffffff;
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--primary);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
   
-  --color-primary: #2563EB;
-  --color-primary-foreground: #ffffff;
-  --color-secondary: #111827;
-  --color-secondary-foreground: #CBD5E1;
-  --color-destructive: #EF4444;
-  --color-destructive-foreground: #ffffff;
-  --color-muted: #111827;
-  --color-muted-foreground: #CBD5E1;
-  --color-accent: #2563EB;
-  --color-accent-foreground: #ffffff;
-  --color-popover: #111827;
-  --color-popover-foreground: #ffffff;
-  --color-card: #161B22;
-  --color-card-foreground: #ffffff;
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
   
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
-
   /* Brand and Accents - Clinical AI Palette */
   --color-brand-blue: #2563EB;
   --color-brand-blue-hover: #1d4ed8;
@@ -82,34 +94,29 @@
   --color-brand-red: #EF4444;
   --color-nutrition-green: #22C55E;
   --color-healthy-lime: #84CC16;
-  --color-secondary-text: #CBD5E1;
+  --color-secondary-text: var(--secondary-text);
   
   /* Charcoal shades mapped to specific background and card definitions */
-  --color-charcoal-dark: #09090B;
-  --color-charcoal-medium: #111827;
-  --color-charcoal-light: #161B22;
-  --color-charcoal-border: rgba(255, 255, 255, 0.08);
+  --color-charcoal-dark: var(--charcoal-dark);
+  --color-charcoal-medium: var(--charcoal-medium);
+  --color-charcoal-light: var(--charcoal-light);
+  --color-charcoal-border: var(--charcoal-border);
 }
 
 body {
-  background-color: #09090B;
-  color: #ffffff;
+  background-color: var(--background);
+  color: var(--foreground);
   font-feature-settings: "rlig" 1, "calt" 1;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* Glassmorphism custom panels */
 .glass-panel {
-  background: rgba(18, 18, 22, 0.7);
+  background: var(--glass-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.dark .glass {
-  background: rgba(18, 18, 22, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--glass-border);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 /* Glowing effects for premium indicators */
@@ -151,4 +158,64 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(59, 130, 246, 0.4);
+}
+
+/* Light Mode Specific Resets for Text and Elements */
+html:not(.dark) {
+  --background: #f9fafb;
+  --foreground: #111827;
+  --border: #e5e7eb;
+  --input: #e5e7eb;
+  --charcoal-dark: #ffffff;
+  --charcoal-medium: #f3f4f6;
+  --charcoal-light: #f9fafb;
+  --charcoal-border: #e5e7eb;
+  --secondary-text: #4b5563;
+
+  /* Force dark text for elements containing .text-white when in light mode */
+  .text-white,
+  h1, h2, h3, h4, h5, h6 {
+    color: #111827 !important;
+  }
+
+  .text-zinc-100 { color: #1f2937 !important; }
+  .text-zinc-200 { color: #374151 !important; }
+  .text-zinc-300 { color: #4b5563 !important; }
+  .text-zinc-400 { color: #6b7280 !important; }
+  .text-zinc-450 { color: #6b7280 !important; }
+  .text-zinc-500 { color: #6b7280 !important; }
+  .text-zinc-550 { color: #4b5563 !important; }
+  
+  /* Buttons and interactive elements that must keep white text */
+  .bg-brand-blue,
+  .bg-brand-blue *,
+  .bg-brand-blue-hover,
+  .bg-brand-blue-hover *,
+  .bg-brand-emerald,
+  .bg-brand-emerald *,
+  .bg-brand-red,
+  .bg-brand-red *,
+  .bg-brand-orange,
+  .bg-brand-orange * {
+    color: #ffffff !important;
+  }
+
+  /* Form Controls */
+  input, textarea, select {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    border-color: #d1d5db !important;
+  }
+  input::placeholder, textarea::placeholder {
+    color: #9ca3af !important;
+  }
+
+  /* Sidebar active items contrast */
+  aside a.bg-brand-blue\/10 {
+    background-color: rgba(37, 99, 235, 0.08) !important;
+    border-color: rgba(37, 99, 235, 0.15) !important;
+  }
+  aside a.bg-brand-blue\/10 * {
+    color: #2563EB !important;
+  }
 }

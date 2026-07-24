@@ -9,16 +9,11 @@ from backend.schemas.schemas import (
     UserSettingUpdate, LongitudinalTrendsResponse
 )
 from backend.services.user_services import (
-    DashboardService, HistoryService, ProfileService, AnalyticsService
+    profile_service, dashboard_service, history_service, analytics_service
 )
 from backend.utils.logger import api_logger
 
 router = APIRouter(prefix="", tags=["User & Dashboard"])
-
-dashboard_service = DashboardService()
-history_service = HistoryService()
-profile_service = ProfileService()
-analytics_service = AnalyticsService()
 
 @router.get("/dashboard", response_model=DashboardResponse)
 def get_dashboard(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):

@@ -60,3 +60,6 @@ class RiskFusionService:
             risk_level = "Critical"
             
         return fused_score, risk_level
+
+# Singleton instance of RiskFusionService
+fusion_service = RiskFusionService()

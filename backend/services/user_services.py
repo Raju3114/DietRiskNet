@@ -339,3 +339,10 @@ class AnalyticsService:
                 data["deficiency_risk"] = m.predictions.deficiency_risk
 
         return list(daily_trends.values())
+
+# Singleton instances of services
+profile_service = ProfileService()
+meal_db_service = MealService()
+dashboard_service = DashboardService()
+history_service = HistoryService()
+analytics_service = AnalyticsService()

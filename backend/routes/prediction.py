@@ -26,6 +26,8 @@ def predict_diabetes(data: DiseasePredictionRequest):
     except Exception as e:
         api_logger.error(f"Diabetes prediction error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        pred_service.unload()
 
 @router.post("/predict-obesity", response_model=DiseasePredictionResponse)
 def predict_obesity(data: DiseasePredictionRequest):
@@ -38,6 +40,8 @@ def predict_obesity(data: DiseasePredictionRequest):
     except Exception as e:
         api_logger.error(f"Obesity prediction error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        pred_service.unload()
 
 @router.post("/predict-hypertension", response_model=DiseasePredictionResponse)
 def predict_hypertension(data: DiseasePredictionRequest):
@@ -50,6 +54,8 @@ def predict_hypertension(data: DiseasePredictionRequest):
     except Exception as e:
         api_logger.error(f"Hypertension prediction error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        pred_service.unload()
 
 @router.post("/predict-deficiency", response_model=DiseasePredictionResponse)
 def predict_deficiency(data: DiseasePredictionRequest):
@@ -62,6 +68,8 @@ def predict_deficiency(data: DiseasePredictionRequest):
     except Exception as e:
         api_logger.error(f"Deficiency prediction error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        pred_service.unload()
 
 @router.post("/risk-fusion", response_model=RiskFusionResponse)
 def risk_fusion(data: RiskFusionRequest):

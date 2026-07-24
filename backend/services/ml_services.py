@@ -20,6 +20,11 @@ class FoodDetectionService:
             ml_logger.error(f"Failed to load YOLOv8 detector: {e}")
             raise e
 
+    def unload(self):
+        self.model = None
+        import gc
+        gc.collect()
+
     def detect(self, image_path_or_bytes: Union[str, bytes]) -> list:
         """
         Runs YOLOv8 detector.
@@ -66,6 +71,13 @@ class FoodClassificationService:
         self.model = None
         self.class_names = []
         self.device = None
+
+    def unload(self):
+        self.model = None
+        self.class_names = []
+        self.device = None
+        import gc
+        gc.collect()
 
     def load_model(self):
         try:

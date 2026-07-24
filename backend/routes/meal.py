@@ -84,6 +84,8 @@ def detect_food(file_path: str = Form(...), current_user: User = Depends(get_cur
     except Exception as e:
         api_logger.error(f"Food detection error: {e}")
         raise HTTPException(status_code=500, detail=f"Detection failed: {str(e)}")
+    finally:
+        detector_service.unload()
 
 @router.post("/classify-food", response_model=FoodClassificationResponse)
 def classify_food(file_path: str = Form(...), x1: float = Form(...), y1: float = Form(...), x2: float = Form(...), y2: float = Form(...), current_user: User = Depends(get_current_user)):
@@ -97,6 +99,8 @@ def classify_food(file_path: str = Form(...), x1: float = Form(...), y1: float =
     except Exception as e:
         api_logger.error(f"Classification error: {e}")
         raise HTTPException(status_code=500, detail=f"Classification failed: {str(e)}")
+    finally:
+        classifier_service.unload()
 
 @router.post("/nutrition-analysis", response_model=NutritionAnalysisResponse)
 def nutrition_analysis(data: NutritionAnalysisRequest, current_user: User = Depends(get_current_user)):
@@ -190,7 +194,11 @@ def analyze_meal(file: UploadFile = File(...), notes: str = Form(""), db: Sessio
         api_logger.info(f"End-to-end analysis started for user {current_user.email}, image: {image_path}")
 
         # 2. YOLOv8 detection
-        detections = detector_service.detect(image_path)
+        try:
+            detections = detector_service.detect(image_path)
+        finally:
+            detector_service.unload()
+
         if not detections:
             # Fallback if no boxes found: assume a default single item to classify whole image
             detections = [{"name": "food", "confidence": 0.5, "box": (0, 0, 100, 100)}]
@@ -198,43 +206,46 @@ def analyze_meal(file: UploadFile = File(...), notes: str = Form(""), db: Sessio
 
         # 3. Crop, Classify, & Lookup nutrition
         items_data = []
-        for det in detections:
-            x1, y1, x2, y2 = det["box"]
-            try:
-                crop_bytes = crop_image(image_path, (x1, y1, x2, y2))
-                classification = classifier_service.classify(crop_bytes)
-                food_name = classification["class_name"]
-                conf = classification["confidence"]
-            except Exception as e:
-                api_logger.error(f"Classification crop failed for box {(x1, y1, x2, y2)}. Skipping detection. Error: {e}")
-                continue
+        try:
+            for det in detections:
+                x1, y1, x2, y2 = det["box"]
+                try:
+                    crop_bytes = crop_image(image_path, (x1, y1, x2, y2))
+                    classification = classifier_service.classify(crop_bytes)
+                    food_name = classification["class_name"]
+                    conf = classification["confidence"]
+                except Exception as e:
+                    api_logger.error(f"Classification crop failed for box {(x1, y1, x2, y2)}. Skipping detection. Error: {e}")
+                    continue
+                    
+                fact = nutrition_service.lookup(food_name)
                 
-            fact = nutrition_service.lookup(food_name)
-            
-            # Lookup the serving size
-            lookup_name = food_name.lower().strip().replace(" ", "_")
-            weight = DEFAULT_SERVING_WEIGHTS.get(lookup_name, 100.0)
+                # Lookup the serving size
+                lookup_name = food_name.lower().strip().replace(" ", "_")
+                weight = DEFAULT_SERVING_WEIGHTS.get(lookup_name, 100.0)
+                    
+                scale = weight / 100.0
                 
-            scale = weight / 100.0
-            
-            item_entry = {
-                "name": fact["name"],
-                "confidence": conf,
-                "bounding_box": {"x1": x1, "y1": y1, "x2": x2, "y2": y2},
-                "weight_g": weight,
-                "calories": fact["calories"] * scale,
-                "protein": fact["protein"] * scale,
-                "carbs": fact["carbs"] * scale,
-                "fats": fact["fats"] * scale,
-                "sugar": fact["sugar"] * scale,
-                "fiber": fact["fiber"] * scale,
-                "sodium": fact["sodium"] * scale,
-                "calcium": fact["calcium"] * scale,
-                "iron": fact["iron"] * scale,
-                "vitamin_c": fact["vitamin_c"] * scale,
-                "folate": fact["folate"] * scale
-            }
-            items_data.append(item_entry)
+                item_entry = {
+                    "name": fact["name"],
+                    "confidence": conf,
+                    "bounding_box": {"x1": x1, "y1": y1, "x2": x2, "y2": y2},
+                    "weight_g": weight,
+                    "calories": fact["calories"] * scale,
+                    "protein": fact["protein"] * scale,
+                    "carbs": fact["carbs"] * scale,
+                    "fats": fact["fats"] * scale,
+                    "sugar": fact["sugar"] * scale,
+                    "fiber": fact["fiber"] * scale,
+                    "sodium": fact["sodium"] * scale,
+                    "calcium": fact["calcium"] * scale,
+                    "iron": fact["iron"] * scale,
+                    "vitamin_c": fact["vitamin_c"] * scale,
+                    "folate": fact["folate"] * scale
+                }
+                items_data.append(item_entry)
+        finally:
+            classifier_service.unload()
 
         # 4. Save Meal & Items to DB and Aggregate nutrition
         meal = meal_db_service.create_meal(current_user.id, image_path, notes, db)
@@ -273,9 +284,12 @@ def analyze_meal(file: UploadFile = File(...), notes: str = Form(""), db: Sessio
             weight = current_user.settings.weight
             existing_conds = current_user.settings.existing_conditions or []
             
-        preds = prediction_service.predict_all(
-            age, gender, height, weight, nutrition_dict, dci, nis, existing_conds
-        )
+        try:
+            preds = prediction_service.predict_all(
+                age, gender, height, weight, nutrition_dict, dci, nis, existing_conds
+            )
+        finally:
+            prediction_service.unload()
         
         # 7. Risk Fusion
         fused_score, fused_level = fusion_service.fuse(

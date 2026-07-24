@@ -8,6 +8,11 @@ class DiseasePredictionService:
     def __init__(self):
         self.models = {}
 
+    def unload(self):
+        self.models = {}
+        import gc
+        gc.collect()
+
     def load_models(self):
         if self.models:
             return

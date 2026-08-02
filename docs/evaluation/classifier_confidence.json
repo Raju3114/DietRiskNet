@@ -1,0 +1,52 @@
+{
+  "confidence_threshold": 0.45,
+  "confidence_stats": {
+    "accepted_items": 83,
+    "mean": 0.8256,
+    "median": 0.843,
+    "min": 0.464,
+    "max": 0.991,
+    "p25": 0.782,
+    "p75": 0.886,
+    "p95": 0.955,
+    "low_conf_rejected_total_e2e": 8,
+    "fallback_confidences_no_food_cases": [
+      0.255
+    ]
+  },
+  "nonfood_confidence_probe": {
+    "solid_red": {
+      "confidence": 0.0208,
+      "class": "ice_cream"
+    },
+    "solid_green": {
+      "confidence": 0.0225,
+      "class": "cup_cakes"
+    },
+    "solid_blue": {
+      "confidence": 0.0215,
+      "class": "foie_gras"
+    },
+    "solid_white": {
+      "confidence": 0.0282,
+      "class": "foie_gras"
+    },
+    "solid_black": {
+      "confidence": 0.0209,
+      "class": "foie_gras"
+    },
+    "gradient": {
+      "confidence": 0.0322,
+      "class": "strawberry_shortcake"
+    },
+    "gaussian_noise": {
+      "confidence": 0.0364,
+      "class": "ice_cream"
+    },
+    "real_food_control(sample_meal)": {
+      "confidence": 0.8667,
+      "class": "idli"
+    }
+  },
+  "note": "Formal Top-1/Top-3/Top-5 and precision/recall require a labelled held-out split; none exists in the repository, so those are reported as N/A in the final report. This JSON records functional confidence evidence only."
+}

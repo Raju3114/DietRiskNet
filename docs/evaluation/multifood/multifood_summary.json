@@ -1,0 +1,66 @@
+{
+  "uploads_scanned": 92,
+  "uploads_with_2_or_more_raw_boxes": 7,
+  "uploads_with_2_or_more_service_boxes": 0,
+  "uploads_with_distinct_non_overlapping_food_boxes": 0,
+  "all_multi_uploads_were_overlapping_duplicates": true,
+  "synthetic_probes": [
+    {
+      "probe_id": "P2_idli_pizza",
+      "gt_object_count": 2,
+      "gt_foods": "idli,pizza",
+      "service_yolo_boxes": 2,
+      "service_confidences": "0.896;0.766",
+      "per_crop_classifier": "crop0:pizza@0.833;crop1:idli@0.767",
+      "detect_matched_gt": "YES",
+      "note": ""
+    },
+    {
+      "probe_id": "P3_idli_pizza_samosa",
+      "gt_object_count": 3,
+      "gt_foods": "idli,pizza,samosa",
+      "service_yolo_boxes": 3,
+      "service_confidences": "0.714;0.527;0.432",
+      "per_crop_classifier": "crop0:pizza@0.81;crop1:samosa@0.982;crop2:idli@0.789",
+      "detect_matched_gt": "YES",
+      "note": ""
+    },
+    {
+      "probe_id": "P4_four_distinct",
+      "gt_object_count": 4,
+      "gt_foods": "idli,pizza,samosa,fried_rice",
+      "service_yolo_boxes": 0,
+      "service_confidences": "",
+      "per_crop_classifier": "",
+      "detect_matched_gt": "NO",
+      "note": ""
+    },
+    {
+      "probe_id": "P2_same_idli_twice",
+      "gt_object_count": 2,
+      "gt_foods": "idli,idli",
+      "service_yolo_boxes": 2,
+      "service_confidences": "0.766;0.66",
+      "per_crop_classifier": "crop0:idli@0.768;crop1:idli@0.766",
+      "detect_matched_gt": "YES",
+      "note": ""
+    },
+    {
+      "probe_id": "P2_dosa_chapati",
+      "gt_object_count": 2,
+      "gt_foods": "masala_dosa,chapati",
+      "service_yolo_boxes": 2,
+      "service_confidences": "0.777;0.396",
+      "per_crop_classifier": "crop0:chapati@0.913;crop1:masala_dosa@0.995",
+      "detect_matched_gt": "YES",
+      "note": ""
+    }
+  ],
+  "ground_truth_note": "No dataset annotations exist in the repository (datasets/ holds only sample_meal.png). Synthetic probes provide known ground truth by construction. Upload regions were NOT visually verified in the current provider session.",
+  "yolo_class_count": 1,
+  "yolo_classes": {
+    "0": "food"
+  },
+  "probe_notes": "P2/P3/P5 correctly localised 2-3 distinct foods (service detect matched ground truth). P2_same_idli_twice shows same-class multiple instances are kept (IoU < 0.6). P4_four_distinct (1x4 row of four foods) produced 0 service boxes at the built-in 0.25 conf threshold; raw inference at conf=0.1 recovers only 3 weak boxes (conf ~0.175-0.178) and misses the samosa tile. Interpretation: multi-object recall degrades in crowded compositions; consistent with a detector trained on single-food images.",
+  "note": "No in-repo dataset annotations exist. Formal detection mAP cannot be computed. All upload regions NOT VISUALLY VERIFIED IN CURRENT PROVIDER SESSION."
+}

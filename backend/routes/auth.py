@@ -3,8 +3,8 @@ from sqlalchemy.orm import Session
 from backend.database.database import get_db
 from backend.schemas.schemas import UserRegister, UserLogin, Token, TokenRefresh
 from backend.services.auth_service import AuthenticationService
-from backend.routes.deps import get_current_user
-from backend.database.models import User
+from backend.database.models import User, RefreshToken
+from backend.utils.auth_utils import verify_token
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 auth_service = AuthenticationService()
@@ -68,17 +68,15 @@ def logout(data: TokenRefresh, request: Request, db: Session = Depends(get_db)):
 
 @router.post("/refresh", response_model=Token)
 def refresh(data: TokenRefresh, db: Session = Depends(get_db)):
-    from backend.utils.auth_utils import verify_token
     user_id_str = verify_token(data.refresh_token, "refresh")
     if not user_id_str:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid or expired refresh token"
         )
-        
+
     user_id = int(user_id_str)
     # Check if token is revoked in db
-    from backend.database.models import RefreshToken
     db_token = db.query(RefreshToken).filter(
         RefreshToken.token == data.refresh_token,
         RefreshToken.is_revoked == False

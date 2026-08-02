@@ -16,13 +16,27 @@ export default function ClientProviders({ children }: { children: React.ReactNod
 
   const theme = useAppStore((state) => state.theme);
 
+  // Apply Light / Dark / System theme to the <html> element.
   useEffect(() => {
     const root = window.document.documentElement;
-    if (theme === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
+    const apply = (mode: 'light' | 'dark') => {
+      if (mode === 'dark') {
+        root.classList.add('dark');
+      } else {
+        root.classList.remove('dark');
+      }
+    };
+
+    if (theme === 'system') {
+      const mq = window.matchMedia('(prefers-color-scheme: dark)');
+      const onSystemChange = (e: MediaQueryListEvent) =>
+        apply(e.matches ? 'dark' : 'light');
+      apply(mq.matches ? 'dark' : 'light');
+      mq.addEventListener('change', onSystemChange);
+      return () => mq.removeEventListener('change', onSystemChange);
     }
+
+    apply(theme);
   }, [theme]);
 
   return (

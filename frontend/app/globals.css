@@ -2,74 +2,110 @@
 
 @layer base {
   :root {
-    --background: #f9fafb;
-    --foreground: #111827;
-    --card: #ffffff;
-    --card-foreground: #111827;
-    --popover: #ffffff;
-    --popover-foreground: #111827;
-    --primary: #2563EB;
-    --primary-foreground: #ffffff;
-    --secondary: #f3f4f6;
-    --secondary-foreground: #1f2937;
-    --muted: #f3f4f6;
-    --muted-foreground: #6b7280;
-    --accent: #2563EB;
-    --accent-foreground: #ffffff;
-    --destructive: #EF4444;
-    --destructive-foreground: #ffffff;
-    --border: #e5e7eb;
-    --input: #e5e7eb;
+    /* ===== Premium Forest Green + Warm Ivory + Champagne Gold (LIGHT) ===== */
+    --background: #F8F7F2;
+    --foreground: #18211D;
+    --card: #FFFFFF;
+    --card-foreground: #18211D;
+    --popover: #FFFFFF;
+    --popover-foreground: #18211D;
+    --primary: #12372A;
+    --primary-foreground: #FFFFFF;
+    --secondary: #F3F1EA;
+    --secondary-foreground: #33413A;
+    --muted: #F3F1EA;
+    --muted-foreground: #5F6D65;
+    --accent: #12372A;
+    --accent-foreground: #FFFFFF;
+    --destructive: #B84A4A;
+    --destructive-foreground: #FFFFFF;
+    --border: #E7E4DA;
+    --input: #E7E4DA;
+    --ring: #12372A;
     --radius: 1rem;
-    
-    --charcoal-dark: #ffffff;
-    --charcoal-medium: #f3f4f6;
-    --charcoal-light: #f9fafb;
-    --charcoal-border: #e5e7eb;
-    --secondary-text: #4b5563;
-    
-    --glass-bg: rgba(255, 255, 255, 0.75);
-    --glass-border: rgba(0, 0, 0, 0.08);
+
+    /* Surface system */
+    --charcoal-dark: #FFFFFF;
+    --charcoal-medium: #F3F1EA;
+    --charcoal-light: #F8F7F2;
+    --charcoal-border: #E7E4DA;
+    --secondary-text: #5F6D65;
+
+    /* Brand palette */
+    --brand-primary: #12372A;
+    --brand-primary-hover: #1F513D;
+    --brand-deep: #0D2A20;
+    --brand-emerald: #27845A;
+    --brand-sage: #5E8C7A;
+    --brand-lime: #86A97C;
+    --brand-orange: #C98A2E;
+    --brand-red: #B84A4A;
+    --gold: #C5A46D;
+    --gold-soft: #D8C49A;
+
+    /* Sidebar */
+    --sidebar: #12372A;
+    --sidebar-foreground: #F4F1E8;
+    --sidebar-muted: #C6D4CC;
+
+    --glass-bg: rgba(255, 255, 255, 0.78);
+    --glass-border: rgba(18, 55, 42, 0.10);
   }
 
   .dark {
-    --background: #09090B;
-    --foreground: #ffffff;
-    --card: #161B22;
-    --card-foreground: #ffffff;
-    --popover: #111827;
-    --popover-foreground: #ffffff;
-    --primary: #2563EB;
-    --primary-foreground: #ffffff;
-    --secondary: #111827;
-    --secondary-foreground: #CBD5E1;
-    --muted: #111827;
-    --muted-foreground: #CBD5E1;
-    --accent: #2563EB;
-    --accent-foreground: #ffffff;
-    --destructive: #EF4444;
-    --destructive-foreground: #ffffff;
-    --border: rgba(255, 255, 255, 0.08);
-    --input: rgba(255, 255, 255, 0.08);
-    
-    --charcoal-dark: #09090B;
-    --charcoal-medium: #111827;
-    --charcoal-light: #161B22;
-    --charcoal-border: rgba(255, 255, 255, 0.08);
-    --secondary-text: #CBD5E1;
-    
-    --glass-bg: rgba(18, 18, 22, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.06);
+    /* ===== Premium Forest Green + Warm Ivory + Champagne Gold (DARK) ===== */
+    --background: #0C1511;
+    --foreground: #F4F1E8;
+    --card: #16231D;
+    --card-foreground: #F4F1E8;
+    --popover: #16231D;
+    --popover-foreground: #F4F1E8;
+    --primary: #4F9B76;
+    --primary-foreground: #0C1511;
+    --secondary: #111D18;
+    --secondary-foreground: #C8D6CF;
+    --muted: #111D18;
+    --muted-foreground: #B9C5BE;
+    --accent: #4F9B76;
+    --accent-foreground: #0C1511;
+    --destructive: #C76A6A;
+    --destructive-foreground: #FFFFFF;
+    --border: rgba(180, 200, 190, 0.16);
+    --input: rgba(180, 200, 190, 0.18);
+    --ring: #4F9B76;
+
+    --charcoal-dark: #0C1511;
+    --charcoal-medium: #111D18;
+    --charcoal-light: #16231D;
+    --charcoal-border: rgba(180, 200, 190, 0.16);
+    --secondary-text: #B9C5BE;
+
+    --brand-primary: #4F9B76;
+    --brand-primary-hover: #5FAD86;
+    --brand-deep: #0C1511;
+    --brand-emerald: #3E9C6C;
+    --brand-sage: #6FA08C;
+    --brand-lime: #92B58A;
+    --brand-orange: #D39A45;
+    --brand-red: #C76A6A;
+    --gold: #C9AB72;
+    --gold-soft: #D8C49A;
+
+    --sidebar: #0D1A14;
+    --sidebar-foreground: #F4F1E8;
+    --sidebar-muted: #A9B5AE;
+
+    --glass-bg: rgba(12, 21, 17, 0.72);
+    --glass-border: rgba(180, 200, 190, 0.10);
   }
 }
 
 @theme {
   --color-border: var(--border);
   --color-input: var(--input);
-  --color-ring: var(--primary);
+  --color-ring: var(--ring);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
@@ -84,19 +120,29 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
-  
-  /* Brand and Accents - Clinical AI Palette */
-  --color-brand-blue: #2563EB;
-  --color-brand-blue-hover: #1d4ed8;
-  --color-brand-emerald: #10B981;
-  --color-brand-cyan: #06B6D4;
-  --color-brand-orange: #F59E0B;
-  --color-brand-red: #EF4444;
-  --color-nutrition-green: #22C55E;
-  --color-healthy-lime: #84CC16;
+
+  /* Brand — forest green primary + restrained champagne gold accent */
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-primary-hover: var(--brand-primary-hover);
+  --color-brand-deep: var(--brand-deep);
+  --color-brand-blue: var(--brand-primary);          /* legacy alias → primary green */
+  --color-brand-blue-hover: var(--brand-primary-hover);
+  --color-brand-emerald: var(--brand-emerald);
+  --color-brand-cyan: var(--brand-sage);             /* legacy alias → sage accent */
+  --color-brand-orange: var(--brand-orange);
+  --color-brand-red: var(--brand-red);
+  --color-nutrition-green: var(--brand-emerald);
+  --color-healthy-lime: var(--brand-lime);
   --color-secondary-text: var(--secondary-text);
-  
-  /* Charcoal shades mapped to specific background and card definitions */
+
+  /* Gold accent + sidebar */
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-muted: var(--sidebar-muted);
+
+  /* Charcoal surface shades */
   --color-charcoal-dark: var(--charcoal-dark);
   --color-charcoal-medium: var(--charcoal-medium);
   --color-charcoal-light: var(--charcoal-light);
@@ -119,32 +165,27 @@ body {
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-/* Glowing effects for premium indicators */
+/* Restrained glows — forest green / gold (kept subtle for a clinical feel) */
 .glow-blue {
-  box-shadow: 0 0 25px rgba(59, 130, 246, 0.15);
+  box-shadow: 0 0 25px rgba(18, 55, 42, 0.18);
 }
-
 .glow-emerald {
-  box-shadow: 0 0 25px rgba(16, 185, 129, 0.15);
+  box-shadow: 0 0 25px rgba(39, 132, 90, 0.18);
 }
-
 .glow-cyan {
-  box-shadow: 0 0 25px rgba(6, 182, 212, 0.15);
+  box-shadow: 0 0 25px rgba(197, 164, 109, 0.16);
 }
-
 .glow-orange {
-  box-shadow: 0 0 25px rgba(249, 115, 22, 0.15);
+  box-shadow: 0 0 25px rgba(201, 138, 46, 0.16);
 }
-
 .glow-red {
-  box-shadow: 0 0 25px rgba(239, 68, 68, 0.15);
+  box-shadow: 0 0 25px rgba(184, 74, 74, 0.16);
 }
-
 .glow-purple {
-  box-shadow: 0 0 25px rgba(168, 85, 247, 0.12);
+  box-shadow: 0 0 25px rgba(197, 164, 109, 0.14);
 }
 
-/* Custom Scrollbars */
+/* Custom Scrollbars — forest-tinted */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -153,69 +194,27 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(59, 130, 246, 0.2);
+  background: rgba(18, 55, 42, 0.25);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(59, 130, 246, 0.4);
+  background: rgba(197, 164, 109, 0.45);
 }
 
-/* Light Mode Specific Resets for Text and Elements */
-html:not(.dark) {
-  --background: #f9fafb;
-  --foreground: #111827;
-  --border: #e5e7eb;
-  --input: #e5e7eb;
-  --charcoal-dark: #ffffff;
-  --charcoal-medium: #f3f4f6;
-  --charcoal-light: #f9fafb;
-  --charcoal-border: #e5e7eb;
-  --secondary-text: #4b5563;
-
-  /* Force dark text for elements containing .text-white when in light mode */
-  .text-white,
-  h1, h2, h3, h4, h5, h6 {
-    color: #111827 !important;
-  }
-
-  .text-zinc-100 { color: #1f2937 !important; }
-  .text-zinc-200 { color: #374151 !important; }
-  .text-zinc-300 { color: #4b5563 !important; }
-  .text-zinc-400 { color: #6b7280 !important; }
-  .text-zinc-450 { color: #6b7280 !important; }
-  .text-zinc-500 { color: #6b7280 !important; }
-  .text-zinc-550 { color: #4b5563 !important; }
-  
-  /* Buttons and interactive elements that must keep white text */
-  .bg-brand-blue,
-  .bg-brand-blue *,
-  .bg-brand-blue-hover,
-  .bg-brand-blue-hover *,
-  .bg-brand-emerald,
-  .bg-brand-emerald *,
-  .bg-brand-red,
-  .bg-brand-red *,
-  .bg-brand-orange,
-  .bg-brand-orange * {
-    color: #ffffff !important;
-  }
-
-  /* Form Controls */
+/* ========================================
+   Theme-aware form control defaults
+   Uses semantic tokens so inputs adapt to
+   both light and dark modes.
+   Must stay inside @layer so Tailwind
+   utilities can still override them.
+   ======================================== */
+@layer base {
   input, textarea, select {
-    background-color: #ffffff !important;
-    color: #111827 !important;
-    border-color: #d1d5db !important;
+    background-color: var(--card);
+    color: var(--foreground);
+    border-color: var(--border);
   }
   input::placeholder, textarea::placeholder {
-    color: #9ca3af !important;
-  }
-
-  /* Sidebar active items contrast */
-  aside a.bg-brand-blue\/10 {
-    background-color: rgba(37, 99, 235, 0.08) !important;
-    border-color: rgba(37, 99, 235, 0.15) !important;
-  }
-  aside a.bg-brand-blue\/10 * {
-    color: #2563EB !important;
+    color: var(--muted-foreground);
   }
 }

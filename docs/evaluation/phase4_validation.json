@@ -1,0 +1,244 @@
+{
+  "nutrition": {
+    "classifier_vocab_size": 118,
+    "mapped_reported": 87,
+    "mapped_actual_array_count": 87,
+    "unmapped_reported": 31,
+    "unmapped_actual_array_count": 31,
+    "sum_matches_total": true,
+    "array_counts_match_reported": true,
+    "coverage_recomputed_pct": 73.73,
+    "coverage_reported_pct": 73.73,
+    "coverage_matches": true,
+    "mapped_plus_unmapped_is_118": true
+  },
+  "dci": {
+    "results": [
+      {
+        "scenario": "0_valid_days",
+        "distinct_valid_days": 0,
+        "dci_recomputed": null,
+        "dci_reported": null,
+        "match": true,
+        "semantics_ok": true
+      },
+      {
+        "scenario": "1_valid_day",
+        "distinct_valid_days": 1,
+        "dci_recomputed": null,
+        "dci_reported": null,
+        "match": true,
+        "semantics_ok": true
+      },
+      {
+        "scenario": "multiple_meals_same_day",
+        "distinct_valid_days": 1,
+        "dci_recomputed": null,
+        "dci_reported": null,
+        "match": true,
+        "semantics_ok": true
+      },
+      {
+        "scenario": "2_consistent_days",
+        "distinct_valid_days": 2,
+        "dci_recomputed": 1.0,
+        "dci_reported": 1.0,
+        "match": true,
+        "semantics_ok": true
+      },
+      {
+        "scenario": "2_varying_days",
+        "distinct_valid_days": 2,
+        "dci_recomputed": 0.8182,
+        "dci_reported": 0.8182,
+        "match": true,
+        "semantics_ok": true
+      },
+      {
+        "scenario": "3_consistent_days",
+        "distinct_valid_days": 3,
+        "dci_recomputed": 0.9801,
+        "dci_reported": 0.9801,
+        "match": true,
+        "semantics_ok": true
+      },
+      {
+        "scenario": "3_highly_varying_days",
+        "distinct_valid_days": 3,
+        "dci_recomputed": 0.6409,
+        "dci_reported": 0.6409,
+        "match": true,
+        "semantics_ok": true
+      },
+      {
+        "scenario": "7_consistent_days",
+        "distinct_valid_days": 7,
+        "dci_recomputed": 1.0,
+        "dci_reported": 1.0,
+        "match": true,
+        "semantics_ok": true
+      },
+      {
+        "scenario": "7_varying_days",
+        "distinct_valid_days": 7,
+        "dci_recomputed": 0.7674,
+        "dci_reported": 0.7674,
+        "match": true,
+        "semantics_ok": true
+      },
+      {
+        "scenario": "zero_calorie_history",
+        "distinct_valid_days": 0,
+        "dci_recomputed": null,
+        "dci_reported": null,
+        "match": true,
+        "semantics_ok": true
+      }
+    ],
+    "all_ok": true
+  },
+  "nis": {
+    "scenario_count": 6,
+    "nis_values": {
+      "balanced": 0.026,
+      "idli": 0.4745,
+      "high_sodium": 0.5622,
+      "high_fat": 0.543,
+      "low_protein": 0.3244,
+      "extreme": 0.871
+    },
+    "recorded_ascending_order": [
+      "balanced",
+      "low_protein",
+      "idli",
+      "high_fat",
+      "high_sodium",
+      "extreme"
+    ],
+    "recorded_is_ascending": true,
+    "recorded_matches_sorted_by_value": true,
+    "all_levels_present": true,
+    "expected_ascending": [
+      "balanced",
+      "low_protein",
+      "idli",
+      "high_fat",
+      "high_sodium",
+      "extreme"
+    ],
+    "extreme_severe": true,
+    "balanced_balanced": true
+  },
+  "risk_fusion": {
+    "weights_total_is_1": true,
+    "weights_sum_recomputed": 1.0,
+    "scenario_B_manual_match": true,
+    "scenario_B_service_fused": 0.24,
+    "scenario_B_manual_fused": 0.24,
+    "scenarios": [
+      {
+        "scenario": "A_all_available",
+        "recomputed": 0.23,
+        "reported": 0.23,
+        "score_match": true,
+        "level_match": true
+      },
+      {
+        "scenario": "B_dci_unavailable",
+        "recomputed": 0.24,
+        "reported": 0.24,
+        "score_match": true,
+        "level_match": true
+      },
+      {
+        "scenario": "C_dci_and_nis_unavailable",
+        "recomputed": 0.21,
+        "reported": 0.21,
+        "score_match": true,
+        "level_match": true
+      },
+      {
+        "scenario": "D_subset_only",
+        "recomputed": 0.2,
+        "reported": 0.2,
+        "score_match": true,
+        "level_match": true
+      },
+      {
+        "scenario": "E_none_available",
+        "recomputed": null,
+        "reported": null,
+        "score_match": true,
+        "level_match": true
+      }
+    ],
+    "all_scenarios_ok": true,
+    "B_not_perfect_health": true
+  },
+  "classifier_confidence": {
+    "threshold": 0.45,
+    "recomputed_stats": {
+      "accepted_items": 83,
+      "mean": 0.8256,
+      "median": 0.843,
+      "min": 0.464,
+      "max": 0.991,
+      "p25": 0.782,
+      "p75": 0.886,
+      "p95": 0.955
+    },
+    "reported_stats": {
+      "accepted_items": 83,
+      "mean": 0.8256,
+      "median": 0.843,
+      "min": 0.464,
+      "max": 0.991,
+      "p25": 0.782,
+      "p75": 0.886,
+      "p95": 0.955
+    },
+    "all_stats_match": true,
+    "nonfood_max_confidence": 0.0364,
+    "all_nonfood_below_threshold": true,
+    "food_control_confidence": 0.8667,
+    "rejected_low_conf_e2e": 8,
+    "fallback_confidences": [
+      0.255
+    ]
+  },
+  "e2e": {
+    "total_rows": 92,
+    "status_counts_recomputed": {
+      "ok": 82,
+      "no_food_recognized": 9,
+      "no_nutrition_data": 1
+    },
+    "reported_total": 92,
+    "reported_status_counts": {
+      "ok": 82,
+      "no_food_recognized": 9,
+      "no_nutrition_data": 1
+    },
+    "counts_match_summary": true,
+    "ok_cases": 82,
+    "no_food_cases": 9,
+    "no_nutrition_cases": 1,
+    "unexpected_failures": 0,
+    "ok_plus_guards_equals_total": true
+  },
+  "portion": {
+    "foods_checked": [
+      "idli",
+      "samosa",
+      "masala_dosa",
+      "butter_naan",
+      "chai",
+      "pizza"
+    ],
+    "all_proportional": true,
+    "food_count": 6,
+    "rows": 24
+  },
+  "source_artifacts": "docs/evaluation/",
+  "note": "Independent recomputation from raw artifact data + on-disk configs; no model loaded, nothing modified."
+}

@@ -22,8 +22,80 @@ class FoodDetectionService:
 
     def unload(self):
         self.model = None
-        import gc
         gc.collect()
+
+    @staticmethod
+    def _compute_iou(box_a: tuple, box_b: tuple) -> float:
+        """Compute Intersection over Union for two bounding boxes.
+
+        Each box is (x1, y1, x2, y2) with coordinates in pixel space.
+        Returns a value in [0.0, 1.0].
+        """
+        x1 = max(box_a[0], box_b[0])
+        y1 = max(box_a[1], box_b[1])
+        x2 = min(box_a[2], box_b[2])
+        y2 = min(box_a[3], box_b[3])
+
+        inter = max(0.0, x2 - x1) * max(0.0, y2 - y1)
+        if inter == 0.0:
+            return 0.0
+
+        area_a = (box_a[2] - box_a[0]) * (box_a[3] - box_a[1])
+        area_b = (box_b[2] - box_b[0]) * (box_b[3] - box_b[1])
+        union = area_a + area_b - inter
+        return inter / union if union > 0 else 0.0
+
+    @staticmethod
+    def _remove_duplicate_detections(
+        detections: list,
+        iou_threshold: float = 0.6,
+    ) -> list:
+        """Remove highly-overlapping detections of the same class.
+
+        For each class label, detections are sorted by confidence
+        (highest first).  Any lower-confidence detection that overlaps
+        a higher-confidence one by more than *iou_threshold* is
+        removed.
+
+        The threshold represents a trade-off:
+        - lower values  (e.g. 0.4)  aggressively remove near-duplicates
+          but risk suppressing legitimate items of the same type that
+          touch or overlap on the plate
+        - higher values (e.g. 0.7)  are more conservative and preserve
+          distinct items, but may let through borderline duplicates
+        - 0.6 is chosen as the midpoint; it catches most obvious
+          YOLO double-detections while keeping distinct food items
+          (e.g. two samosas on the same plate) in the majority of
+          cases
+        """
+        if not detections:
+            return []
+
+        # Group by class name
+        by_class: dict = {}
+        for det in detections:
+            by_class.setdefault(det["name"], []).append(det)
+
+        kept = []
+        for cls_name, group in by_class.items():
+            # Sort descending by confidence
+            group.sort(key=lambda d: d["confidence"], reverse=True)
+
+            for det in group:
+                is_duplicate = False
+                for kept_det in kept:
+                    if kept_det["name"] != cls_name:
+                        continue
+                    iou = FoodDetectionService._compute_iou(
+                        det["box"], kept_det["box"]
+                    )
+                    if iou > iou_threshold:
+                        is_duplicate = True
+                        break
+                if not is_duplicate:
+                    kept.append(det)
+
+        return kept
 
     def detect(self, image_path_or_bytes: Union[str, bytes]) -> list:
         """
@@ -42,7 +114,7 @@ class FoodDetectionService:
             # Run inference
             results = self.model(img)
             detections = []
-            
+
             # YOLO results is a list of Results objects
             for r in results:
                 boxes = r.boxes
@@ -52,15 +124,21 @@ class FoodDetectionService:
                     conf = float(box.conf[0])
                     cls_id = int(box.cls[0])
                     cls_name = self.model.names[cls_id]
-                    
+
                     detections.append({
                         "name": cls_name,
                         "confidence": conf,
                         "box": (x1, y1, x2, y2)
                     })
-            
-            ml_logger.info(f"YOLOv8 detected {len(detections)} objects.")
-            return detections
+
+            # Remove duplicate overlapping detections of the same class
+            filtered = self._remove_duplicate_detections(detections)
+
+            ml_logger.info(
+                f"YOLOv8 detected {len(detections)} objects, "
+                f"{len(filtered)} kept after duplicate removal."
+            )
+            return filtered
         except Exception as e:
             ml_logger.error(f"Error in YOLOv8 inference: {e}")
             raise e
@@ -76,7 +154,6 @@ class FoodClassificationService:
         self.model = None
         self.class_names = []
         self.device = None
-        import gc
         gc.collect()
 
     def load_model(self):

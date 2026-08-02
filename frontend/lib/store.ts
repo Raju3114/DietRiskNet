@@ -30,10 +30,13 @@ export const useAuthStore = create<AuthState>()(
   )
 );
 
+export type ThemeMode = 'light' | 'dark' | 'system';
+
 interface AppState {
   currentAnalysis: MealAnalysis | null;
   setCurrentAnalysis: (analysis: MealAnalysis | null) => void;
-  theme: 'light' | 'dark';
+  theme: ThemeMode;
+  setTheme: (theme: ThemeMode) => void;
   toggleTheme: () => void;
 }
 
@@ -42,9 +45,16 @@ export const useAppStore = create<AppState>()(
     (set) => ({
       currentAnalysis: null,
       setCurrentAnalysis: (analysis) => set({ currentAnalysis: analysis }),
-      theme: 'dark',
+      theme: 'system',
+      setTheme: (theme) => set({ theme }),
+      // Cycle light -> dark -> system (three-state selector).
       toggleTheme: () =>
-        set((state) => ({ theme: state.theme === 'light' ? 'dark' : 'light' })),
+        set((state) => ({
+          theme:
+            state.theme === 'light' ? 'dark'
+            : state.theme === 'dark' ? 'system'
+            : 'light',
+        })),
     }),
     {
       name: 'dietrisknet-app',

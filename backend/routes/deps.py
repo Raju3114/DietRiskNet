@@ -24,7 +24,15 @@ def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
         
-    user_id = int(user_id_str)
+    try:
+        user_id = int(user_id_str)
+    except (TypeError, ValueError):
+        auth_logger.warning("Authentication failure: Malformed token subject.")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         auth_logger.warning(f"Authentication failure: User ID {user_id} not found in database.")

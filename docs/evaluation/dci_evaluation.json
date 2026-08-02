@@ -1,0 +1,76 @@
+{
+  "scenarios": [
+    {
+      "scenario": "0_valid_days",
+      "distinct_valid_days": 0,
+      "daily_calories": "",
+      "dci": "None",
+      "dci_level": "Insufficient Data"
+    },
+    {
+      "scenario": "1_valid_day",
+      "distinct_valid_days": 1,
+      "daily_calories": "2026-08-02=2000",
+      "dci": "None",
+      "dci_level": "Insufficient Data"
+    },
+    {
+      "scenario": "multiple_meals_same_day",
+      "distinct_valid_days": 1,
+      "daily_calories": "2026-08-02=2150",
+      "dci": "None",
+      "dci_level": "Insufficient Data"
+    },
+    {
+      "scenario": "2_consistent_days",
+      "distinct_valid_days": 2,
+      "daily_calories": "2026-08-01=2000;2026-08-02=2000",
+      "dci": 1.0,
+      "dci_level": "High Consistency"
+    },
+    {
+      "scenario": "2_varying_days",
+      "distinct_valid_days": 2,
+      "daily_calories": "2026-08-01=2600;2026-08-02=1800",
+      "dci": 0.8182,
+      "dci_level": "Moderate Consistency"
+    },
+    {
+      "scenario": "3_consistent_days",
+      "distinct_valid_days": 3,
+      "daily_calories": "2026-07-31=2100;2026-08-01=2050;2026-08-02=2000",
+      "dci": 0.9801,
+      "dci_level": "High Consistency"
+    },
+    {
+      "scenario": "3_highly_varying_days",
+      "distinct_valid_days": 3,
+      "daily_calories": "2026-07-31=3200;2026-08-01=2600;2026-08-02=1200",
+      "dci": 0.6409,
+      "dci_level": "Low Consistency"
+    },
+    {
+      "scenario": "7_consistent_days",
+      "distinct_valid_days": 7,
+      "daily_calories": "2026-07-27=2000;2026-07-28=2000;2026-07-29=2000;2026-07-30=2000;2026-07-31=2000;2026-08-01=2000;2026-08-02=2000",
+      "dci": 1.0,
+      "dci_level": "High Consistency"
+    },
+    {
+      "scenario": "7_varying_days",
+      "distinct_valid_days": 7,
+      "daily_calories": "2026-07-27=2900;2026-07-28=2650;2026-07-29=2400;2026-07-30=2150;2026-07-31=1900;2026-08-01=1650;2026-08-02=1400",
+      "dci": 0.7674,
+      "dci_level": "Moderate Consistency"
+    },
+    {
+      "scenario": "zero_calorie_history",
+      "distinct_valid_days": 0,
+      "daily_calories": "",
+      "dci": "None",
+      "dci_level": "Insufficient Data"
+    }
+  ],
+  "requirement": ">=2 distinct valid days within last 7 days",
+  "dci_measures": "consistency of daily total calorie intake (CV), not diet quality"
+}

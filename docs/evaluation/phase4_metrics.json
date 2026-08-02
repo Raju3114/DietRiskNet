@@ -1,0 +1,100 @@
+{
+  "phase": 4,
+  "title": "Final Model & End-to-End Evaluation — verified headline metrics",
+  "generated": "2026-08-02",
+  "verification": "Independently recomputed from raw artifacts by backend/evaluation/phase4/validate_phase4.py -> phase4_validation.json. Every value below matches the recomputed value unless marked N/A.",
+  "classifier": {
+    "architecture": "EfficientNet-B3 (B0 fallback)",
+    "classes": 118,
+    "evaluation_split": "N/A - held-out evaluation split not reliably reconstructable",
+    "top1": null,
+    "top3": null,
+    "top5": null,
+    "macro_f1": null,
+    "weighted_precision": null,
+    "weighted_recall": null,
+    "weighted_f1": null,
+    "per_class_metrics": "N/A - requires labelled split",
+    "confusion_matrix": "N/A - requires labelled split",
+    "confidence_mean": 0.8256,
+    "confidence_median": 0.843,
+    "confidence_p95": 0.955,
+    "nonfood_max_confidence": 0.0364,
+    "acceptance_threshold": 0.45
+  },
+  "yolo": {
+    "formal_labelled_benchmark_available": false,
+    "precision": null,
+    "recall": null,
+    "map50": null,
+    "map50_95": null,
+    "formal_mAP": "N/A - appropriate labelled detection benchmark not available/reconstructed",
+    "functional_localization": "localised 2-3 food items on controlled synthetic probes (P2/P3/P5 matched GT); 0 boxes on a 4-item composition -> reduced multi-object recall",
+    "evaluation_type": "controlled/synthetic functional evaluation (not formal detection benchmarking)"
+  },
+  "multi_food": {
+    "evaluation_type": "controlled/synthetic functional evaluation",
+    "two_item": "localized (3/3 probes matched ground truth)",
+    "three_item": "localized (1/1 probe matched ground truth)",
+    "four_item": "0 service boxes at conf 0.25 (reduced multi-object recall)",
+    "overall_interpretation": "Functional multi-food capability on 2-3 item synthetic probes; not robust/general multi-food detection."
+  },
+  "nutrition": {
+    "total_classes": 118,
+    "mapped": 87,
+    "unmapped": 31,
+    "coverage_percent": 73.73
+  },
+  "portion_estimation": {
+    "image_based_mass_estimation": false,
+    "current_method": "static DEFAULT_SERVING_WEIGHTS config with 100g fallback",
+    "controlled_scaling": "proportional (6 foods x 4 weights = 24 rows, all proportional)",
+    "statement": "Food recognition is image-based; physical portion mass is not estimated from image geometry/depth."
+  },
+  "nis": {
+    "result": "PASS - 6 controlled scenarios; ascending order and severity labels verified (balanced 0.026 ... extreme 0.871)",
+    "clinically_validated": false
+  },
+  "dci": {
+    "result": "PASS - 10/10 controlled scenarios; CV-based, >=2 distinct valid days, null otherwise"
+  },
+  "xgboost": {
+    "result": "PASS - 4 artifacts load, feature-order protected, artifacts unchanged",
+    "major_limitation": "Many clinical features are fixed default/heuristic inputs; not clinically validated; pre-trained on public survey data"
+  },
+  "risk_fusion": {
+    "result": "PASS - 5/5 scenarios + manual calc verified; missing components renormalised, never fabricated",
+    "weights": {
+      "DCI": 0.25,
+      "NIS": 0.25,
+      "Diabetes": 0.2,
+      "Obesity": 0.15,
+      "Hypertension": 0.1,
+      "Deficiency": 0.05
+    }
+  },
+  "e2e": {
+    "total_cases": 92,
+    "successful_recognized_food_analyses": 82,
+    "expected_safe_rejections": 9,
+    "nutrition_unavailable_cases": 1,
+    "unexpected_failures": 0
+  },
+  "robustness": {
+    "result": "PASS - valid food recognized (conf 0.857); non-food/solid/gradient/noise/dark/tiny rejected (conf <=0.036); blurred real food rejected (0.089); corrupt bytes graceful error"
+  },
+  "database": {
+    "users": 20,
+    "meals": 92,
+    "evaluation_users_remaining": 0,
+    "cleanup": "Phase 4 harness used a temporary DB and removed its eval user; no temp DB files remain; no destructive cleanup performed"
+  },
+  "regression": {
+    "backend_pytest": "189 passed",
+    "frontend_typescript": "clean",
+    "frontend_eslint": "clean",
+    "frontend_build": "success, 17 routes"
+  },
+  "capstone_claim_status": "SAFE",
+  "phase4_status": "PASS"
+}

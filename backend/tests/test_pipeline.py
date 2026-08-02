@@ -131,12 +131,14 @@ def run_verification_test():
     
     dci, dci_level = dci_calc.calculate(nutrition_dict, test_user.id, db)
     nis, nis_level = nis_calc.calculate(nutrition_dict)
-    print(f"[6/9] Indices compiled: DCI = {dci:.2f} ({dci_level}), NIS = {nis:.2f} ({nis_level})")
+    # DCI is None until the user has >=2 valid longitudinal days.
+    dci_str = f"{dci:.2f}" if dci is not None else "N/A"
+    print(f"[6/9] Indices compiled: DCI = {dci_str} ({dci_level}), NIS = {nis:.2f} ({nis_level})")
 
     # 8. Predict disease risk parameters & Risk Fusion
     preds = predictor.predict_all(
-        test_settings.age, test_settings.gender, test_settings.height, 
-        test_settings.weight, nutrition_dict, dci, nis, test_settings.existing_conditions
+        test_settings.age, test_settings.gender, test_settings.height,
+        test_settings.weight, nutrition_dict, test_settings.existing_conditions
     )
     print(f"[7/9] XGBoost risk predictions completed:")
     print(f"    Diabetes Risk: {preds['diabetes_risk']*100:.1f}%")

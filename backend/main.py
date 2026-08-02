@@ -5,7 +5,9 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
 from backend.config import settings
 from backend.database.database import engine, Base
-from backend.routes import auth, meal, prediction, user
+from backend.routes import (
+    auth, meal, prediction, user, ai_chat, report, nutrition_chat, nutrition_coach,
+)
 from backend.utils.logger import app_logger
 
 # Initialize database tables
@@ -54,6 +56,10 @@ app.include_router(auth.router, prefix=settings.API_V1_STR)
 app.include_router(meal.router, prefix=settings.API_V1_STR)
 app.include_router(prediction.router, prefix=settings.API_V1_STR)
 app.include_router(user.router, prefix=settings.API_V1_STR)
+app.include_router(ai_chat.router, prefix=settings.API_V1_STR)
+app.include_router(report.router, prefix=settings.API_V1_STR)
+app.include_router(nutrition_chat.router, prefix=settings.API_V1_STR)
+app.include_router(nutrition_coach.router, prefix=settings.API_V1_STR)
 
 @app.middleware("http")
 async def log_requests(request: Request, call_next):

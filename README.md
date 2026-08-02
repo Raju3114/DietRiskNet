@@ -2,7 +2,11 @@
 
 **Vision-Language-Based Food Recognition and Personalized Disease-Risk-Aware Dietary Recommendation Using Longitudinal Meal Analysis**
 
-DietRiskNet is a production-ready medical AI system that integrates computer vision models (YOLOv8 & EfficientNet) with clinical-grade classifiers (XGBoost) and a comprehensive nutrition database to identify meal items, aggregate nutritional metrics, and predict disease hazards.
+DietRiskNet is a production-ready medical-adjacent AI system that integrates computer vision models (YOLOv8 & EfficientNet) with risk-estimating models (XGBoost) and a comprehensive nutrition database to identify meal items, aggregate nutritional metrics, and predict disease hazards. It also includes a **Personalized AI Nutrition Coach** — a general conversational coach for meal planning, healthy eating, and dietary guidance that works with or without a meal analysis. The coach uses your stored meal history to show a nutrition dashboard (averages, DCI/NIS, risk trend), detect patterns (e.g. high sodium), and suggest smart goals with progress.
+
+> **Important:** DietRiskNet produces disease-risk **estimates**, not medical
+> diagnoses. Read [MODEL_LIMITATIONS.md](MODEL_LIMITATIONS.md) to understand
+> what every model can and cannot tell you before interpreting any score.
 
 ---
 
@@ -12,7 +16,7 @@ DietRiskNet is a production-ready medical AI system that integrates computer vis
 graph TD
     Upload[User Uploads Meal Image] --> YOLO[YOLOv8 detects bounding boxes]
     YOLO --> Crops[Crop detected food regions]
-    Crops --> EffNet[EfficientNet classifies crops into 360 dishes]
+    Crops --> EffNet[EfficientNet classifies crops into 118 Indian dishes]
     EffNet --> CSV[Look up nutrition in Indian Food Nutrition CSV]
     CSV --> Agg[Aggregate meal macros and micronutrients]
     Agg --> DCI[Calculate Dietary Consistency Index - DCI]
@@ -20,8 +24,10 @@ graph TD
     Agg & DCI & NIS --> XGB[XGBoost Predicts Diabetes, Obesity, Hypertension & Deficiency]
     XGB --> Fusion[Weighted Risk Fusion Engine]
     Fusion --> Recs[ExplainDiet Recommendation Generation]
-    Recs --> Database[Save diagnostic log to DB]
+    Recs --> Database[Save analysis record to DB]
     Database --> Dash[Update dashboard & longitudinal trends]
+    Recs --> AI[AI Dietitian + Meal Chat + Nutrition Assistant]
+    AI --> LLM[LLM Provider Layer: Ollama default / Gemini optional]
 ```
 
 ---
@@ -29,8 +35,9 @@ graph TD
 ## Tech Stack
 
 - **Backend:** FastAPI, Python, SQLAlchemy (PostgreSQL / SQLite fallback), Pydantic, JWT Auth, Uvicorn.
-- **Frontend:** Next.js 15, React 19, TypeScript, Tailwind CSS v4, Framer Motion, React Query, Zustand, Recharts.
-- **Machine Learning:** Ultralytics YOLOv8, PyTorch (EfficientNet), XGBoost, OpenCV, NumPy, Pandas.
+- **Frontend:** Next.js 16, React 19, TypeScript, Tailwind CSS v4, Framer Motion, React Query, Zustand, Recharts.
+- **Machine Learning:** Ultralytics YOLOv8, PyTorch (EfficientNet-B3), XGBoost, OpenCV, NumPy, Pandas.
+- **LLM / AI:** provider-agnostic layer — **Ollama (default, local, no API key)** and **Gemini (optional cloud)**; ReportLab PDF.
 - **Deployment:** Docker, Docker Compose.
 
 ---
@@ -86,6 +93,22 @@ pip install -r requirements.txt
 uvicorn backend.main:app --reload
 ```
 API docs will be available at `http://localhost:8000/docs` (Swagger UI).
+
+### AI / LLM Setup (optional, for AI features)
+
+The ML pipeline and rule-based recommendations work with **no LLM**. The AI
+features (AI Dietitian, meal chat, Nutrition Assistant) use **Ollama by
+default**:
+
+```bash
+ollama serve                 # start the local Ollama server
+ollama pull llama3.2:3b      # pull the default model (~2 GB)
+```
+
+Optionally, set `LLM_PROVIDER=gemini` + `GEMINI_API_KEY` in `.env` to use
+Gemini as a cloud provider (with automatic fallback to Ollama). With no LLM
+available, `ai_dietitian` is `null` and rule-based output is used — the app
+never crashes.
 
 ### 2. Frontend Web Application Setup
 From a new terminal session in the `frontend` folder:

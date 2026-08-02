@@ -1,8 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
-from backend.database.database import get_db
-from backend.routes.deps import get_current_user
-from backend.database.models import User
 from backend.schemas.schemas import (
     DiseasePredictionRequest, DiseasePredictionResponse,
     RiskFusionRequest, RiskFusionResponse,
@@ -34,7 +30,7 @@ def predict_obesity(data: DiseasePredictionRequest):
     try:
         bmi = data.weight / ((data.height/100)**2) if data.height > 0 else 22.0
         risk = pred_service.predict_obesity(
-            data.age, data.gender, data.height, data.weight, bmi, data.meal_nutrition.dict()
+            data.age, data.gender, data.height, data.weight, bmi, data.meal_nutrition.model_dump()
         )
         return {"diabetes_risk": 0.0, "obesity_risk": risk, "hypertension_risk": 0.0, "deficiency_risk": 0.0}
     except Exception as e:
@@ -48,7 +44,7 @@ def predict_hypertension(data: DiseasePredictionRequest):
     try:
         bmi = data.weight / ((data.height/100)**2) if data.height > 0 else 22.0
         risk = pred_service.predict_hypertension(
-            data.age, bmi, data.meal_nutrition.dict(), data.existing_conditions
+            data.age, bmi, data.meal_nutrition.model_dump(), data.existing_conditions
         )
         return {"diabetes_risk": 0.0, "obesity_risk": 0.0, "hypertension_risk": risk, "deficiency_risk": 0.0}
     except Exception as e:
@@ -62,7 +58,7 @@ def predict_deficiency(data: DiseasePredictionRequest):
     try:
         bmi = data.weight / ((data.height/100)**2) if data.height > 0 else 22.0
         risk = pred_service.predict_deficiency(
-            data.age, data.gender, bmi, data.meal_nutrition.dict(), data.existing_conditions
+            data.age, data.gender, bmi, data.meal_nutrition.model_dump(), data.existing_conditions
         )
         return {"diabetes_risk": 0.0, "obesity_risk": 0.0, "hypertension_risk": 0.0, "deficiency_risk": risk}
     except Exception as e:
@@ -90,8 +86,8 @@ def risk_fusion(data: RiskFusionRequest):
 def explain_diet(data: ExplainDietRequest):
     try:
         recs = rec_service.recommend(
-            data.meal_nutrition.dict(),
-            data.disease_prediction.dict(),
+            data.meal_nutrition.model_dump(),
+            data.disease_prediction.model_dump(),
             data.dci, data.nis,
             data.history_summary
         )

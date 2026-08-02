@@ -1,0 +1,3 @@
+path,samples,mean_ms,median_ms,p95_ms
+ai_cache_hit,2,0.865,0.865,0.983
+ai_cache_miss,2,2.396,2.396,2.556

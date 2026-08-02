@@ -1,0 +1,13 @@
+{
+  "total_cases": 92,
+  "status_counts": {
+    "ok": 82,
+    "no_food_recognized": 9,
+    "no_nutrition_data": 1
+  },
+  "ok_cases": 82,
+  "dci_available_cases": 8,
+  "multi_food_cases": [],
+  "multi_food_count": 0,
+  "note": "meals persisted in a temporary DB with original timestamps; temp DB removed after run"
+}

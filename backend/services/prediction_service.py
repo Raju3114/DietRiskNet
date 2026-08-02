@@ -10,7 +10,6 @@ class DiseasePredictionService:
 
     def unload(self):
         self.models = {}
-        import gc
         gc.collect()
 
     def load_models(self):
@@ -38,11 +37,36 @@ class DiseasePredictionService:
                 raise e
         gc.collect()
 
-    def predict_all(self, age: int, gender: str, height: float, weight: float, 
-                    meal_nutrition_dict: dict, dci: float, nis: float, 
-                    existing_conditions: list) -> dict:
+    @staticmethod
+    def _prepare_df(df, model, model_name: str):
+        """Reorder the inference DataFrame to the trained model's exact column order.
+
+        XGBoost's ``inplace_predict`` (used by ``predict_proba``) requires the
+        DataFrame columns to be in EXACTLY ``model.feature_names_in_`` order —
+        it does NOT reorder by name and raises on a mismatch.  This is a
+        defensive reliability fix: we reorder explicitly and fail safely with a
+        clear internal error if any required feature is missing, rather than
+        silently substituting a wrong column.  Feature values / engineering /
+        categorical values are unchanged, so predictions are identical.
+        """
+        required = list(model.feature_names_in_)
+        missing = [f for f in required if f not in df.columns]
+        if missing:
+            raise ValueError(
+                f"XGBoost '{model_name}' model is missing required features: {missing}"
+            )
+        return df[required]
+
+    def predict_all(self, age: int, gender: str, height: float, weight: float,
+                    meal_nutrition_dict: dict, existing_conditions: list) -> dict:
         """
         Executes all four XGBoost prediction pipelines and returns risk scores.
+
+        NOTE: The XGBoost models do NOT consume DCI or NIS — those indices feed
+        only the risk-fusion and recommendation stages (see RiskFusionService
+        and ExplainDietService).  They are deliberately absent here so callers
+        do not need to fabricate or thread an index value into a stage that
+        never uses it.
         """
         if not self.models:
             self.load_models()
@@ -102,7 +126,8 @@ class DiseasePredictionService:
             for col in df.columns:
                 if df[col].dtype == object:
                     df[col] = df[col].astype('category')
-                    
+            df = self._prepare_df(df, model, "diabetes")
+
             proba = model.predict_proba(df)[0]
             # Risk is probability of positive class (index 1)
             return float(proba[1])
@@ -150,7 +175,8 @@ class DiseasePredictionService:
             for col in df.columns:
                 if df[col].dtype == object:
                     df[col] = df[col].astype('category')
-                    
+            df = self._prepare_df(df, model, "obesity")
+
             proba = model.predict_proba(df)[0]
             # Multi-class: 7 classes. Sum probabilities of Overweight and Obese classes (indices 2 to 6)
             obesity_prob = float(np.sum(proba[2:]))
@@ -192,7 +218,8 @@ class DiseasePredictionService:
             for col in df.columns:
                 if df[col].dtype == object:
                     df[col] = df[col].astype('category')
-                    
+            df = self._prepare_df(df, model, "hypertension")
+
             proba = model.predict_proba(df)[0]
             # Binary model, return positive probability (index 1)
             return float(proba[1])
@@ -247,7 +274,6 @@ class DiseasePredictionService:
                 'has_night_blindness': 0,
                 'has_fatigue': 0,
                 'has_bleeding_gums': 0,
-                'has_bone_paint': 0,
                 'has_bone_pain': 0,
                 'has_muscle_weakness': 0,
                 'has_numbness_tingling': 0,
@@ -268,7 +294,8 @@ class DiseasePredictionService:
             for col in df.columns:
                 if df[col].dtype == object:
                     df[col] = df[col].astype('category')
-                    
+            df = self._prepare_df(df, model, "deficiency")
+
             proba = model.predict_proba(df)[0]
             # Risk is 1 - proba[0] (i.e. the probability of having any deficiency)
             return float(1.0 - proba[0])

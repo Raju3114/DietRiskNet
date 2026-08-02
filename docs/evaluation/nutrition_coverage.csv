@@ -1,0 +1,119 @@
+class,mapped,priority,resolved_dish
+apple_pie,True,priority2_alias,Apple cinnamon pie
+baby_back_ribs,False,unresolved,Unresolved: baby_back_ribs
+baklava,False,unresolved,Unresolved: baklava
+beef_carpaccio,False,unresolved,Unresolved: beef_carpaccio
+beef_tartare,False,unresolved,Unresolved: beef_tartare
+beet_salad,False,unresolved,Unresolved: beet_salad
+beignets,False,unresolved,Unresolved: beignets
+bibimbap,False,unresolved,Unresolved: bibimbap
+bread_pudding,True,priority2_alias,Bread and butter pudding
+breakfast_burrito,True,priority2_alias,Stuffed egg omelette/omlet
+bruschetta,True,priority2_alias,Cheese and tomato sandwich (toasted) (Cheese aur tamatar ke sandwich (toasted))
+burger,True,priority2_alias,Vegetable burger
+butter_naan,True,priority2_alias,Naan
+caesar_salad,True,priority2_alias,Tossed green salad
+cannoli,False,unresolved,Unresolved: cannoli
+caprese_salad,True,priority2_alias,Tossed salad
+carrot_cake,True,priority2_alias,Carrot cake (Gajar ka cake)
+ceviche,False,unresolved,Unresolved: ceviche
+chai,True,priority2_alias,Hot tea (Garam Chai)
+chapati,True,priority2_alias,Chapati/Roti
+cheese_plate,True,priority4_fuzzy,Cheese patties
+cheesecake,True,priority2_alias,Plain cream cake
+chicken_curry,True,priority2_alias,Chicken curry
+chicken_quesadilla,True,priority4_fuzzy,Chicken salad
+chicken_wings,True,priority4_fuzzy,Chicken chowmein
+chocolate_cake,True,priority3_normalized,Chocolate cake
+chocolate_mousse,True,priority4_fuzzy,Rich chocolate mousse
+chole_bhature,True,priority2_alias,Chickpeas curry (Safed channa curry)
+churros,False,unresolved,Unresolved: churros
+clam_chowder,False,unresolved,Unresolved: clam_chowder
+club_sandwich,True,priority3_normalized,Club sandwich
+crab_cakes,True,priority2_alias,Fish cutlet (Machli ka cutlet)
+creme_brulee,True,priority2_alias,Caramel custard (steamed)
+croque_madame,True,priority2_alias,Egg sandwich (Ande ka sandwich)
+cup_cakes,True,priority2_alias,Plain cream cake
+dal_makhani,True,priority2_alias,Dal makhani
+deviled_eggs,True,priority4_fuzzy,Deviled egg
+dhokla,True,priority2_alias,Dhokla
+donuts,True,priority2_alias,Sponge cake
+dumplings,True,priority2_alias,Spring roll
+edamame,True,priority2_alias,Soyabean curry
+eggs_benedict,True,priority2_alias,Egg sandwich (Ande ka sandwich)
+escargots,False,unresolved,Unresolved: escargots
+falafel,True,priority2_alias,Spinach chickpeas cutlet (Palak channa dal cutlet)
+filet_mignon,False,unresolved,Unresolved: filet_mignon
+fish_and_chips,True,priority2_alias,Fried fish and Chips (English Style) (Tali hui machli aur chips)
+foie_gras,False,unresolved,Unresolved: foie_gras
+french_fries,True,priority2_alias,Dry potato (Sookhe aloo)
+french_onion_soup,True,priority3_normalized,French onion soup
+french_toast,True,priority2_alias,French omelette/omlet
+fried_calamari,True,priority2_alias,Fried fish (Indian style) (Tali hui machli)
+fried_rice,True,priority2_alias,Chinese fried rice
+frozen_yogurt,True,priority2_alias,Vanilla ice cream without egg
+garlic_bread,True,priority2_alias,Cheese toast
+gnocchi,True,priority2_alias,Potato parantha/paratha (Aloo ka parantha/paratha)
+greek_salad,True,priority2_alias,Tossed green salad
+grilled_cheese_sandwich,True,priority2_alias,Cheese toast
+grilled_salmon,True,priority2_alias,Tandoori fish
+guacamole,False,unresolved,Unresolved: guacamole
+gyoza,True,priority2_alias,Spring roll
+hamburger,True,priority2_alias,Vegetable burger
+hot_and_sour_soup,True,priority3_normalized,Hot and sour soup
+hot_dog,False,unresolved,Unresolved: hot_dog
+huevos_rancheros,True,priority2_alias,Stuffed egg omelette/omlet
+hummus,True,priority2_alias,Chickpeas curry (Safed channa curry)
+ice_cream,True,priority2_alias,Vanilla ice cream without egg
+idli,True,priority2_alias,Idli
+jalebi,True,priority2_alias,Gulab Jamun with khoya
+kaathi_rolls,True,priority2_alias,Paneer kaathi roll
+kadai_paneer,True,priority2_alias,Pea paneer curry (Matar paneer)
+kulfi,True,priority2_alias,Kulfi
+lasagna,True,priority2_alias,Macroni cheese pie
+lobster_bisque,False,unresolved,Unresolved: lobster_bisque
+lobster_roll_sandwich,False,unresolved,Unresolved: lobster_roll_sandwich
+macaroni_and_cheese,True,priority4_fuzzy,Macroni cheese pie
+macarons,True,priority2_alias,Chickpea flour cookies (Sweet besan rounds/cookies)
+masala_dosa,True,priority2_alias,Masala dosa
+miso_soup,True,priority2_alias,Clear tomato soup (Tamatar ka soup)
+momos,True,priority2_alias,Spring roll
+mussels,False,unresolved,Unresolved: mussels
+nachos,False,unresolved,Unresolved: nachos
+omelette,True,priority2_alias,Plain omelette/omlet
+onion_rings,True,priority2_alias,Onion pakora/pakoda (Pyaaz ke pakode)
+oysters,False,unresolved,Unresolved: oysters
+paani_puri,True,priority2_alias,Bhel puri
+pad_thai,True,priority2_alias,Home made plain noodles
+paella,True,priority2_alias,Spanish rice
+pakode,True,priority2_alias,Mixed vegetable pakora/pakoda
+pancakes,True,priority4_fuzzy,Pancake
+panna_cotta,True,priority2_alias,Caramel custard (steamed)
+pav_bhaji,True,priority2_alias,Pav bhaji
+peking_duck,True,priority2_alias,Roast chicken
+pho,True,priority2_alias,Chicken consomme (Clear chicken soup)
+pizza,True,priority2_alias,Cheese pizza
+pork_chop,False,unresolved,Unresolved: pork_chop
+poutine,False,unresolved,Unresolved: poutine
+prime_rib,False,unresolved,Unresolved: prime_rib
+pulled_pork_sandwich,False,unresolved,Unresolved: pulled_pork_sandwich
+ramen,True,priority2_alias,Chicken consomme (Clear chicken soup)
+ravioli,True,priority2_alias,Macroni cheese pie
+red_velvet_cake,True,priority2_alias,Chocolate cake
+risotto,True,priority2_alias,Boiled rice (Uble chawal)
+samosa,True,priority2_alias,Vegetable samosa
+sashimi,False,unresolved,Unresolved: sashimi
+scallops,False,unresolved,Unresolved: scallops
+seaweed_salad,True,priority2_alias,Tossed green salad
+shrimp_and_grits,True,priority2_alias,Prawn curry (with coconut) (Jhinga curry)
+spaghetti_bolognese,True,priority3_normalized,Spaghetti bolognese
+spaghetti_carbonara,True,priority2_alias,Macroni cheese pie
+spring_rolls,True,priority2_alias,Spring roll
+steak,False,unresolved,Unresolved: steak
+strawberry_shortcake,True,priority2_alias,Plain cream cake
+sushi,False,unresolved,Unresolved: sushi
+tacos,True,priority2_alias,Paneer kaathi roll
+takoyaki,False,unresolved,Unresolved: takoyaki
+tiramisu,True,priority2_alias,Chocolate cake
+tuna_tartare,False,unresolved,Unresolved: tuna_tartare
+waffles,True,priority2_alias,Pancake

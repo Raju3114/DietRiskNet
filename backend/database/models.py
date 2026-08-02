@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Boolean, JSON, Index
 from sqlalchemy.orm import relationship
-from datetime import datetime
+from backend.utils.datetime_utils import utcnow
 from backend.database.database import Base
 
 class User(Base):
@@ -10,8 +10,8 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     password_hash = Column(String, nullable=False)
     full_name = Column(String, nullable=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, default=utcnow)
+    updated_at = Column(DateTime, default=utcnow, onupdate=utcnow)
 
     # Relationships
     settings = relationship("UserSetting", back_populates="user", uselist=False, cascade="all, delete-orphan")
@@ -28,7 +28,7 @@ class RefreshToken(Base):
     token = Column(String, unique=True, index=True, nullable=False)
     expires_at = Column(DateTime, nullable=False)
     is_revoked = Column(Boolean, default=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=utcnow)
 
     user = relationship("User", back_populates="refresh_tokens")
 
@@ -44,8 +44,8 @@ class UserSetting(Base):
     activity_level = Column(String, default="Moderate")  # Sedentary, Lightly Active, Moderately Active, Very Active
     existing_conditions = Column(JSON, default=list)  # ["diabetes", "hypertension"] etc
     rdi_custom = Column(JSON, nullable=True)  # Custom nutrition goals override
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, default=utcnow)
+    updated_at = Column(DateTime, default=utcnow, onupdate=utcnow)
 
     user = relationship("User", back_populates="settings")
 
@@ -62,7 +62,7 @@ class Meal(Base):
     risk_fusion_score = Column(Float, nullable=True)
     risk_fusion_level = Column(String, nullable=True)
     notes = Column(String, nullable=True)
-    created_at = Column(DateTime, default=datetime.utcnow, index=True)
+    created_at = Column(DateTime, default=utcnow, index=True)
 
     user = relationship("User", back_populates="meals")
     items = relationship("MealItem", back_populates="meal", cascade="all, delete-orphan")
@@ -132,7 +132,7 @@ class DiseasePrediction(Base):
     obesity_risk = Column(Float, default=0.0)
     hypertension_risk = Column(Float, default=0.0)
     deficiency_risk = Column(Float, default=0.0)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=utcnow)
 
     meal = relationship("Meal", back_populates="predictions")
 
@@ -144,7 +144,7 @@ class RiskFusionResult(Base):
     
     fused_score = Column(Float, default=0.0)
     risk_level = Column(String, default="Low") # Low, Moderate, High, Critical
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=utcnow)
 
     meal = relationship("Meal", back_populates="fusion_result")
 
@@ -156,7 +156,7 @@ class Recommendation(Base):
     content = Column(String, nullable=False)
     explanation = Column(String, nullable=False)
     category = Column(String, default="General") # General, Diabetes, Hypertension, Obesity, Deficiency
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=utcnow)
 
     meal = relationship("Meal", back_populates="recommendations")
 
@@ -166,8 +166,8 @@ class DietHistory(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     meal_id = Column(Integer, ForeignKey("meals.id", ondelete="CASCADE"), unique=True, nullable=False)
-    logged_date = Column(DateTime, default=datetime.utcnow, index=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    logged_date = Column(DateTime, default=utcnow, index=True)
+    created_at = Column(DateTime, default=utcnow)
 
     user = relationship("User", back_populates="diet_history")
     meal = relationship("Meal", back_populates="history_entry")
@@ -180,10 +180,14 @@ class AuditLog(Base):
     action = Column(String, nullable=False)
     ip_address = Column(String, nullable=True)
     user_agent = Column(String, nullable=True)
-    timestamp = Column(DateTime, default=datetime.utcnow, index=True)
+    timestamp = Column(DateTime, default=utcnow, index=True)
 
     user = relationship("User", back_populates="audit_logs")
 
 # Indexes
 Index("idx_meal_user_created", Meal.user_id, Meal.created_at)
 Index("idx_diet_history_user_logged", DietHistory.user_id, DietHistory.logged_date)
+
+# AI Dietitian result cache model.
+# Imported here so Base.metadata.create_all() registers the table.
+from backend.models.ai_dietitian import AIDietitianResult  # noqa: E402, F401

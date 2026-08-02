@@ -1,0 +1,21 @@
+{
+  "name": "ai",
+  "provider": "fake (no GEMINI_API_KEY)",
+  "iterations": 2,
+  "metrics": {
+    "ai_cache_hit": {
+      "count": 2,
+      "mean_ms": 0.865,
+      "median_ms": 0.865,
+      "p95_ms": 0.983
+    },
+    "ai_cache_miss": {
+      "count": 2,
+      "mean_ms": 2.396,
+      "median_ms": 2.396,
+      "p95_ms": 2.556
+    }
+  },
+  "avg_response_length": 53.0,
+  "hit_rate": 0.5
+}

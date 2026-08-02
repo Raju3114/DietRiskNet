@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
-from datetime import datetime, timedelta
+from datetime import timedelta
+from backend.utils.datetime_utils import utcnow
 from typing import Optional, Tuple
 from backend.database.models import User, RefreshToken, UserSetting, AuditLog
 from backend.schemas.schemas import UserRegister, UserLogin
@@ -21,7 +22,7 @@ class AuthenticationService:
                 email=data.email,
                 password_hash=hashed_pwd,
                 full_name=data.full_name,
-                created_at=datetime.utcnow()
+                created_at=utcnow()
             )
             db.add(user)
             db.commit()
@@ -57,7 +58,7 @@ class AuthenticationService:
         refresh_token = create_refresh_token(subject=user_id)
         
         # Save refresh token in database
-        expires_at = datetime.utcnow() + timedelta(days=7)
+        expires_at = utcnow() + timedelta(days=7)
         db_token = RefreshToken(
             user_id=user_id,
             token=refresh_token,

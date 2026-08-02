@@ -1,0 +1,31 @@
+{
+  "portion_source": "static configuration, not vision-estimated",
+  "default_serving_weight_g": 100.0,
+  "per_food_serving_overrides": {
+    "idli": 60.0,
+    "masala_dosa": 180.0,
+    "plain_dosa": 150.0,
+    "chapati": 40.0,
+    "rice": 180.0,
+    "fried_rice": 250.0,
+    "burger": 220.0,
+    "pizza": 150.0,
+    "samosa": 100.0,
+    "jalebi": 50.0,
+    "tea": 150.0,
+    "coffee": 150.0
+  },
+  "override_count": 12,
+  "scaling_rule": "nutrient = per_100g_value * (weight_g / 100)",
+  "all_proportional": true,
+  "tested_foods": [
+    "idli",
+    "samosa",
+    "masala_dosa",
+    "butter_naan",
+    "chai",
+    "pizza"
+  ],
+  "vision_estimates_mass": false,
+  "statement": "Food recognition is image-based, but portion mass is currently default/configuration-based rather than visually estimated."
+}

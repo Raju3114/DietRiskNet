@@ -8,10 +8,10 @@ This document outlines the detailed instructions to set up, configure, run, and 
 
 **DietRiskNet** is a Vision-Language-Based Food Recognition and Personalized Disease-Risk-Aware Dietary Recommendation platform. It integrates:
 * **YOLOv8** object detector for localizing food items.
-* **EfficientNet-B0** classifier for categorizing 360 unique food items.
+* **EfficientNet-B3** classifier for classifying 118 food classes (EfficientNet-B0 retained only as a fallback).
 * An Indian food nutrition database mapping to estimate portion-specific calories and macronutrients.
-* Four clinical **XGBoost** diagnostic classifiers for predicting Diabetes, Obesity, Hypertension, and Nutritional Deficiency risks.
-* An **ExplainDiet** recommendation engine providing personalized clinical advice based on daily logs.
+* Four **XGBoost** risk-estimating models for estimating Diabetes, Obesity, Hypertension, and Nutritional Deficiency risk (estimated risk, not diagnosis).
+* An **ExplainDiet** recommendation engine providing personalized dietary guidance based on recent meal logs.
 
 ---
 
@@ -68,7 +68,7 @@ cp .env.example .env
 Inside `.env`, verify the following configurations:
 ```env
 DATABASE_URL=sqlite:///./dietrisknet.db
-SECRET_KEY=dietrisknet_super_secret_jwt_key_2026_capstone
+SECRET_KEY=CHANGE_ME___insecure_dev_jwt_key___DO_NOT_USE_IN_PRODUCTION
 MODELS_DIR=d:\DietRiskNet\backend\trained_models
 NUTRITION_CSV_PATH=d:\DietRiskNet\nutrition\indian_food_nutrition_processed.csv
 UPLOAD_DIR=d:\DietRiskNet\backend\uploads
@@ -174,7 +174,7 @@ If you see the error:
 `FileNotFoundError: [Errno 2] No such file or directory...`
 Ensure the files in `backend/trained_models` exist:
 * `DietRiskNet_FoodDetector_YOLOv8.pt`
-* `DietRiskNet_FoodClassifier_EfficientNetB0.pth` (or `DietRiskNet_FoodClassifier_EfficientNetB3.pth`)
+* `DietRiskNet_FoodClassifier_EfficientNetB3.pth` (fallback: `DietRiskNet_FoodClassifier_EfficientNetB0.pth`)
 * `DietRiskNet_Diabetes_XGBoost.pkl`
 * `DietRiskNet_Obesity_XGBoost.pkl`
 * `DietRiskNet_Hypertension_XGBoost.pkl`

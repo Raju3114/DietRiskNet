@@ -1,0 +1,7 @@
+scenario,calories,protein_g,carbs_g,fats_g,sodium_mg,fiber_g,meal_calorie_fraction,nis,nis_level
+balanced,600,18,90,20,600,9,0.3,0.026,Balanced Diet
+idli,206,5,43,1,450,1.5,0.103,0.4745,Moderate Imbalance
+high_sodium,600,18,90,20,3000,9,0.3,0.5622,Moderate Imbalance
+high_fat,600,15,40,60,700,5,0.3,0.543,Moderate Imbalance
+low_protein,600,4,120,10,700,6,0.3,0.3244,Mild Imbalance
+extreme,1500,80,120,120,4500,2,0.75,0.871,Severe Imbalance

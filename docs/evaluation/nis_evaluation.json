@@ -1,0 +1,39 @@
+{
+  "scenarios": {
+    "balanced": {
+      "nis": 0.026,
+      "level": "Balanced Diet"
+    },
+    "idli": {
+      "nis": 0.4745,
+      "level": "Moderate Imbalance"
+    },
+    "high_sodium": {
+      "nis": 0.5622,
+      "level": "Moderate Imbalance"
+    },
+    "high_fat": {
+      "nis": 0.543,
+      "level": "Moderate Imbalance"
+    },
+    "low_protein": {
+      "nis": 0.3244,
+      "level": "Mild Imbalance"
+    },
+    "extreme": {
+      "nis": 0.871,
+      "level": "Severe Imbalance"
+    }
+  },
+  "nis_is_clinically_validated": false,
+  "note": "NIS is a project-designed dietary imbalance indicator and is not claimed as clinically validated.",
+  "ordering_verified": true,
+  "ascending_nis_order": [
+    "balanced",
+    "low_protein",
+    "idli",
+    "high_fat",
+    "high_sodium",
+    "extreme"
+  ]
+}

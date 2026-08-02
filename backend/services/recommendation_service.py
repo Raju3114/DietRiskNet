@@ -1,5 +1,4 @@
 from typing import List, Dict, Any
-from backend.utils.logger import app_logger
 
 class ExplainDietService:
     def recommend(self, meal_nutrition_dict: dict, disease_prediction_dict: dict, 
@@ -22,7 +21,9 @@ class ExplainDietService:
         def_risk = disease_prediction_dict.get("deficiency_risk", 0.0)
 
         # -- General Nutrition and NIS Check --
-        if nis > 0.4:
+        # nis is None only when no nutrient data existed at all; then there is
+        # no imbalance value to warn about.
+        if nis is not None and nis > 0.4:
             recommendations.append({
                 "category": "General Nutrition",
                 "content": "Diversify your ingredients with fresh fruits, lean proteins, and leafy greens.",
@@ -86,7 +87,9 @@ class ExplainDietService:
             })
 
         # -- Dietary Consistency (DCI) Check --
-        if dci < 0.7:
+        # DCI is null when the user has insufficient longitudinal history —
+        # then there is no consistency value to warn about.
+        if dci is not None and dci < 0.7:
             recommendations.append({
                 "category": "Diet Consistency",
                 "content": "Establish regular meal timings and aim for consistent daily calorie budgets.",

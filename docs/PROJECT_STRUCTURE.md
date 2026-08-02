@@ -108,7 +108,7 @@ graph TD
 1. **Photo Upload**: The FastAPI `/analyze-meal` endpoint receives the meal image.
 2. **YOLOv8 Detection**: The system runs object detection using `DietRiskNet_FoodDetector_YOLOv8.pt` to detect regions of food.
 3. **Segmentation**: Detected regions are cropped from the original image in memory.
-4. **EfficientNet-B0 Classification**: Each cropped image is classified using `DietRiskNet_FoodClassifier_EfficientNetB0.pth` into one of 360 food classes.
+4. **EfficientNet-B3 Classification**: Each cropped image is classified using `DietRiskNet_FoodClassifier_EfficientNetB3.pth` into one of 118 food classes. EfficientNet-B0 (`DietRiskNet_FoodClassifier_EfficientNetB0.pth`) is retained only as an implementation fallback.
 5. **Nutrition Mapping**: The database matches the food class name using fuzzy search to find macronutrients per gram.
 6. **Clinical Indices (DCI & NIS)**:
    * **DCI (Dietary Consistency Index)**: Measures portion size consistency against historical records.

@@ -21,7 +21,9 @@ services:
     container_name: dietrisknet_backend
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/dietrisknet
-      - SECRET_KEY=dietrisknet_super_secret_jwt_key_2026_capstone
+      # IMPORTANT: Replace with a strong random key for any non-local deployment.
+      # Generate with: python -c "import secrets; print(secrets.token_urlsafe(48))"
+      - SECRET_KEY=CHANGE_ME___docker_compose_dev_key___DO_NOT_USE_IN_PRODUCTION
       - MODELS_DIR=/app/backend/trained_models
       - NUTRITION_CSV_PATH=/app/nutrition/indian_food_nutrition_processed.csv
       - UPLOAD_DIR=/app/backend/uploads

@@ -25,20 +25,20 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
 
   if (checking || !token) {
     return (
-      <div className="min-h-screen bg-charcoal-dark flex items-center justify-center text-white">
+      <div className="min-h-screen bg-charcoal-dark flex items-center justify-center text-foreground">
         <div className="flex flex-col items-center space-y-4">
           <div className="relative">
             <Loader2 className="h-10 w-10 animate-spin text-brand-blue" />
             <Activity className="absolute inset-0 m-auto h-4 w-4 text-brand-cyan animate-pulse" />
           </div>
-          <span className="text-xs font-semibold uppercase tracking-widest text-zinc-500">Verifying session...</span>
+          <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Verifying session...</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-charcoal-dark text-white flex flex-col lg:flex-row">
+    <div className="min-h-screen bg-charcoal-dark text-foreground flex flex-col lg:flex-row">
       <Sidebar />
       
       {/* Main content wrapper */}

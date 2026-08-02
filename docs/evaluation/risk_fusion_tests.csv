@@ -1,0 +1,6 @@
+scenario,dci,nis,diabetes,obesity,hypertension,deficiency,fused_score,risk_level
+A_all_available,0.8,0.3,0.2,0.3,0.1,0.2,0.23,Low
+B_dci_unavailable,,0.3,0.2,0.3,0.1,0.2,0.24,Low
+C_dci_and_nis_unavailable,,,0.2,0.3,0.1,0.2,0.21,Low
+D_subset_only,0.8,,0.2,,,,0.2,Low
+E_none_available,,,,,,,,

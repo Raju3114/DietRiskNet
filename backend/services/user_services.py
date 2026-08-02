@@ -1,13 +1,12 @@
 from sqlalchemy.orm import Session
-from datetime import datetime, timedelta
-from sqlalchemy import func
+from datetime import timedelta
+from backend.utils.datetime_utils import utcnow
 from typing import Dict, Any, List
 from backend.database.models import (
-    User, UserSetting, Meal, MealItem, MealNutrition, 
+    User, UserSetting, Meal, MealItem, MealNutrition,
     DiseasePrediction, RiskFusionResult, Recommendation, DietHistory
 )
 from backend.schemas.schemas import UserSettingUpdate
-from backend.utils.logger import db_logger
 
 class ProfileService:
     def get_profile(self, user_id: int, db: Session) -> User:
@@ -34,7 +33,7 @@ class ProfileService:
     def update_settings(self, user_id: int, data: UserSettingUpdate, db: Session) -> UserSetting:
         setting = self.get_settings(user_id, db)
         
-        update_data = data.dict(exclude_unset=True)
+        update_data = data.model_dump(exclude_unset=True)
         for key, val in update_data.items():
             setattr(setting, key, val)
             
@@ -49,7 +48,7 @@ class MealService:
             user_id=user_id,
             image_path=image_path,
             notes=notes,
-            created_at=datetime.utcnow()
+            created_at=utcnow()
         )
         db.add(meal)
         db.commit()
@@ -168,7 +167,7 @@ class MealService:
 class DashboardService:
     def get_dashboard_data(self, user_id: int, db: Session) -> dict:
         # Today's timeframe
-        today_start = datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
+        today_start = utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
         
         # Get today's meals
         today_meals = db.query(Meal).filter(
@@ -210,12 +209,15 @@ class DashboardService:
         # Get latest indexes (from latest meal)
         latest_meal = db.query(Meal).filter(Meal.user_id == user_id).order_by(Meal.created_at.desc()).first()
         
-        dci = latest_meal.dci if latest_meal else 1.0
-        dci_level = latest_meal.dci_level if latest_meal else "High Consistency"
-        nis = latest_meal.nis if latest_meal else 0.0
-        nis_level = latest_meal.nis_level if latest_meal else "Balanced Diet"
-        fusion_score = latest_meal.risk_fusion_score if latest_meal else 0.0
-        fusion_level = latest_meal.risk_fusion_level if latest_meal else "Low"
+        # A user with no logged meals has NO measured consistency / risk data.
+        # Return null (rather than fabricated "perfect health" defaults) so the
+        # UI can surface an "insufficient data" state.
+        dci = latest_meal.dci if latest_meal else None
+        dci_level = latest_meal.dci_level if latest_meal else None
+        nis = latest_meal.nis if latest_meal else None
+        nis_level = latest_meal.nis_level if latest_meal else None
+        fusion_score = latest_meal.risk_fusion_score if latest_meal else None
+        fusion_level = latest_meal.risk_fusion_level if latest_meal else None
         
         # Get recent 5 meals
         recent_db_meals = db.query(Meal).filter(Meal.user_id == user_id).order_by(Meal.created_at.desc()).limit(5).all()
@@ -292,7 +294,7 @@ class HistoryService:
 
 class AnalyticsService:
     def get_trends(self, user_id: int, days: int, db: Session) -> List[dict]:
-        start_date = datetime.utcnow() - timedelta(days=days)
+        start_date = utcnow() - timedelta(days=days)
         
         # Query meals in period
         meals = db.query(Meal).filter(
@@ -311,8 +313,10 @@ class AnalyticsService:
                     "protein": 0.0,
                     "carbs": 0.0,
                     "fats": 0.0,
-                    "dci": m.dci or 1.0,
-                    "nis": m.nis or 0.0,
+                    # Keep null DCI/NIS as null — do not fabricate a "perfect"
+                    # consistency of 1.0 for meals without longitudinal data.
+                    "dci": m.dci,
+                    "nis": m.nis,
                     # Fallback default risks if prediction missing
                     "diabetes_risk": m.predictions.diabetes_risk if m.predictions else 0.1,
                     "obesity_risk": m.predictions.obesity_risk if m.predictions else 0.1,
@@ -329,9 +333,11 @@ class AnalyticsService:
                 data["fats"] += m.nutrition.fats
             
             data["meal_count"] += 1
-            # Keep latest indices and prediction of the day
-            data["dci"] = m.dci or data["dci"]
-            data["nis"] = m.nis or data["nis"]
+            # Keep latest indices and prediction of the day (only overwrite with non-null)
+            if m.dci is not None:
+                data["dci"] = m.dci
+            if m.nis is not None:
+                data["nis"] = m.nis
             if m.predictions:
                 data["diabetes_risk"] = m.predictions.diabetes_risk
                 data["obesity_risk"] = m.predictions.obesity_risk

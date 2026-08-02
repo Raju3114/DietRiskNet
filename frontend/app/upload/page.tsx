@@ -29,13 +29,13 @@ export default function UploadPage() {
     'Mapping to Indian food composition table database...',
     'Calculating cumulative NIS imbalance values...',
     'Generating Timing and Portion Consistency Index (DCI)...',
-    'Executing XGBoost Diabetes Mellitus diagnostics...',
-    'Executing XGBoost Obesity Index diagnostics...',
-    'Executing XGBoost Hypertension diagnostics...',
-    'Evaluating RDA Nutritional Deficiency parameters...',
-    'Calculating Fused Risk Score probabilities...',
+    'Estimating diabetes mellitus risk...',
+    'Estimating obesity risk...',
+    'Estimating hypertension risk...',
+    'Evaluating RDA nutritional deficiency parameters...',
+    'Calculating fused risk score probabilities...',
     'Compiling ExplainDiet personalized recommendations...',
-    'Committing diagnostic record to database...',
+    'Saving analysis record to database...',
   ];
 
   // Rotate steps animation while loading
@@ -99,10 +99,10 @@ export default function UploadPage() {
             <Activity className="h-3.5 w-3.5 text-brand-cyan animate-pulse" />
             <span>Computer Vision Ingestion</span>
           </div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-white flex items-center space-x-3">
+          <h1 className="text-3xl font-extrabold tracking-tight text-foreground flex items-center space-x-3">
             <span>AI Food Scanner</span>
           </h1>
-          <p className="text-zinc-550 text-[10px] font-extrabold uppercase tracking-wider mt-1">Upload meal photo for YOLOv8 crop localization &amp; EfficientNet diagnostics analysis.</p>
+          <p className="text-muted-foreground text-[10px] font-extrabold uppercase tracking-wider mt-1">Upload meal photo for YOLOv8 food detection &amp; EfficientNet recognition.</p>
         </div>
 
         <AnimatePresence mode="wait">
@@ -121,7 +121,7 @@ export default function UploadPage() {
               </div>
               
               <div className="space-y-3.5 max-w-md">
-                <h3 className="text-[10px] font-extrabold uppercase tracking-widest text-zinc-400">Running Vision &amp; Clinical Pipeline</h3>
+                <h3 className="text-[10px] font-extrabold uppercase tracking-widest text-muted-foreground">Running Vision &amp; Clinical Pipeline</h3>
                 <p className="text-xs text-brand-cyan font-bold animate-pulse h-12 flex items-center justify-center leading-relaxed">
                   {steps[stepIndex]}
                 </p>
@@ -134,7 +134,7 @@ export default function UploadPage() {
                 />
               </div>
               
-              <span className="text-[9px] font-extrabold text-zinc-500 uppercase tracking-widest">
+              <span className="text-[9px] font-extrabold text-muted-foreground uppercase tracking-widest">
                 Pipeline Stage {stepIndex + 1} of {steps.length}
               </span>
             </motion.div>
@@ -186,12 +186,12 @@ export default function UploadPage() {
                 ) : (
                   /* Helper Prompt */
                   <>
-                    <div className="p-4 rounded-xl bg-charcoal-dark border border-charcoal-border text-zinc-500 group-hover:text-brand-blue group-hover:border-brand-blue/20 transition-all glow-blue">
+                    <div className="p-4 rounded-xl bg-charcoal-dark border border-charcoal-border text-muted-foreground group-hover:text-brand-blue group-hover:border-brand-blue/20 transition-all glow-blue">
                       <Upload className="h-6 w-6" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-bold text-white uppercase tracking-wider">Drag and drop your food photo</h4>
-                      <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest mt-1">Supports PNG, JPG, or JPEG up to 10MB</p>
+                      <h4 className="text-xs font-bold text-foreground uppercase tracking-wider">Drag and drop your food photo</h4>
+                      <p className="text-[9px] text-muted-foreground font-bold uppercase tracking-widest mt-1">Supports PNG, JPG, or JPEG up to 10MB</p>
                     </div>
                   </>
                 )}
@@ -199,13 +199,13 @@ export default function UploadPage() {
 
               {/* Meal Notes */}
               <div className="space-y-2">
-                <label className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">Optional Clinical Metadata (Meal Notes)</label>
-                <textarea 
+                <label className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Optional Clinical Metadata (Meal Notes)</label>
+                <textarea
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   placeholder="e.g., Breakfast post-workout, default portion sizes, minimal added salt"
                   rows={3}
-                  className="w-full bg-charcoal-medium/55 border border-charcoal-border rounded-2xl p-4 text-xs font-semibold text-white focus:outline-none focus:border-brand-blue/50 focus:ring-1 focus:ring-brand-blue/20 transition-all resize-none placeholder:text-zinc-600 shadow-inner"
+                  className="w-full bg-charcoal-medium/55 border border-charcoal-border rounded-2xl p-4 text-xs font-semibold text-foreground focus:outline-none focus:border-brand-blue/50 focus:ring-1 focus:ring-brand-blue/20 transition-all resize-none shadow-inner"
                 />
               </div>
 
@@ -216,7 +216,7 @@ export default function UploadPage() {
                 className="w-full py-4 bg-brand-blue hover:bg-brand-blue-hover text-white font-extrabold rounded-xl text-[10px] uppercase tracking-widest flex items-center justify-center space-x-2 shadow-lg shadow-brand-blue/15 border border-brand-blue/20 cursor-pointer disabled:bg-charcoal-medium/50 disabled:text-zinc-600 disabled:border-charcoal-border disabled:cursor-not-allowed transition-all duration-300"
               >
                 <Sparkles className="h-4 w-4" />
-                <span>Execute Diagnostic Analysis</span>
+                <span>Run Risk Analysis</span>
               </button>
             </motion.form>
           )}

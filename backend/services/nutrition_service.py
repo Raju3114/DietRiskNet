@@ -80,8 +80,50 @@ SYNONYM_MAP = {
     "red_velvet_cake": "Chocolate cake",
     "seaweed_salad": "Tossed green salad",
     "spaghetti_carbonara": "Macroni cheese pie",
-    "strawberry_shortcake": "Plain cream cake"
+    "strawberry_shortcake": "Plain cream cake",
+    # Additional defensible mappings (validated against the CSV during audit).
+    # Only classes with a genuinely similar existing Indian record were added;
+    # classes with no defensible equivalent remain unresolved and are surfaced
+    # to the UI as nutrition-unavailable (see lookup()).
+    "hummus": "Chickpeas curry (Safed channa curry)",                       # chickpea-based dip vs chickpea curry
+    "edamame": "Soyabean curry",                                            # young soy beans vs soy curry
+    "frozen_yogurt": "Vanilla ice cream without egg",                       # dairy frozen dessert
+    "risotto": "Boiled rice (Uble chawal)",                                 # rice-based dish
+    "gnocchi": "Potato parantha/paratha (Aloo ka parantha/paratha)",        # potato-based
+    "croque_madame": "Egg sandwich (Ande ka sandwich)",                     # bread + egg + cheese
+    "pad_thai": "Home made plain noodles",                                  # noodle dish
+    "fried_calamari": "Fried fish (Indian style) (Tali hui machli)",        # fried seafood
+    "shrimp_and_grits": "Prawn curry (with coconut) (Jhinga curry)",        # shellfish
+    "bruschetta": "Cheese and tomato sandwich (toasted) (Cheese aur tamatar ke sandwich (toasted))",  # toasted bread + tomato
 }
+
+# Display-name overrides for the frontend.
+#
+# These are applied when the CSV dish name contains a default modifier
+# (e.g. "Vegetable samosa") that can be omitted for a cleaner display
+# without changing the meaning of the dish.
+#
+# Only entries where the modifier is truly redundant are listed here.
+# Dishes where removing the modifier would change the identity
+# (e.g. "Chicken biryani" vs "Vegetable biryani", "Masala dosa" vs
+# "Plain dosa") are intentionally NOT included.
+DISPLAY_NAMES = {
+    # Samosa — "vegetable" is the default, no other variety exists in the DB
+    "Vegetable samosa": "Samosa",
+    # Dosa varieties — "plain" is redundant, other varieties have their own names
+    "Plain dosa": "Dosa",
+    # Idli — same reasoning
+    "Plain idli": "Idli",
+    # Omelette — "plain" is redundant
+    "Plain omelette/omlet": "Omelette",
+    # Burger — "vegetable" is the default in this database
+    "Vegetable burger": "Burger",
+    # Cutlet — "vegetable" is the default
+    "Vegetable cutlet": "Cutlet",
+    # Roll — "vegetable" is the default
+    "Vegetable roll": "Roll",
+}
+
 
 class NutritionService:
     def __init__(self):
@@ -107,6 +149,7 @@ class NutritionService:
                     # Parse nutritional facts
                     data = {
                         "name": dish_name,
+                        "nutrition_available": True,
                         "calories": float(row.get("Calories (kcal)", 0) or 0),
                         "carbs": float(row.get("Carbohydrates (g)", 0) or 0),
                         "protein": float(row.get("Protein (g)", 0) or 0),
@@ -180,9 +223,22 @@ class NutritionService:
         app_logger.warning(f"Nutrition lookup failed for food: '{food_name}'. Returning default values.")
         return self._default_nutrition(food_name)
 
+    def get_display_name(self, dish_name: str) -> str | None:
+        """Return a friendlier display label for *dish_name*, or ``None``.
+
+        The original CSV dish name is always returned in the ``name``
+        field so that the raw data is preserved.  This method produces
+        an optional ``display_name`` that the frontend can render in
+        place of the raw name.
+
+        To add a new display label, add an entry to ``DISPLAY_NAMES``.
+        """
+        return DISPLAY_NAMES.get(dish_name)
+
     def _default_nutrition(self, name: str) -> dict:
         return {
             "name": f"Unresolved: {name}" if name != "Unknown" else "Unknown",
+            "nutrition_available": False,  # no valid record — must not be treated as real zeros
             "calories": 0.0,
             "carbs": 0.0,
             "protein": 0.0,

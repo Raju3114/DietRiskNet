@@ -1,0 +1,11 @@
+scenario,distinct_valid_days,daily_calories,dci,dci_level
+0_valid_days,0,,None,Insufficient Data
+1_valid_day,1,2026-08-02=2000,None,Insufficient Data
+multiple_meals_same_day,1,2026-08-02=2150,None,Insufficient Data
+2_consistent_days,2,2026-08-01=2000;2026-08-02=2000,1.0,High Consistency
+2_varying_days,2,2026-08-01=2600;2026-08-02=1800,0.8182,Moderate Consistency
+3_consistent_days,3,2026-07-31=2100;2026-08-01=2050;2026-08-02=2000,0.9801,High Consistency
+3_highly_varying_days,3,2026-07-31=3200;2026-08-01=2600;2026-08-02=1200,0.6409,Low Consistency
+7_consistent_days,7,2026-07-27=2000;2026-07-28=2000;2026-07-29=2000;2026-07-30=2000;2026-07-31=2000;2026-08-01=2000;2026-08-02=2000,1.0,High Consistency
+7_varying_days,7,2026-07-27=2900;2026-07-28=2650;2026-07-29=2400;2026-07-30=2150;2026-07-31=1900;2026-08-01=1650;2026-08-02=1400,0.7674,Moderate Consistency
+zero_calorie_history,0,,None,Insufficient Data

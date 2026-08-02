@@ -1,0 +1,2 @@
+metric,samples,mean_ms,median_ms,p95_ms
+pdf_generation,3,8.38,8.252,8.659

@@ -51,12 +51,12 @@ export default function RecommendationsPage() {
         <div>
           <div className="flex items-center space-x-2 px-3 py-1.5 rounded-full border border-brand-emerald/20 bg-brand-emerald/5 text-brand-emerald text-[9px] font-bold uppercase tracking-widest mb-3 w-fit glow-emerald">
             <Sparkles className="h-3.5 w-3.5 text-brand-emerald animate-pulse" />
-            <span>Clinical Recommendations</span>
+            <span>Dietary Recommendations</span>
           </div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-white flex items-center space-x-3">
+          <h1 className="text-3xl font-extrabold tracking-tight text-foreground flex items-center space-x-3">
             <span>ExplainDiet Advisory</span>
           </h1>
-          <p className="text-zinc-550 text-[10px] font-extrabold uppercase tracking-wider mt-1">Personalized dietary adjustments compiled from RDI margins and XGBoost risk parameters.</p>
+          <p className="text-muted-foreground text-[10px] font-extrabold uppercase tracking-wider mt-1">Personalized dietary adjustments compiled from RDI margins and XGBoost risk parameters.</p>
         </div>
 
         {/* ExplainDiet Intro Card */}
@@ -65,8 +65,8 @@ export default function RecommendationsPage() {
             <Sparkles className="h-3.5 w-3.5 text-brand-cyan" />
             <span>ExplainDiet Recommendation Engine</span>
           </div>
-          <h2 className="text-sm font-extrabold text-white uppercase tracking-wider">Diagnostic Derivation Logic</h2>
-          <p className="text-zinc-400 text-xs leading-relaxed font-semibold">
+          <h2 className="text-sm font-extrabold text-foreground uppercase tracking-wider">Risk-to-Recommendation Logic</h2>
+          <p className="text-muted-foreground text-xs leading-relaxed font-semibold">
             Our recommendation engine combines predicted disease risks from the XGBoost classifiers with current nutritional input distributions, matching variables against reference bounds. Suggestions clarify the physiological path of your metabolism in response to specific food crops.
           </p>
         </div>
@@ -95,10 +95,10 @@ export default function RecommendationsPage() {
                       {rec.category}
                     </span>
                   </div>
-                  <h3 className="text-xs font-extrabold text-white leading-normal uppercase tracking-wider">{rec.content}</h3>
+                  <h3 className="text-xs font-extrabold text-foreground leading-normal uppercase tracking-wider">{rec.content}</h3>
                   
-                  <div className="p-4 rounded-xl bg-charcoal-dark/50 border border-charcoal-border/80 text-xs text-zinc-400 leading-relaxed font-semibold space-y-1">
-                    <span className="font-extrabold text-zinc-300 block mb-1 uppercase tracking-wider text-[8px]">Clinical Explanation:</span>
+                  <div className="p-4 rounded-xl bg-charcoal-dark/50 border border-charcoal-border/80 text-xs text-muted-foreground leading-relaxed font-semibold space-y-1">
+                    <span className="font-extrabold text-muted-foreground block mb-1 uppercase tracking-wider text-[8px]">Clinical Explanation:</span>
                     <p className="leading-relaxed">{rec.explanation}</p>
                   </div>
                 </div>
@@ -107,15 +107,15 @@ export default function RecommendationsPage() {
           ) : (
             <div className="p-16 rounded-2xl bg-charcoal-medium/50 border border-charcoal-border text-center shadow-inner">
               <CheckCircle2 className="h-10 w-10 text-brand-emerald mx-auto mb-4" />
-              <h3 className="text-xs font-bold text-white mb-1 uppercase tracking-wider">No Active Recommendations</h3>
-              <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Log a new meal with YOLO crops to trigger recommendation mapping.</p>
+              <h3 className="text-xs font-bold text-foreground mb-1 uppercase tracking-wider">No Active Recommendations</h3>
+              <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">Log a new meal with YOLO crops to trigger recommendation mapping.</p>
             </div>
           )}
         </motion.div>
 
         {/* Navigation Action Buttons */}
         <div className="flex justify-between gap-4 mt-8 pt-6 border-t border-charcoal-border/50">
-          <Link href="/predictions" className="px-6 py-3.5 bg-charcoal-medium border border-charcoal-border hover:bg-charcoal-light hover:border-zinc-700 text-zinc-350 hover:text-white text-[10px] font-bold uppercase tracking-widest rounded-xl text-center transition-all flex items-center space-x-2 cursor-pointer">
+          <Link href="/predictions" className="px-6 py-3.5 bg-charcoal-medium border border-charcoal-border hover:bg-charcoal-light hover:border-zinc-700 text-muted-foreground hover:text-foreground text-[10px] font-bold uppercase tracking-widest rounded-xl text-center transition-all flex items-center space-x-2 cursor-pointer">
             <ArrowLeft className="h-4 w-4" />
             <span>Disease Risks</span>
           </Link>

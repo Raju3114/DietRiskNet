@@ -1,0 +1,6 @@
+probe_id,gt_object_count,gt_foods,service_yolo_boxes,service_confidences,per_crop_classifier,detect_matched_gt,note
+P2_idli_pizza,2,"idli,pizza",2,0.896;0.766,crop0:pizza@0.833;crop1:idli@0.767,YES,
+P3_idli_pizza_samosa,3,"idli,pizza,samosa",3,0.714;0.527;0.432,crop0:pizza@0.81;crop1:samosa@0.982;crop2:idli@0.789,YES,
+P4_four_distinct,4,"idli,pizza,samosa,fried_rice",0,,,NO,
+P2_same_idli_twice,2,"idli,idli",2,0.766;0.66,crop0:idli@0.768;crop1:idli@0.766,YES,
+P2_dosa_chapati,2,"masala_dosa,chapati",2,0.777;0.396,crop0:chapati@0.913;crop1:masala_dosa@0.995,YES,

@@ -1,0 +1,77 @@
+{
+  "configured_weights": {
+    "DCI": 0.25,
+    "NIS": 0.25,
+    "Diabetes": 0.2,
+    "Obesity": 0.15,
+    "Hypertension": 0.1,
+    "Deficiency": 0.05
+  },
+  "weights_total": 1.0,
+  "weights_total_is_1": true,
+  "renormalisation": "available weights are renormalised to sum to 1; missing components are not fabricated",
+  "manual_calculation_scenario_B": {
+    "formula": "sum(w_i*v_i for available i) / sum(w_i for available i)",
+    "available_weight": 0.75,
+    "manual_fused_score": 0.24,
+    "service_fused_score": 0.24,
+    "match": true
+  },
+  "scenarios": [
+    {
+      "scenario": "A_all_available",
+      "dci": 0.8,
+      "nis": 0.3,
+      "diabetes": 0.2,
+      "obesity": 0.3,
+      "hypertension": 0.1,
+      "deficiency": 0.2,
+      "fused_score": 0.23,
+      "risk_level": "Low"
+    },
+    {
+      "scenario": "B_dci_unavailable",
+      "dci": null,
+      "nis": 0.3,
+      "diabetes": 0.2,
+      "obesity": 0.3,
+      "hypertension": 0.1,
+      "deficiency": 0.2,
+      "fused_score": 0.24,
+      "risk_level": "Low"
+    },
+    {
+      "scenario": "C_dci_and_nis_unavailable",
+      "dci": null,
+      "nis": null,
+      "diabetes": 0.2,
+      "obesity": 0.3,
+      "hypertension": 0.1,
+      "deficiency": 0.2,
+      "fused_score": 0.21,
+      "risk_level": "Low"
+    },
+    {
+      "scenario": "D_subset_only",
+      "dci": 0.8,
+      "nis": null,
+      "diabetes": 0.2,
+      "obesity": null,
+      "hypertension": null,
+      "deficiency": null,
+      "fused_score": 0.2,
+      "risk_level": "Low"
+    },
+    {
+      "scenario": "E_none_available",
+      "dci": null,
+      "nis": null,
+      "diabetes": null,
+      "obesity": null,
+      "hypertension": null,
+      "deficiency": null,
+      "fused_score": null,
+      "risk_level": null
+    }
+  ]
+}

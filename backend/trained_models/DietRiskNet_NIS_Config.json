@@ -7,26 +7,11 @@
         "Sodium": 2300,
         "Fiber": 30
     },
-    "Thresholds": {
-        "Balanced Diet": [
-            0.0,
-            0.2
-        ],
-        "Mild Imbalance": [
-            0.2,
-            0.4
-        ],
-        "Moderate Imbalance": [
-            0.4,
-            0.6
-        ],
-        "High Imbalance": [
-            0.6,
-            0.8
-        ],
-        "Severe Imbalance": [
-            0.8,
-            999
-        ]
-    }
+    "levels": [
+        {"value": 0.20, "label": "Balanced Diet"},
+        {"value": 0.40, "label": "Mild Imbalance"},
+        {"value": 0.60, "label": "Moderate Imbalance"},
+        {"value": 0.80, "label": "High Imbalance"},
+        {"label": "Severe Imbalance"}
+    ]
 }

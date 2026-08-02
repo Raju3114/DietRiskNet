@@ -1,0 +1,19 @@
+{
+  "name": "cache",
+  "iterations": 10,
+  "hit_rate": 0.5,
+  "metrics": {
+    "cache_hit": {
+      "count": 5,
+      "mean_ms": 0.622,
+      "median_ms": 0.323,
+      "p95_ms": 1.804
+    },
+    "cache_miss": {
+      "count": 5,
+      "mean_ms": 0.314,
+      "median_ms": 0.299,
+      "p95_ms": 0.417
+    }
+  }
+}

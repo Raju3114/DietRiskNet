@@ -1,0 +1,13 @@
+{
+  "name": "pdf",
+  "iterations": 3,
+  "avg_pdf_size_bytes": 4179.0,
+  "metrics": {
+    "pdf_generation": {
+      "count": 3,
+      "mean_ms": 8.38,
+      "median_ms": 8.252,
+      "p95_ms": 8.659
+    }
+  }
+}

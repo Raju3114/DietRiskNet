@@ -1,0 +1,12 @@
+input,yolo_boxes,outcome,classifier_conf,classifier_class
+real_food_sample_meal,1,recognized,0.8573,idli
+solid_color_red,0,no_food_recognized,0.0208,ice_cream
+solid_color_blue,0,no_food_recognized,0.0215,foie_gras
+solid_color_white,0,no_food_recognized,0.0282,foie_gras
+solid_color_black,0,no_food_recognized,0.0209,foie_gras
+gradient,0,no_food_recognized,0.0322,strawberry_shortcake
+gaussian_noise,0,no_food_recognized,0.0364,ice_cream
+dark_image,0,no_food_recognized,0.021,foie_gras
+tiny_8x8,0,no_food_recognized,0.0217,foie_gras
+blurred_real_food,1,low_confidence_rejected,0.0886,tuna_tartare
+corrupt_bytes,,error,,Truncated File Read

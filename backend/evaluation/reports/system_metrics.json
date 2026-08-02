@@ -1,0 +1,122 @@
+{
+  "pipeline": {
+    "name": "pipeline",
+    "iterations": 2,
+    "memory_mb": {
+      "current_mb": 56.956,
+      "peak_mb": 62.393
+    },
+    "metrics": {
+      "yolo_detection": {
+        "count": 2,
+        "mean_ms": 0.002,
+        "median_ms": 0.002,
+        "p95_ms": 0.003
+      },
+      "efficientnet_classification": {
+        "count": 2,
+        "mean_ms": 10.386,
+        "median_ms": 10.386,
+        "p95_ms": 10.422
+      },
+      "nutrition_lookup": {
+        "count": 2,
+        "mean_ms": 0.43,
+        "median_ms": 0.43,
+        "p95_ms": 0.559
+      },
+      "dci": {
+        "count": 2,
+        "mean_ms": 1.422,
+        "median_ms": 1.422,
+        "p95_ms": 1.777
+      },
+      "nis": {
+        "count": 2,
+        "mean_ms": 0.022,
+        "median_ms": 0.022,
+        "p95_ms": 0.025
+      },
+      "disease_prediction": {
+        "count": 2,
+        "mean_ms": 51.438,
+        "median_ms": 51.438,
+        "p95_ms": 52.831
+      },
+      "risk_fusion": {
+        "count": 2,
+        "mean_ms": 0.005,
+        "median_ms": 0.005,
+        "p95_ms": 0.006
+      },
+      "rule_recommendations": {
+        "count": 2,
+        "mean_ms": 0.003,
+        "median_ms": 0.003,
+        "p95_ms": 0.003
+      }
+    },
+    "detections": 1
+  },
+  "cache": {
+    "name": "cache",
+    "iterations": 10,
+    "hit_rate": 0.5,
+    "metrics": {
+      "cache_hit": {
+        "count": 5,
+        "mean_ms": 0.622,
+        "median_ms": 0.323,
+        "p95_ms": 1.804
+      },
+      "cache_miss": {
+        "count": 5,
+        "mean_ms": 0.314,
+        "median_ms": 0.299,
+        "p95_ms": 0.417
+      }
+    }
+  },
+  "ai": {
+    "name": "ai",
+    "provider": "fake (no GEMINI_API_KEY)",
+    "iterations": 2,
+    "metrics": {
+      "ai_cache_hit": {
+        "count": 2,
+        "mean_ms": 0.865,
+        "median_ms": 0.865,
+        "p95_ms": 0.983
+      },
+      "ai_cache_miss": {
+        "count": 2,
+        "mean_ms": 2.396,
+        "median_ms": 2.396,
+        "p95_ms": 2.556
+      }
+    },
+    "avg_response_length": 53.0,
+    "hit_rate": 0.5
+  },
+  "pdf": {
+    "name": "pdf",
+    "iterations": 3,
+    "avg_pdf_size_bytes": 4179.0,
+    "metrics": {
+      "pdf_generation": {
+        "count": 3,
+        "mean_ms": 8.38,
+        "median_ms": 8.252,
+        "p95_ms": 8.659
+      }
+    }
+  },
+  "system": {
+    "memory": {
+      "peak_mb": 145.2,
+      "current_mb": 38.4,
+      "rss_mb": 210.5
+    },
+    "cpu_percent": 3.4
+  }
+}

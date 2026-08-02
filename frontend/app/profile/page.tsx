@@ -105,7 +105,7 @@ export default function ProfilePage() {
     try {
       await profileMutation.mutateAsync();
       await settingsMutation.mutateAsync();
-      alert('Profile and demographics updated successfully. XGBoost diagnostic risk models will now evaluate using these parameters.');
+      alert('Profile and demographics updated successfully. XGBoost risk-estimation models will now evaluate using these parameters.');
       refetch();
     } catch (err) {
       const error = err instanceof Error ? err : new Error(String(err));
@@ -129,7 +129,7 @@ export default function ProfilePage() {
             <div className="h-10 w-10 border-4 border-brand-blue border-t-transparent rounded-full animate-spin" />
             <Activity className="absolute inset-0 m-auto h-4.5 w-4.5 text-brand-cyan animate-pulse" />
           </div>
-          <span className="text-zinc-500 text-xs font-semibold uppercase tracking-widest animate-pulse">Loading demographic variables...</span>
+          <span className="text-muted-foreground text-xs font-semibold uppercase tracking-widest animate-pulse">Loading demographic variables...</span>
         </div>
       </ProtectedRoute>
     );
@@ -145,34 +145,34 @@ export default function ProfilePage() {
             <User className="h-3.5 w-3.5 text-brand-blue" />
             <span>Clinical Demographics</span>
           </div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-white flex items-center space-x-3">
+          <h1 className="text-3xl font-extrabold tracking-tight text-foreground flex items-center space-x-3">
             <span>Profile Records</span>
           </h1>
-          <p className="text-zinc-555 text-[10px] font-extrabold uppercase tracking-wider mt-1">Configure clinical metrics utilized for disease risk estimations.</p>
+          <p className="text-muted-foreground text-[10px] font-extrabold uppercase tracking-wider mt-1">Configure clinical metrics utilized for disease risk estimations.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="p-6.5 rounded-2xl bg-charcoal-medium/50 border border-charcoal-border grid grid-cols-1 md:grid-cols-2 gap-6 shadow-md">
             {/* Full Name */}
             <div className="space-y-2">
-              <label className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest block">Full Name</label>
+              <label className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest block">Full Name</label>
               <input 
                 type="text" 
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full bg-charcoal-light/60 border border-charcoal-border/80 rounded-xl p-3 text-xs text-white placeholder-zinc-650 focus:outline-none focus:border-brand-blue/50 focus:ring-1 focus:ring-brand-blue/25 transition-all shadow-inner"
+                className="w-full bg-charcoal-light/60 border border-charcoal-border/80 rounded-xl p-3 text-xs text-foreground focus:outline-none focus:border-brand-blue/50 focus:ring-1 focus:ring-brand-blue/25 transition-all shadow-inner"
               />
             </div>
 
             {/* Email (Readonly) */}
             <div className="space-y-2 opacity-65">
-              <label className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest block">Email Address</label>
+              <label className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest block">Email Address</label>
               <input 
                 type="email" 
                 disabled
                 value={profile?.email || ''}
-                className="w-full bg-charcoal-light/40 border border-charcoal-border/50 rounded-xl p-3 text-xs text-zinc-500 cursor-not-allowed"
+                className="w-full bg-charcoal-light/40 border border-charcoal-border/50 rounded-xl p-3 text-xs text-muted-foreground cursor-not-allowed"
               />
             </div>
           </div>
@@ -180,9 +180,9 @@ export default function ProfilePage() {
           {/* XGBoost Demographics Card */}
           <div className="p-6.5 rounded-2xl bg-charcoal-medium/50 border border-charcoal-border space-y-6 shadow-md">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <h3 className="text-xs font-bold text-white flex items-center space-x-2.5 uppercase tracking-wider">
+              <h3 className="text-xs font-bold text-foreground flex items-center space-x-2.5 uppercase tracking-wider">
                 <Settings className="h-4.5 w-4.5 text-brand-blue animate-pulse" />
-                <span>Diagnostic Metric Vectors</span>
+                <span>Risk Assessment Inputs</span>
               </h3>
 
               {computedBMI && (
@@ -197,7 +197,7 @@ export default function ProfilePage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Age */}
               <div className="space-y-2">
-                <label className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest block">Age (Years)</label>
+                <label className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest block">Age (Years)</label>
                 <input 
                   type="number" 
                   min={1} 
@@ -208,17 +208,17 @@ export default function ProfilePage() {
                     const val = parseInt(e.target.value);
                     setAge(Number.isNaN(val) ? '' : val);
                   }}
-                  className="w-full bg-charcoal-light/60 border border-charcoal-border/80 rounded-xl p-3 text-xs text-white placeholder-zinc-655 focus:outline-none focus:border-brand-blue/50 focus:ring-1 focus:ring-brand-blue/25 transition-all shadow-inner"
+                  className="w-full bg-charcoal-light/60 border border-charcoal-border/80 rounded-xl p-3 text-xs text-foreground focus:outline-none focus:border-brand-blue/50 focus:ring-1 focus:ring-brand-blue/25 transition-all shadow-inner"
                 />
               </div>
 
               {/* Gender */}
               <div className="space-y-2">
-                <label className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest block">Gender</label>
+                <label className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest block">Gender</label>
                 <select 
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
-                  className="w-full bg-charcoal-light/60 border border-charcoal-border/80 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-brand-blue/50 focus:ring-1 focus:ring-brand-blue/25 transition-all shadow-inner cursor-pointer"
+                  className="w-full bg-charcoal-light/60 border border-charcoal-border/80 rounded-xl p-3 text-xs text-foreground focus:outline-none focus:border-brand-blue/50 focus:ring-1 focus:ring-brand-blue/25 transition-all shadow-inner cursor-pointer"
                 >
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
@@ -227,7 +227,7 @@ export default function ProfilePage() {
 
               {/* Height */}
               <div className="space-y-2">
-                <label className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest block">Height (cm)</label>
+                <label className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest block">Height (cm)</label>
                 <input 
                   type="number" 
                   step="0.1"
@@ -237,13 +237,13 @@ export default function ProfilePage() {
                     const val = parseFloat(e.target.value);
                     setHeight(Number.isNaN(val) ? '' : val);
                   }}
-                  className="w-full bg-charcoal-light/60 border border-charcoal-border/80 rounded-xl p-3 text-xs text-white placeholder-zinc-655 focus:outline-none focus:border-brand-blue/50 focus:ring-1 focus:ring-brand-blue/25 transition-all shadow-inner"
+                  className="w-full bg-charcoal-light/60 border border-charcoal-border/80 rounded-xl p-3 text-xs text-foreground focus:outline-none focus:border-brand-blue/50 focus:ring-1 focus:ring-brand-blue/25 transition-all shadow-inner"
                 />
               </div>
 
               {/* Weight */}
               <div className="space-y-2">
-                <label className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest block">Weight (kg)</label>
+                <label className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest block">Weight (kg)</label>
                 <input 
                   type="number" 
                   step="0.1"
@@ -253,17 +253,17 @@ export default function ProfilePage() {
                     const val = parseFloat(e.target.value);
                     setWeight(Number.isNaN(val) ? '' : val);
                   }}
-                  className="w-full bg-charcoal-light/60 border border-charcoal-border/80 rounded-xl p-3 text-xs text-white placeholder-zinc-655 focus:outline-none focus:border-brand-blue/50 focus:ring-1 focus:ring-brand-blue/25 transition-all shadow-inner"
+                  className="w-full bg-charcoal-light/60 border border-charcoal-border/80 rounded-xl p-3 text-xs text-foreground focus:outline-none focus:border-brand-blue/50 focus:ring-1 focus:ring-brand-blue/25 transition-all shadow-inner"
                 />
               </div>
 
               {/* Activity Level */}
               <div className="space-y-2">
-                <label className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest block">Activity Level</label>
+                <label className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest block">Activity Level</label>
                 <select 
                   value={activity}
                   onChange={(e) => setActivity(e.target.value)}
-                  className="w-full bg-charcoal-light/60 border border-charcoal-border/80 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-brand-blue/50 focus:ring-1 focus:ring-brand-blue/25 transition-all shadow-inner cursor-pointer"
+                  className="w-full bg-charcoal-light/60 border border-charcoal-border/80 rounded-xl p-3 text-xs text-foreground focus:outline-none focus:border-brand-blue/50 focus:ring-1 focus:ring-brand-blue/25 transition-all shadow-inner cursor-pointer"
                 >
                   <option value="Sedentary">Sedentary</option>
                   <option value="Lightly Active">Lightly Active</option>
@@ -276,11 +276,11 @@ export default function ProfilePage() {
 
           {/* Existing Conditions Checklist */}
           <div className="p-6.5 rounded-2xl bg-charcoal-medium/50 border border-charcoal-border space-y-4 shadow-md">
-            <h3 className="text-xs font-bold text-white flex items-center space-x-2.5 uppercase tracking-wider">
+            <h3 className="text-xs font-bold text-foreground flex items-center space-x-2.5 uppercase tracking-wider">
               <Scale className="h-4 w-4 text-brand-blue" />
               <span>Prior Conditions Checklist</span>
             </h3>
-            <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Check existing diagnoses to align model outputs and medical explanations.</p>
+            <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">Select existing conditions so the risk models account for your medical history.</p>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-2">
               {[
@@ -299,7 +299,7 @@ export default function ProfilePage() {
                       p-4 rounded-xl text-left border text-[9px] font-extrabold transition-all duration-200 uppercase tracking-widest cursor-pointer
                       ${isSelected 
                         ? `${cond.color} shadow-sm shadow-black/40 scale-[0.98]` 
-                        : 'bg-charcoal-light/60 border-charcoal-border/80 text-zinc-400 hover:text-white'}
+                        : 'bg-charcoal-light/60 border-charcoal-border/80 text-muted-foreground hover:text-foreground'}
                     `}
                   >
                     {cond.label}
@@ -323,7 +323,7 @@ export default function ProfilePage() {
             ) : (
               <>
                 <Save className="h-4 w-4" />
-                <span>Save Diagnostic Profile</span>
+                <span>Save Risk Profile</span>
               </>
             )}
           </button>

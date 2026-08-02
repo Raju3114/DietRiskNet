@@ -92,6 +92,10 @@ class MealItemResponse(BaseModel):
     iron: float
     vitamin_c: float
     folate: float
+    # False when the classifier recognised a food that has no record in the
+    # nutrition database (its nutrient fields are then all zero and must NOT
+    # be treated as measured values).
+    nutrition_available: bool = True
 
     class Config:
         from_attributes = True
@@ -116,9 +120,6 @@ class NutritionResponse(BaseModel):
 class FoodDetectionResponse(BaseModel):
     detections: List[MealItemBase]
 
-class FoodClassificationRequest(BaseModel):
-    crop_image_base64: str
-
 class FoodClassificationResponse(BaseModel):
     class_name: str
     confidence: float
@@ -135,8 +136,9 @@ class CalculateDCIRequest(BaseModel):
     user_id: int
 
 class CalculateDCIResponse(BaseModel):
-    dci: float
-    dci_level: str
+    # dci is null when the user has <2 valid days of longitudinal history.
+    dci: Optional[float] = None
+    dci_level: Optional[str] = None
 
 class CalculateNISRequest(BaseModel):
     meal_nutrition: NutritionResponse
@@ -152,9 +154,9 @@ class DiseasePredictionRequest(BaseModel):
     height: float
     weight: float
     meal_nutrition: NutritionResponse
-    dci: float
-    nis: float
     existing_conditions: List[str]
+    # NOTE: DCI / NIS are intentionally absent — the XGBoost prediction models
+    # do not consume them (they feed risk fusion / recommendations instead).
 
 class DiseasePredictionResponse(BaseModel):
     diabetes_risk: float
@@ -163,20 +165,25 @@ class DiseasePredictionResponse(BaseModel):
     deficiency_risk: float
 
 class RiskFusionRequest(BaseModel):
-    dci: float
-    nis: float
+    # dci is null when the user has insufficient longitudinal history; fusion
+    # renormalises the remaining component weights instead of fabricating a value.
+    dci: Optional[float] = None
+    nis: Optional[float] = None
     disease_prediction: DiseasePredictionResponse
 
 class RiskFusionResponse(BaseModel):
-    fused_score: float
-    risk_level: str
+    # Null when no meaningful risk component is available.
+    fused_score: Optional[float] = None
+    risk_level: Optional[str] = None
 
 # --- Recommendation ---
 class ExplainDietRequest(BaseModel):
     meal_nutrition: NutritionResponse
     disease_prediction: DiseasePredictionResponse
-    dci: float
-    nis: float
+    # dci is null when the user has insufficient longitudinal history; the
+    # recommendation engine only warns about consistency when a value exists.
+    dci: Optional[float] = None
+    nis: Optional[float] = None
     history_summary: Optional[Dict[str, Any]] = None
 
 class RecommendationItem(BaseModel):
@@ -187,31 +194,49 @@ class RecommendationItem(BaseModel):
 class ExplainDietResponse(BaseModel):
     recommendations: List[RecommendationItem]
 
+# --- AI Dietitian (Gemini) ---
+class AIDietitianResponse(BaseModel):
+    summary: str
+    meal_quality: str
+    health_score: int
+    health_level: str
+    health_explanation: str
+    risk_explanation: str
+    recommendations: List[str] = Field(default_factory=list)
+    healthier_alternatives: List[str] = Field(default_factory=list)
+    warnings: List[str] = Field(default_factory=list)
+    follow_up_questions: List[str] = Field(default_factory=list)
+
 # --- Meal Complete Analysis ---
 class MealAnalysisResponse(BaseModel):
     meal_id: int
     image_path: Optional[str]
     items: List[MealItemResponse]
     nutrition: NutritionResponse
-    dci: float
-    dci_level: str
-    nis: float
-    nis_level: str
-    predictions: DiseasePredictionResponse
-    fusion: RiskFusionResponse
-    recommendations: List[RecommendationItem]
+    # Indices / risk are null when no item had usable nutrition (insufficient
+    # data) — they must not be fabricated from zero-nutrient input.
+    dci: Optional[float] = None
+    dci_level: Optional[str] = None
+    nis: Optional[float] = None
+    nis_level: Optional[str] = None
+    predictions: Optional[DiseasePredictionResponse] = None
+    fusion: Optional[RiskFusionResponse] = None
+    recommendations: List[RecommendationItem] = Field(default_factory=list)
+    ai_dietitian: Optional[AIDietitianResponse] = None  # nullable; null when Gemini unavailable
     created_at: datetime
 
 # --- Dashboard & Longitudinal trends ---
 class DashboardResponse(BaseModel):
     daily_aggregated: NutritionResponse
     daily_percentage_rdi: Dict[str, float]
-    dci: float
-    dci_level: str
-    nis: float
-    nis_level: str
-    fused_risk_score: float
-    fused_risk_level: str
+    # DCI / NIS / risk are null when the user has no logged meals yet
+    # (insufficient data) — they must not be fabricated as perfect health.
+    dci: Optional[float] = None
+    dci_level: Optional[str] = None
+    nis: Optional[float] = None
+    nis_level: Optional[str] = None
+    fused_risk_score: Optional[float] = None
+    fused_risk_level: Optional[str] = None
     recent_meals: List[Dict[str, Any]]
     recommendations: List[RecommendationItem]
 
@@ -221,8 +246,9 @@ class TrendDataPoint(BaseModel):
     protein: float
     carbs: float
     fats: float
-    dci: float
-    nis: float
+    # dci / nis are null when no longitudinal value exists (do not fabricate).
+    dci: Optional[float] = None
+    nis: Optional[float] = None
     diabetes_risk: float
     obesity_risk: float
     hypertension_risk: float

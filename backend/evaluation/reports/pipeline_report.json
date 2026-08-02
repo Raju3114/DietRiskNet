@@ -1,0 +1,59 @@
+{
+  "name": "pipeline",
+  "iterations": 2,
+  "memory_mb": {
+    "current_mb": 56.956,
+    "peak_mb": 62.393
+  },
+  "metrics": {
+    "yolo_detection": {
+      "count": 2,
+      "mean_ms": 0.002,
+      "median_ms": 0.002,
+      "p95_ms": 0.003
+    },
+    "efficientnet_classification": {
+      "count": 2,
+      "mean_ms": 10.386,
+      "median_ms": 10.386,
+      "p95_ms": 10.422
+    },
+    "nutrition_lookup": {
+      "count": 2,
+      "mean_ms": 0.43,
+      "median_ms": 0.43,
+      "p95_ms": 0.559
+    },
+    "dci": {
+      "count": 2,
+      "mean_ms": 1.422,
+      "median_ms": 1.422,
+      "p95_ms": 1.777
+    },
+    "nis": {
+      "count": 2,
+      "mean_ms": 0.022,
+      "median_ms": 0.022,
+      "p95_ms": 0.025
+    },
+    "disease_prediction": {
+      "count": 2,
+      "mean_ms": 51.438,
+      "median_ms": 51.438,
+      "p95_ms": 52.831
+    },
+    "risk_fusion": {
+      "count": 2,
+      "mean_ms": 0.005,
+      "median_ms": 0.005,
+      "p95_ms": 0.006
+    },
+    "rule_recommendations": {
+      "count": 2,
+      "mean_ms": 0.003,
+      "median_ms": 0.003,
+      "p95_ms": 0.003
+    }
+  },
+  "detections": 1
+}

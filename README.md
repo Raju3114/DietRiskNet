@@ -44,20 +44,20 @@ the core analysis.
 
 ```mermaid
 graph TD
-    Upload[Meal image] --> YOLO[YOLOv8 localises food regions<br/>(single 'food' class)]
+    Upload[Meal image] --> YOLO[YOLOv8 food-region localization, single food detector class]
     YOLO --> Crops[Extract detected crops]
-    Crops --> EffNet[EfficientNet-B3 classifies crops into 118 food classes]
+    Crops --> EffNet[EfficientNet-B3 classification into 118 food classes]
     EffNet --> CSV[Look up nutrition in Indian Food Nutrition CSV]
     CSV --> Agg[Aggregate meal nutrients]
-    Agg --> DCI[DCI — dietary consistency index]
-    Agg --> NIS[NIS — nutritional imbalance score]
-    Agg --> XGB[XGBoost risk estimates<br/>diabetes / obesity / hypertension / deficiency]
+    Agg --> DCI[DCI, dietary consistency index]
+    Agg --> NIS[NIS, nutritional imbalance score]
+    Agg --> XGB[XGBoost risk estimates: diabetes, obesity, hypertension, deficiency]
     DCI --> Fusion[Weighted risk fusion]
     NIS --> Fusion
     XGB --> Fusion
     Fusion --> Recs[ExplainDiet recommendations]
-    Recs --> DB[Persist analysis + dashboard / history / trends]
-    Recs -. optional .-> LLM[LLM — Nutrition Assistant / meal chat / AI Dietitian]
+    Recs --> DB[Persist analysis + dashboard, history, trends]
+    Recs -. optional .-> LLM[LLM, Nutrition Assistant, meal chat, AI Dietitian]
 ```
 
 Notes on the real implementation:

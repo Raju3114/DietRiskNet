@@ -75,7 +75,7 @@ export default function ResearchPage() {
             <h2 className="text-sm font-bold text-foreground uppercase tracking-wider">2. XGBoost Risk-Estimation Models</h2>
           </div>
           <p className="text-xs text-muted-foreground leading-relaxed font-semibold">
-            Disease-risk estimation is driven by four independent **XGBoost Classifier** models. These models are trained on distinct clinical datasets, mapping patient parameters, diet consistency scores, and cumulative nutrient imbalances to hazard probabilities.
+            Disease-risk estimation is driven by four independent **XGBoost Classifier** models. These models are trained on distinct clinical datasets and map user-profile parameters, nutrition, and configured default inputs to model-derived risk estimates. DCI and NIS are not inputs to these models — they are combined with the four risk estimates at the risk-fusion stage.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -130,7 +130,7 @@ export default function ResearchPage() {
         <motion.section variants={itemVariants} className="space-y-4">
           <div className="flex items-center space-x-3 border-b border-charcoal-border/50 pb-3">
             <ShieldAlert className="h-5 w-5 text-brand-red glow-red" />
-            <h2 className="text-sm font-bold text-foreground uppercase tracking-wider">3. Fused Risk Probability Matrix</h2>
+            <h2 className="text-sm font-bold text-foreground uppercase tracking-wider">3. Weighted Risk Fusion</h2>
           </div>
           <p className="text-xs text-muted-foreground leading-relaxed font-semibold">
             Instead of examining metrics in isolation, DietRiskNet uses a weighted risk fusion algorithm configured by <code className="text-brand-blue bg-charcoal-light border border-charcoal-border/80 px-2 py-0.5 rounded font-mono text-[9px]">DietRiskNet_RiskFusion_Config.json</code>. The formula fuses consistency (DCI), imbalances (NIS), and the four XGBoost risk estimates:

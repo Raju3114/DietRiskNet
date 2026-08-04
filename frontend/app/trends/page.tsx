@@ -69,7 +69,7 @@ export default function TrendsPage() {
             <h1 className="text-3xl font-extrabold tracking-tight text-foreground flex items-center space-x-3">
               <span>Longitudinal Analytics</span>
             </h1>
-            <p className="text-muted-foreground text-[10px] font-extrabold uppercase tracking-wider mt-1">Audit daily calories, macronutrient weights, portion metrics, and disease trends over time.</p>
+            <p className="text-muted-foreground text-[10px] font-extrabold uppercase tracking-wider mt-1">Audit daily calories, macronutrient weights, portion metrics, and estimated disease-risk trends over time.</p>
           </div>
 
           {/* Timeframe picker */}

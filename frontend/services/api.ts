@@ -1,16 +1,11 @@
 import { useAuthStore } from '../lib/store';
 
+// NEXT_PUBLIC_API_URL is a build-time public environment variable.  In
+// production it must point to the deployed backend (e.g. Render), e.g.
+// https://<backend-host>/api.  When it is not configured the frontend falls
+// back to the local development backend.  No production hostname is
+// hard-coded in source.
 let rawBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
-
-// Self-healing fallback: If running in browser on a production domain but base is localhost,
-// dynamically switch to the production Render backend URL.
-if (typeof window !== 'undefined' && 
-    window.location.hostname !== 'localhost' && 
-    window.location.hostname !== '127.0.0.1' && 
-    rawBase.includes('localhost')) {
-  console.warn('[api] Running in production but API_BASE points to localhost. Falling back to production Render backend.');
-  rawBase = 'https://dietrisknet-backend.onrender.com/api';
-}
 
 // Normalize trailing slash
 rawBase = rawBase.replace(/\/+$/, '');

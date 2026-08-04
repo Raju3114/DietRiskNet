@@ -90,6 +90,14 @@ class Settings(BaseSettings):
     GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-2.0-flash")
     GEMINI_TIMEOUT_SECONDS: float = float(os.getenv("GEMINI_TIMEOUT", "15"))
 
+    # Allowed CORS origin for the PRODUCTION frontend (e.g. a Vercel app).
+    # Leave empty for local development; set to the real frontend origin
+    # (https://<your-app>.vercel.app) when deploying.  Local development
+    # origins and a safe "*.<name>.vercel.app" pattern are configured in
+    # main.py, so this only needs to be set when the frontend is NOT on
+    # vercel.app.  Never use allow_origins=["*"] with authenticated requests.
+    FRONTEND_ORIGIN: str = os.getenv("FRONTEND_ORIGIN", "")
+
     # Load configuration from environment variables first, then from a
     # root-level `.env` file (kept out of version control).  This makes
     # the documented "copy .env.example to .env" workflow work.

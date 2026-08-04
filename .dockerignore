@@ -1,0 +1,48 @@
+# Docker build context exclusions for DietRiskNet.
+#
+# The build context is the repository root (Render + docker-compose). These
+# exclusions keep the image lean and prevent dev/runtime/local artifacts from
+# leaking into production builds.  MODEL ARTIFACTS under backend/trained_models/
+# are intentionally NOT excluded — they must be present in the image so the
+# backend can run YOLO / EfficientNet / XGBoost inference.
+
+# --- VCS / tooling / local agent config ---
+.git
+.claude
+.pytest_cache
+**/__pycache__
+*.pyc
+
+# --- Secrets & environment ---
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# --- Local runtime data ---
+*.db
+test.db
+dietrisknet.db
+reg_bad.png
+reg_bad.txt
+reg_green.png
+
+# --- Python virtualenv & caches ---
+backend/.venv
+backend/.venv_broken_backup
+.venv
+venv
+
+# --- Runtime uploads & logs (recreated on startup / configured via env) ---
+backend/uploads/*
+!backend/uploads/.gitkeep
+backend/logs/*
+
+# --- Frontend build/runtime (not needed by backend image) ---
+frontend/node_modules
+frontend/.next
+frontend/.vercel
+
+# --- Project-local Ollama runtime ---
+runtime

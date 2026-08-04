@@ -28,6 +28,12 @@ app = FastAPI(
 )
 
 # CORS middleware config
+#
+# Local development origins are always allowed.  Production frontends are
+# covered by: (a) the env-configurable settings.FRONTEND_ORIGIN (set to the
+# real deployed frontend origin), and (b) a safe pattern for vercel.app
+# preview/review deployments.  A wildcard allow_origins=["*"] is deliberately
+# NOT used because the API relies on cookie/Bearer-authenticated requests.
 origins = [
     "http://localhost:3000",
     "http://localhost:5173",
@@ -35,8 +41,9 @@ origins = [
     "http://127.0.0.1:3000",
     "http://127.0.0.1:5173",
     "http://127.0.0.1:8000",
-    "https://diet-risk-net.vercel.app",
 ]
+if settings.FRONTEND_ORIGIN:
+    origins.append(settings.FRONTEND_ORIGIN)
 
 app.add_middleware(
     CORSMiddleware,

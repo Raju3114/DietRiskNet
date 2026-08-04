@@ -42,6 +42,9 @@ export default function AnalysisPage() {
   if (!currentAnalysis) return null;
 
   const { items, nutrition, dci, dci_level, nis, nis_level, image_path, ai_dietitian } = currentAnalysis;
+  // Only aggregate nutrition visually when at least one recognized food has nutrition data —
+  // never show a fabricated "0 kcal" for a meal with no recognized nutrition.
+  const hasAnyRecognizedNutrition = items.some((it) => it.nutrition_available !== false);
 
   // Resolve backend server uploads path (remove static prefix or append base URL)
   const backendBase = API_BASE.replace(/\/api$/, '');
@@ -182,6 +185,7 @@ export default function AnalysisPage() {
         <div className="space-y-4 pt-4 border-t border-charcoal-border/50">
           <h2 className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Aggregated Meal Nutrition</h2>
           
+          {hasAnyRecognizedNutrition ? (
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             <div className="p-4 rounded-xl bg-charcoal-medium/50 border border-charcoal-border flex items-center space-x-3 shadow-sm hover:border-brand-orange/20 transition-all duration-200">
               <Flame className="h-4.5 w-4.5 text-brand-orange shrink-0" />
@@ -223,6 +227,11 @@ export default function AnalysisPage() {
               </div>
             </div>
           </div>
+        ) : (
+          <div className="rounded-xl bg-brand-orange/5 border border-brand-orange/20 p-3 text-center">
+            <span className="text-[9px] font-bold text-brand-orange uppercase tracking-widest">Nutrition data unavailable for this meal</span>
+          </div>
+        )}
         </div>
 
         {/* DCI & NIS Indices Card */}

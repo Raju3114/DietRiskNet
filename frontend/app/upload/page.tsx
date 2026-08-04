@@ -76,7 +76,7 @@ export default function UploadPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedFile) return;
+    if (loading || !selectedFile) return;
 
     setLoading(true);
     try {
@@ -102,7 +102,8 @@ export default function UploadPage() {
           <h1 className="text-3xl font-extrabold tracking-tight text-foreground flex items-center space-x-3">
             <span>AI Food Scanner</span>
           </h1>
-          <p className="text-muted-foreground text-[10px] font-extrabold uppercase tracking-wider mt-1">Upload meal photo for YOLOv8 food detection &amp; EfficientNet recognition.</p>
+          <p className="text-muted-foreground text-[10px] font-extrabold uppercase tracking-wider mt-1">Upload a meal photo for YOLOv8 food localization and EfficientNet-B3 food classification.</p>
+          <p className="text-[8px] text-muted-foreground font-semibold tracking-wide mt-1">Detect &rarr; Classify &rarr; Nutrition &rarr; DCI/NIS &rarr; Risk Estimation &rarr; Recommendations</p>
         </div>
 
         <AnimatePresence mode="wait">
@@ -121,7 +122,7 @@ export default function UploadPage() {
               </div>
               
               <div className="space-y-3.5 max-w-md">
-                <h3 className="text-[10px] font-extrabold uppercase tracking-widest text-muted-foreground">Running Vision &amp; Clinical Pipeline</h3>
+                <h3 className="text-[10px] font-extrabold uppercase tracking-widest text-muted-foreground">Analyzing Meal&hellip;</h3>
                 <p className="text-xs text-brand-cyan font-bold animate-pulse h-12 flex items-center justify-center leading-relaxed">
                   {steps[stepIndex]}
                 </p>
@@ -169,7 +170,9 @@ export default function UploadPage() {
 
                 {previewUrl ? (
                   /* Preview Image */
-                  <div className="relative w-full max-h-[300px] rounded-2xl overflow-hidden flex justify-center">
+                  <>
+                    <span className="text-[9px] text-muted-foreground font-semibold mb-1 max-w-full truncate">{selectedFile?.name}</span>
+                    <div className="relative w-full max-h-[300px] rounded-2xl overflow-hidden flex justify-center">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img 
                       src={previewUrl} 
@@ -183,6 +186,7 @@ export default function UploadPage() {
                       </div>
                     </div>
                   </div>
+                  </>
                 ) : (
                   /* Helper Prompt */
                   <>
@@ -199,7 +203,7 @@ export default function UploadPage() {
 
               {/* Meal Notes */}
               <div className="space-y-2">
-                <label className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Optional Clinical Metadata (Meal Notes)</label>
+                <label className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Meal Notes (Optional)</label>
                 <textarea
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
@@ -213,7 +217,7 @@ export default function UploadPage() {
               <button 
                 type="submit" 
                 disabled={!selectedFile}
-                className="w-full py-4 bg-brand-blue hover:bg-brand-blue-hover text-white font-extrabold rounded-xl text-[10px] uppercase tracking-widest flex items-center justify-center space-x-2 shadow-lg shadow-brand-blue/15 border border-brand-blue/20 cursor-pointer disabled:bg-charcoal-medium/50 disabled:text-zinc-600 disabled:border-charcoal-border disabled:cursor-not-allowed transition-all duration-300"
+                className="w-full py-4 bg-brand-blue hover:bg-brand-blue-hover text-white font-extrabold rounded-xl text-[10px] uppercase tracking-widest flex items-center justify-center space-x-2 shadow-lg shadow-brand-blue/15 border border-brand-blue/20 cursor-pointer disabled:bg-charcoal-medium/50 disabled:text-zinc-600 disabled:border-charcoal-border disabled:cursor-not-allowed transition-all duration-300 enabled:ring-1 enabled:ring-gold/30 enabled:shadow-[0_8px_24px_rgba(212,175,55,0.18)]"
               >
                 <Sparkles className="h-4 w-4" />
                 <span>Run Risk Analysis</span>

@@ -102,7 +102,13 @@ Fused = 0.25·(1−DCI) + 0.25·NIS + 0.20·diabetes
       + 0.15·obesity + 0.10·hypertension + 0.05·deficiency
 ```
 
-The result maps to `Low / Moderate / High` risk.
+The result maps to `Low / Moderate / High / Critical` risk, based on the
+deployed boundaries in `risk_fusion_service.py`:
+`score ≤ 0.25 → Low`, `0.25 < score ≤ 0.50 → Moderate`,
+`0.50 < score ≤ 0.75 → High`, `score > 0.75 → Critical`.
+Only *available* components participate: a missing component (e.g. DCI with
+insufficient history) contributes no value and the remaining weights are
+renormalised proportionally so the fused score stays on `[0, 1]`.
 
 **Files**: `backend/services/risk_fusion_service.py`, `backend/trained_models/DietRiskNet_RiskFusion_Config.json`.
 

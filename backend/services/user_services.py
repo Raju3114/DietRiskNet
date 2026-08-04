@@ -317,11 +317,12 @@ class AnalyticsService:
                     # consistency of 1.0 for meals without longitudinal data.
                     "dci": m.dci,
                     "nis": m.nis,
-                    # Fallback default risks if prediction missing
-                    "diabetes_risk": m.predictions.diabetes_risk if m.predictions else 0.1,
-                    "obesity_risk": m.predictions.obesity_risk if m.predictions else 0.1,
-                    "hypertension_risk": m.predictions.hypertension_risk if m.predictions else 0.1,
-                    "deficiency_risk": m.predictions.deficiency_risk if m.predictions else 0.1,
+                    # Fallback default risks if prediction missing — keep null so
+                    # unavailable risk gaps in the chart instead of fabricating a 0.1 estimate.
+                    "diabetes_risk": m.predictions.diabetes_risk if m.predictions else None,
+                    "obesity_risk": m.predictions.obesity_risk if m.predictions else None,
+                    "hypertension_risk": m.predictions.hypertension_risk if m.predictions else None,
+                    "deficiency_risk": m.predictions.deficiency_risk if m.predictions else None,
                     "meal_count": 0
                 }
             

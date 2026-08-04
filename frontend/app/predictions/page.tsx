@@ -39,10 +39,10 @@ export default function PredictionsPage() {
   };
 
   const diseaseList = [
-    { name: 'Diabetes Mellitus', risk: predictions?.diabetes_risk ?? 0, desc: 'XGBoost clinical model evaluating glucose-insulin patterns, BMI, and family demographics.', icon: Droplet, color: 'text-brand-cyan border-brand-cyan/15 bg-brand-cyan/5' },
-    { name: 'Obesity Index', risk: predictions?.obesity_risk ?? 0, desc: 'Obesity dataset features evaluating calorie surpluses, dietary frequencies, and activity.', icon: Scale, color: 'text-brand-orange border-brand-orange/15 bg-brand-orange/5' },
-    { name: 'Hypertension Stress', risk: predictions?.hypertension_risk ?? 0, desc: 'Blood pressure models examining sodium-salt ratios and clinical volume indices.', icon: Heart, color: 'text-brand-red border-brand-red/15 bg-brand-red/5' },
-    { name: 'Nutritional Deficiency', risk: predictions?.deficiency_risk ?? 0, desc: 'RDA percentages examining vitamin C, Vitamin D, folate, calcium, and iron levels.', icon: Info, color: 'text-brand-emerald border-brand-emerald/15 bg-brand-emerald/5' },
+    { name: 'Diabetes Mellitus', risk: predictions?.diabetes_risk ?? null, desc: 'XGBoost clinical model evaluating glucose-insulin patterns, BMI, and family demographics.', icon: Droplet, color: 'text-brand-cyan border-brand-cyan/15 bg-brand-cyan/5' },
+    { name: 'Obesity Index', risk: predictions?.obesity_risk ?? null, desc: 'Obesity dataset features evaluating calorie surpluses, dietary frequencies, and activity.', icon: Scale, color: 'text-brand-orange border-brand-orange/15 bg-brand-orange/5' },
+    { name: 'Hypertension Stress', risk: predictions?.hypertension_risk ?? null, desc: 'Blood pressure models examining sodium-salt ratios and clinical volume indices.', icon: Heart, color: 'text-brand-red border-brand-red/15 bg-brand-red/5' },
+    { name: 'Nutritional Deficiency', risk: predictions?.deficiency_risk ?? null, desc: 'RDA percentages examining vitamin C, Vitamin D, folate, calcium, and iron levels.', icon: Info, color: 'text-brand-emerald border-brand-emerald/15 bg-brand-emerald/5' },
   ];
 
   return (
@@ -75,7 +75,7 @@ export default function PredictionsPage() {
               <Sparkles className="h-3.5 w-3.5 text-brand-cyan animate-pulse" />
               <span>Weighted Risk Fusion</span>
             </div>
-            <h2 className="text-xl font-extrabold text-foreground uppercase tracking-wider"> unified metabolic index</h2>
+            <h2 className="text-xl font-extrabold text-foreground uppercase tracking-wider">Unified Metabolic Index</h2>
             <p className="text-muted-foreground text-xs leading-relaxed font-semibold">
               We compile predictions, timing consistency parameters (DCI), and nutrient baseline deviations (NIS) into a single risk profile using an IEEE-validated weights matrix.
             </p>
@@ -113,24 +113,26 @@ export default function PredictionsPage() {
                       </div>
                     </div>
                     
-                    <span className={`px-3 py-1.5 rounded-xl text-[9px] font-extrabold border uppercase tracking-wider ${getRiskBg(disease.risk)}`}>
-                      Estimated Risk: {(disease.risk * 100).toFixed(0)}%
+                    <span className={`px-3 py-1.5 rounded-xl text-[9px] font-extrabold border uppercase tracking-wider ${disease.risk != null ? getRiskBg(disease.risk) : 'bg-charcoal-light/60 text-muted-foreground border-charcoal-border'}`}>
+                      {disease.risk != null ? `Estimated Risk: ${(disease.risk * 100).toFixed(0)}%` : 'Estimated Risk: N/A'}
                     </span>
                   </div>
 
                   <p className="text-xs text-muted-foreground leading-relaxed font-semibold">{disease.desc}</p>
-                  
-                  {/* Progress bar */}
-                  <div className="space-y-1">
-                    <div className="w-full bg-charcoal-dark rounded-full h-1 overflow-hidden border border-charcoal-border/30">
-                      <div 
-                        className={`h-full rounded-full transition-all duration-500 ${
-                          disease.risk < 0.3 ? 'bg-brand-emerald' : (disease.risk < 0.6 ? 'bg-brand-orange' : 'bg-brand-red')
-                        }`}
-                        style={{ width: `${disease.risk * 100}%` }}
-                      />
+
+                  {/* Progress bar — only when a numeric estimate exists */}
+                  {disease.risk != null && (
+                    <div className="space-y-1">
+                      <div className="w-full bg-charcoal-dark rounded-full h-1 overflow-hidden border border-charcoal-border/30">
+                        <div
+                          className={`h-full rounded-full transition-all duration-500 ${
+                            disease.risk < 0.3 ? 'bg-brand-emerald' : (disease.risk < 0.6 ? 'bg-brand-orange' : 'bg-brand-red')
+                          }`}
+                          style={{ width: `${disease.risk * 100}%` }}
+                        />
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               );
             })}

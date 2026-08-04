@@ -50,6 +50,11 @@ export default function TrendsPage() {
   }
 
   const chartData = data.trends;
+  // DCI shown on the same /100 scale as Dashboard / History / Coach; null stays null (gaps the chart).
+  const dciData = (chartData as Array<{ date: string; dci: number | null }>).map((p) => ({
+    date: p.date,
+    dci: p.dci != null ? Number((p.dci * 100).toFixed(1)) : null,
+  }));
 
   return (
     <ProtectedRoute>
@@ -142,12 +147,12 @@ export default function TrendsPage() {
                 <h3 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Dietary Consistency (DCI) Trend</h3>
                 <div className="h-[250px] w-full">
                   <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                    <LineChart data={dciData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" />
                       <XAxis dataKey="date" stroke="#71717a" fontSize={8} tickLine={false} />
-                      <YAxis domain={[0, 1]} stroke="#71717a" fontSize={8} tickLine={false} />
+                      <YAxis domain={[0, 100]} stroke="#71717a" fontSize={8} tickLine={false} />
                       <Tooltip contentStyle={{ backgroundColor: '#111827', borderColor: 'rgba(255,255,255,0.08)', borderRadius: '12px', color: '#fff', fontSize: 10 }} />
-                      <Line type="monotone" dataKey="dci" name="DCI Score" stroke="#3E9C6C" strokeWidth={3} dot={{ r: 3, fill: '#3E9C6C' }} activeDot={{ r: 5 }} />
+                      <Line type="monotone" dataKey="dci" name="DCI (/100)" stroke="#3E9C6C" strokeWidth={3} dot={{ r: 3, fill: '#3E9C6C' }} activeDot={{ r: 5 }} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -171,7 +176,7 @@ export default function TrendsPage() {
 
             {/* Disease Risk progressions */}
             <div className="p-6.5 rounded-2xl bg-charcoal-medium/50 border border-charcoal-border space-y-4 shadow-md hover:border-brand-blue/15 transition-all duration-200">
-              <h3 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">XGBoost Disease Risk Probabilities Progression</h3>
+              <h3 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Estimated Disease Risk Trend (XGBoost)</h3>
               <div className="h-[300px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>

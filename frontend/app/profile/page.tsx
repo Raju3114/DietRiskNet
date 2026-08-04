@@ -143,12 +143,12 @@ export default function ProfilePage() {
         <div>
           <div className="flex items-center space-x-2 px-3 py-1.5 rounded-full border border-brand-blue/20 bg-brand-blue/5 text-brand-blue text-[9px] font-bold uppercase tracking-widest mb-3 w-fit glow-blue">
             <User className="h-3.5 w-3.5 text-brand-blue" />
-            <span>Clinical Demographics</span>
+            <span>Profile Demographics</span>
           </div>
           <h1 className="text-3xl font-extrabold tracking-tight text-foreground flex items-center space-x-3">
             <span>Profile Records</span>
           </h1>
-          <p className="text-muted-foreground text-[10px] font-extrabold uppercase tracking-wider mt-1">Configure clinical metrics utilized for disease risk estimations.</p>
+          <p className="text-muted-foreground text-[10px] font-extrabold uppercase tracking-wider mt-1">Configure profile metrics used by the disease risk-estimation models.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -229,8 +229,9 @@ export default function ProfilePage() {
               <div className="space-y-2">
                 <label className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest block">Height (cm)</label>
                 <input 
-                  type="number" 
+                  type="number"
                   step="0.1"
+                  min="1"
                   required
                   value={height === '' || Number.isNaN(height) ? '' : height}
                   onChange={(e) => {
@@ -245,8 +246,9 @@ export default function ProfilePage() {
               <div className="space-y-2">
                 <label className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest block">Weight (kg)</label>
                 <input 
-                  type="number" 
+                  type="number"
                   step="0.1"
+                  min="1"
                   required
                   value={weight === '' || Number.isNaN(weight) ? '' : weight}
                   onChange={(e) => {
@@ -267,6 +269,7 @@ export default function ProfilePage() {
                 >
                   <option value="Sedentary">Sedentary</option>
                   <option value="Lightly Active">Lightly Active</option>
+                  <option value="Moderate">Moderate</option>
                   <option value="Moderately Active">Moderately Active</option>
                   <option value="Very Active">Very Active</option>
                 </select>

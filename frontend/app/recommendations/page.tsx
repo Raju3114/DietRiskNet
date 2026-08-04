@@ -98,7 +98,7 @@ export default function RecommendationsPage() {
                   <h3 className="text-xs font-extrabold text-foreground leading-normal uppercase tracking-wider">{rec.content}</h3>
                   
                   <div className="p-4 rounded-xl bg-charcoal-dark/50 border border-charcoal-border/80 text-xs text-muted-foreground leading-relaxed font-semibold space-y-1">
-                    <span className="font-extrabold text-muted-foreground block mb-1 uppercase tracking-wider text-[8px]">Clinical Explanation:</span>
+                    <span className="font-extrabold text-muted-foreground block mb-1 uppercase tracking-wider text-[8px]">Dietary Rationale:</span>
                     <p className="leading-relaxed">{rec.explanation}</p>
                   </div>
                 </div>
@@ -112,6 +112,13 @@ export default function RecommendationsPage() {
             </div>
           )}
         </motion.div>
+
+        {/* Model-honesty note */}
+        <p className="mx-auto max-w-2xl text-center text-[9px] text-muted-foreground leading-relaxed">
+          These are model-informed dietary guidance based on your meal&apos;s estimated risks and available
+          nutrition data — not medical advice, diagnosis, or treatment. Consult a qualified healthcare
+          professional for any medical decision.
+        </p>
 
         {/* Navigation Action Buttons */}
         <div className="flex justify-between gap-4 mt-8 pt-6 border-t border-charcoal-border/50">

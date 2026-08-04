@@ -37,7 +37,7 @@ export default function ResearchPage() {
           <h1 className="text-3xl font-extrabold tracking-tight text-foreground flex items-center space-x-3">
             <span>Research Publication Overview</span>
           </h1>
-          <p className="text-muted-foreground text-[10px] font-extrabold uppercase tracking-wider mt-1">Unified vision-language pipelines, XGBoost clinical matrices, and weighted risk fusion paradigms.</p>
+          <p className="text-muted-foreground text-[10px] font-extrabold uppercase tracking-wider mt-1">Unified vision-language pipelines, XGBoost risk-estimation models, and weighted risk fusion paradigms.</p>
         </motion.div>
 
         {/* Vision Pipeline Section */}
@@ -47,14 +47,14 @@ export default function ResearchPage() {
             <h2 className="text-sm font-bold text-foreground uppercase tracking-wider">1. Vision-Language Crop Segmentation</h2>
           </div>
           <p className="text-xs text-muted-foreground leading-relaxed font-semibold">
-            DietRiskNet implements a dual-stage vision architecture. First, a custom **YOLOv8** model performs multi-class object detection, generating localized bounding box coordinate matrices for food items in a single scan. Each recognized region is then cropped and processed through a fine-tuned **EfficientNet-B3** convolutional neural network, classifying crops into 118 unique food types.
+            DietRiskNet implements a dual-stage vision architecture. First, a custom **YOLOv8** model performs food-region object localization, generating localized bounding box coordinate matrices for food items in a single scan. Each recognized region is then cropped and processed through a fine-tuned **EfficientNet-B3** convolutional neural network, classifying crops into 118 unique food types.
           </p>
           <div className="p-5.5 rounded-2xl bg-charcoal-medium/50 border border-charcoal-border space-y-3.5 shadow-md">
             <span className="text-[9px] font-extrabold text-muted-foreground uppercase tracking-widest block">Model Specifications</span>
             <ul className="text-xs text-muted-foreground space-y-3">
               <li className="flex items-start space-x-3">
                 <CheckCircle className="h-4 w-4 text-brand-cyan mt-0.5 shrink-0" />
-                <span className="font-semibold text-muted-foreground">YOLOv8 Weights: <code className="text-brand-cyan bg-charcoal-light border border-charcoal-border/80 px-2 py-0.5 rounded font-mono text-[9px]">DietRiskNet_FoodDetector_YOLOv8.pt</code> (18 detection classes)</span>
+                <span className="font-semibold text-muted-foreground">YOLOv8 Weights: <code className="text-brand-cyan bg-charcoal-light border border-charcoal-border/80 px-2 py-0.5 rounded font-mono text-[9px]">DietRiskNet_FoodDetector_YOLOv8.pt</code> (single &quot;food&quot; localization class)</span>
               </li>
               <li className="flex items-start space-x-3">
                 <CheckCircle className="h-4 w-4 text-brand-cyan mt-0.5 shrink-0" />
@@ -72,7 +72,7 @@ export default function ResearchPage() {
         <motion.section variants={itemVariants} className="space-y-4">
           <div className="flex items-center space-x-3 border-b border-charcoal-border/50 pb-3">
             <Activity className="h-5 w-5 text-brand-blue glow-blue" />
-            <h2 className="text-sm font-bold text-foreground uppercase tracking-wider">2. XGBoost Clinical Classifiers</h2>
+            <h2 className="text-sm font-bold text-foreground uppercase tracking-wider">2. XGBoost Risk-Estimation Models</h2>
           </div>
           <p className="text-xs text-muted-foreground leading-relaxed font-semibold">
             Disease-risk estimation is driven by four independent **XGBoost Classifier** models. These models are trained on distinct clinical datasets, mapping patient parameters, diet consistency scores, and cumulative nutrient imbalances to hazard probabilities.
@@ -119,6 +119,11 @@ export default function ResearchPage() {
               </p>
             </div>
           </div>
+
+          <p className="text-[9px] text-muted-foreground leading-relaxed font-semibold">
+            These are model-derived, estimated risk scores — not diagnoses — and where clinical inputs are
+            not provided, the pipeline uses configured default values.
+          </p>
         </motion.section>
 
         {/* Risk Fusion Section */}
@@ -128,7 +133,7 @@ export default function ResearchPage() {
             <h2 className="text-sm font-bold text-foreground uppercase tracking-wider">3. Fused Risk Probability Matrix</h2>
           </div>
           <p className="text-xs text-muted-foreground leading-relaxed font-semibold">
-            Instead of examining metrics in isolation, DietRiskNet uses a weighted risk fusion algorithm configured by <code className="text-brand-blue bg-charcoal-light border border-charcoal-border/80 px-2 py-0.5 rounded font-mono text-[9px]">DietRiskNet_RiskFusion_Config.json</code>. The formula fuses consistency (DCI), imbalances (NIS), and predicted disease probabilities:
+            Instead of examining metrics in isolation, DietRiskNet uses a weighted risk fusion algorithm configured by <code className="text-brand-blue bg-charcoal-light border border-charcoal-border/80 px-2 py-0.5 rounded font-mono text-[9px]">DietRiskNet_RiskFusion_Config.json</code>. The formula fuses consistency (DCI), imbalances (NIS), and the four XGBoost risk estimates:
           </p>
           <div className="p-6 rounded-xl bg-charcoal-dark border border-charcoal-border/80 text-center font-mono text-[10px] text-brand-blue overflow-x-auto shadow-inner leading-relaxed select-all">
             Fused Score = 0.25 × (1 - DCI) + 0.25 × NIS + 0.20 × Diabetes + 0.15 × Obesity + 0.10 × Hypertension + 0.05 × Deficiency

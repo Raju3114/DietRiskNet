@@ -249,10 +249,10 @@ class TrendDataPoint(BaseModel):
     # dci / nis are null when no longitudinal value exists (do not fabricate).
     dci: Optional[float] = None
     nis: Optional[float] = None
-    diabetes_risk: float
-    obesity_risk: float
-    hypertension_risk: float
-    deficiency_risk: float
+    diabetes_risk: Optional[float] = None
+    obesity_risk: Optional[float] = None
+    hypertension_risk: Optional[float] = None
+    deficiency_risk: Optional[float] = None
 
 class LongitudinalTrendsResponse(BaseModel):
     trends: List[TrendDataPoint]

@@ -101,3 +101,44 @@ def test_config_weights_unchanged(fusion):
     fusion.fuse(None, 0.3, 0.2, 0.3, 0.1, 0.2)
     after = dict(fusion.config.get("weights", {}))
     assert before == after
+
+
+def _fused_level(fusion, score):
+    """Return only the severity level for a given fused score.
+
+    Passing a single non-None component (NIS) drives the fused score exactly
+    to that value: the missing real weights renormalise, so the NIS
+    component's weight cancels. NIS has weight 0.25 = 1/4 (a power of two),
+    so ``0.25 * score / 0.25 == score`` exactly in IEEE-754 floats — the
+    at-boundary scores (0.25 / 0.50 / 0.75) land precisely on the thresholds.
+    This exercises the REAL RiskFusionService.fuse() for a precise score
+    without re-implementing the production classification algorithm.
+    """
+    _, level = fusion.fuse(None, score, None, None, None, None)
+    return level
+
+
+class TestRiskFusionSeverityBoundaries:
+    """Verify the deployed severity labels at and just above each boundary.
+
+    Canonical behavior (risk_fusion_service.py): score <= 0.25 Low;
+    0.25 < score <= 0.50 Moderate; 0.50 < score <= 0.75 High; > 0.75 Critical.
+    """
+
+    def test_low_boundary(self, fusion):
+        assert _fused_level(fusion, 0.25) == "Low"
+        assert _fused_level(fusion, 0.2501) == "Moderate"
+
+    def test_moderate_boundary(self, fusion):
+        assert _fused_level(fusion, 0.50) == "Moderate"
+        assert _fused_level(fusion, 0.5001) == "High"
+
+    def test_high_boundary(self, fusion):
+        assert _fused_level(fusion, 0.75) == "High"
+        assert _fused_level(fusion, 0.7501) == "Critical"
+
+    def test_representative_interior_values(self, fusion):
+        assert _fused_level(fusion, 0.0) == "Low"
+        assert _fused_level(fusion, 0.30) == "Moderate"
+        assert _fused_level(fusion, 0.60) == "High"
+        assert _fused_level(fusion, 0.90) == "Critical"

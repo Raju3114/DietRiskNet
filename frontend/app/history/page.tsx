@@ -151,12 +151,12 @@ export default function HistoryPage() {
                         {new Date(meal.created_at).toLocaleString()}
                       </span>
                       <h3 className="text-xs font-extrabold text-foreground mt-1 uppercase tracking-wider">
-                        Logged {meal.items ? meal.items.length : 0} recognized item(s)
+                        Logged {(meal.items ? meal.items.length : 0)} recognized item{(meal.items ? meal.items.length : 0) === 1 ? '' : 's'}
                       </h3>
                     </div>
                     <div className="flex items-center space-x-4">
                       <div className="text-right">
-                        <span className="text-[8px] text-muted-foreground uppercase tracking-widest font-bold block mb-1">Risk Assessment</span>
+                        <span className="text-[8px] text-muted-foreground uppercase tracking-widest font-bold block mb-1">Estimated Risk</span>
                         <span className={`text-xs font-bold uppercase tracking-wider ${riskTextColor}`}>
                           {hasRisk ? `${(meal.risk_score! * 100).toFixed(0)}%` : 'N/A'}
                         </span>
@@ -217,8 +217,8 @@ export default function HistoryPage() {
                       <div className="grid grid-cols-2 gap-2 text-[9px] font-bold text-muted-foreground bg-charcoal-light/40 p-3.5 rounded-xl border border-charcoal-border/50">
                         <div className="flex flex-col justify-center border-r border-charcoal-border/30 pr-2">
                           <span className="text-muted-foreground uppercase tracking-wider block text-[8px]">Consistency (DCI)</span>
-                          <span className="text-brand-emerald text-base font-black mt-1 font-mono">
-                            {hasDci ? `${(meal.dci! * 100).toFixed(0)}` : 'N/A'}
+                          <span className="text-brand-emerald text-sm font-black mt-1 font-mono">
+                            {hasDci ? <>{Number((meal.dci! * 100).toFixed(0))} <span className="text-[8px] text-muted-foreground font-bold inline-block align-middle">/ 100</span></> : 'N/A'}
                           </span>
                         </div>
                         <div className="flex flex-col justify-center pl-2">

@@ -84,7 +84,7 @@ export default function HistoryPage() {
         <div className="border-b border-charcoal-border/50 pb-6">
           <div className="flex items-center space-x-2 px-3 py-1.5 rounded-full border border-brand-blue/20 bg-brand-blue/5 text-brand-blue text-[9px] font-bold uppercase tracking-widest mb-3 w-fit glow-blue">
             <Calendar className="h-3.5 w-3.5 text-brand-blue" />
-            <span>Patient Records Log</span>
+            <span>Meal Records Log</span>
           </div>
           <h1 className="text-3xl font-extrabold tracking-tight text-foreground flex items-center space-x-3">
             <span>Meal History Log</span>

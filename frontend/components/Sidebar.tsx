@@ -98,7 +98,7 @@ export default function Sidebar() {
               {(user?.full_name || 'C').charAt(0).toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
-              <span className="text-[8px] text-gold-soft font-extrabold uppercase tracking-widest block">Clinical Profile</span>
+              <span className="text-[8px] text-gold-soft font-extrabold uppercase tracking-widest block">User Profile</span>
               <span className="text-xs font-bold text-sidebar-foreground truncate block">
                 {user?.full_name || 'Capstone User'}
               </span>

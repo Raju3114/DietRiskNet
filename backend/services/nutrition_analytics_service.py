@@ -317,10 +317,15 @@ class NutritionAnalyticsService:
         habits: List[str] = []
         if avg_dci is not None and avg_dci >= 0.7:
             habits.append("Your diet is consistent (DCI ≥ 0.70).")
-        if avg_nis <= 0.3:
+        # avg_nis is 0.0 only when no meal had a computed NIS (missing data).
+        # Require avg_nis > 0 so an unavailable NIS never fabricates a
+        # "nutritionally balanced" positive habit from a synthetic zero.
+        if avg_nis > 0 and avg_nis <= 0.3:
             habits.append("Your meals are nutritionally balanced (NIS ≤ 0.30).")
         if len(meals) >= 5:
-            habits.append(f"You have logged {len(meals)} meals so far.")
+            # len(meals) is the ANALYSIS WINDOW count (<= RECENT_MEALS_LIMIT),
+            # not the user's all-time total — keep the wording window-precise.
+            habits.append(f"You have logged {len(meals)} meals in this analysis window.")
         return habits
 
     @staticmethod

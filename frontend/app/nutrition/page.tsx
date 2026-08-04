@@ -185,8 +185,14 @@ export default function NutritionPage() {
                           </div>
                         );
                       }
-                      // Consistency is only meaningful when DCI data exists.
-                      const insufficient = goal.id === 'consistency' && (analytics.avg_dci == null || analytics.avg_dci <= 0);
+                      // Consistency and balance progress are only meaningful
+                      // when the underlying DCI / NIS data actually exists.
+                      // Mirror the NIS stat tile's "> 0 = data available"
+                      // convention so missing NIS never fabricates a fake
+                      // "perfect balance" (100%).
+                      const insufficient =
+                        (goal.id === 'consistency' && (analytics.avg_dci == null || analytics.avg_dci <= 0)) ||
+                        (goal.id === 'balance' && (analytics.avg_nis == null || analytics.avg_nis <= 0));
                       return (
                         <div key={goal.id} className="flex items-center space-x-3">
                           <span className="text-[10px] font-bold text-foreground w-40 shrink-0 truncate">{goal.title}</span>

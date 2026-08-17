@@ -8,12 +8,12 @@ A complete step-by-step guide for setting up, running, testing, and troubleshoot
 
 Before setting up DietRiskNet, ensure your environment meets the following requirements:
 
-- **Python**: Version **3.10.x** (3.10.0 to 3.10.11 recommended). Check with `python --version`.
+- **Python**: Version **3.10.x** (3.10.0 to 3.10.11 recommended). Check with `python --version` or `py -0p`.
 - **Node.js**: Version **18.x** or **20.x LTS**. Check with `node --version`.
 - **Package Managers**: `pip` (Python) and `npm` (Node).
 - **Git & Git LFS**: Installed on `PATH` to pull large model binary artifacts (`.pth` weights).
 - **OS Notes**:
-  - **Windows**: PowerShell 5.1+ or Windows Terminal recommended. Ensure execution policy allows script execution if needed (`Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`).
+  - **Windows**: PowerShell 5.1+ or Windows Terminal recommended. Ensure execution policy allows script execution (`Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`).
   - **macOS / Linux**: Standard bash or zsh shell. Ensure `python3` and `pip3` alias appropriately.
 
 ---
@@ -67,111 +67,125 @@ Key environment variables in `.env`:
 
 ---
 
-## 4. Backend Setup
+## 4. Quick Command Reference (Copy-Paste Ready)
 
-Open **Terminal 1** in the repository root.
-
-### 4a — Create Python Virtual Environment
-
-```bash
-cd backend
-python -m venv .venv
-```
-
-### 4b — Activate Virtual Environment
+### A) Fresh Setup
 
 **Windows (PowerShell):**
 ```powershell
+# 1. Setup backend virtual environment (Python 3.10)
+cd "backend"
+py -3.10 -m venv .venv
 .\.venv\Scripts\Activate.ps1
-```
-
-**Windows (Command Prompt):**
-```cmd
-.venv\Scripts\activate.bat
-```
-
-**macOS / Linux:**
-```bash
-source .venv/bin/activate
-```
-
-Your prompt will show `(.venv)`.
-
-### 4c — Install Backend Dependencies
-
-```bash
 pip install --upgrade pip
 pip install -r requirements.txt
-```
+cd ..
 
-### 4d — Database Initialization
+# 2. Setup environment variables
+Copy-Item .env.example .env
 
-The database schema initializes automatically on backend startup using SQLAlchemy `Base.metadata.create_all(bind=engine)`. No manual migration step is required for local SQLite or initial setup.
-
-### 4e — Start Backend Server
-
-From the project root directory:
-
-**Windows (PowerShell):**
-```powershell
-$env:PYTHONPATH="."
-& "backend/.venv/Scripts/python.exe" -m uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
+# 3. Setup frontend dependencies
+cd "frontend"
+npm install
+cd ..
 ```
 
 **macOS / Linux:**
 ```bash
-PYTHONPATH=. backend/.venv/bin/uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
-```
+# 1. Setup backend virtual environment (Python 3.10)
+cd backend
+python3.10 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+cd ..
 
-Expected output:
-```
-INFO: Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
-```
+# 2. Setup environment variables
+cp .env.example .env
 
----
-
-## 5. Frontend Setup
-
-Open **Terminal 2** (in parallel with Terminal 1).
-
-### 5a — Install Node Dependencies
-
-```bash
+# 3. Setup frontend dependencies
 cd frontend
 npm install
-```
-
-### 5b — Start Frontend Development Server
-
-```bash
-npm run dev
-```
-
-Expected output:
-```
-✓ Ready in ~2s
-- Local: http://localhost:3000
+cd ..
 ```
 
 ---
 
-## 6. Automated One-Command Startup (Windows)
+### B) Daily Startup
 
-On Windows, you can start the entire stack (Backend, Frontend, and optional Ollama) with a single command from the project root:
-
+**Automated (Windows PowerShell):**
 ```powershell
 .\run_dietrisknet.cmd
 ```
 
-To stop all background processes started by the launcher:
-
+**Stop Launcher (Windows PowerShell):**
 ```powershell
 .\stop_dietrisknet.cmd
 ```
 
 ---
 
-## 7. Expected URLs & Endpoints
+### C) Backend Only
+
+**From Project Root (Windows PowerShell):**
+```powershell
+$env:PYTHONPATH="."
+& "backend/.venv/Scripts/python.exe" -m uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+**From Inside `backend/` Directory (Windows PowerShell):**
+```powershell
+cd backend
+$env:PYTHONPATH=".."
+& ".\.venv\Scripts\python.exe" -m uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+**From Project Root (macOS / Linux):**
+```bash
+PYTHONPATH=. backend/.venv/bin/uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+---
+
+### D) Frontend Only
+
+**Windows / macOS / Linux:**
+```bash
+cd frontend
+npm run dev
+```
+
+---
+
+### E) Production Build & Code Quality Verification
+
+**1. Backend Unit & Integration Tests (from project root):**
+```powershell
+$env:PYTHONPATH="."
+& "backend/.venv/Scripts/python.exe" -m pytest backend/tests
+```
+
+**2. Frontend TypeScript Compilation (from `frontend/`):**
+```powershell
+cd frontend
+npx tsc --noEmit
+```
+
+**3. Frontend ESLint Quality Check (from `frontend/`):**
+```powershell
+cd frontend
+npm run lint
+```
+
+**4. Frontend Production Build Check (from `frontend/`):**
+```powershell
+cd frontend
+npm run build
+```
+
+---
+
+## 5. Expected URLs & Endpoints
 
 | Service | Component | URL |
 |---|---|---|
@@ -183,67 +197,21 @@ To stop all background processes started by the launcher:
 
 ---
 
-## 8. Verification Steps
-
-To verify that all components are fully functional and pass system checks:
-
-### 8a — Run Backend Unit & Integration Tests
-
-From the project root:
-
-**Windows (PowerShell):**
-```powershell
-$env:PYTHONPATH="."
-& "backend/.venv/Scripts/python.exe" -m pytest backend/tests
-```
-
-**macOS / Linux:**
-```bash
-PYTHONPATH=. backend/.venv/bin/pytest backend/tests
-```
-
-All 193+ tests must pass.
-
-### 8b — Verify Frontend TypeScript Compilation
-
-From the `frontend` directory:
-
-```bash
-cd frontend
-npx tsc --noEmit
-```
-
-Must complete with exit code 0.
-
-### 8c — Verify Frontend Code Quality (ESLint)
-
-From the `frontend` directory:
-
-```bash
-cd frontend
-npm run lint
-```
-
-Must complete without lint errors.
-
-### 8d — Verify Frontend Production Build
-
-From the `frontend` directory:
-
-```bash
-cd frontend
-npm run build
-```
-
-Must complete successfully with all static pages generated.
-
----
-
-## 9. Common Troubleshooting Steps
+## 6. Common Troubleshooting Steps
 
 ### Issue: `ModuleNotFoundError: No module named 'backend'`
 - **Cause**: Python path is not pointing to the project root directory when running backend modules or tests.
-- **Fix**: Set `PYTHONPATH=.` before running `pytest` or `uvicorn` commands, or run from the project root directory.
+- **Fix**: Set `PYTHONPATH=.` before running `pytest` or `uvicorn` commands from the project root, or set `PYTHONPATH=..` when inside the `backend/` directory.
+
+### Issue: `ModuleNotFoundError: No module named 'pydantic_core._pydantic_core'`
+- **Cause**: The Python virtual environment was created with a Python version higher than 3.10 (e.g., Python 3.14).
+- **Fix**: Explicitly use Python 3.10 when creating `.venv`:
+  ```powershell
+  cd backend
+  py -3.10 -m venv .venv
+  .\.venv\Scripts\Activate.ps1
+  pip install -r requirements.txt
+  ```
 
 ### Issue: `SECRET_KEY is set to an insecure default value`
 - **Cause**: Warning logged when `.env` is using the default development JWT key.

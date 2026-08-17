@@ -88,7 +88,11 @@ class Settings(BaseSettings):
     # work).
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
     GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-2.0-flash")
-    GEMINI_TIMEOUT_SECONDS: float = float(os.getenv("GEMINI_TIMEOUT", "15"))
+    GEMINI_TIMEOUT: float = float(os.getenv("GEMINI_TIMEOUT", "15"))
+
+    @property
+    def GEMINI_TIMEOUT_SECONDS(self) -> float:
+        return self.GEMINI_TIMEOUT
 
     # Allowed CORS origin for the PRODUCTION frontend (e.g. a Vercel app).
     # Leave empty for local development; set to the real frontend origin
@@ -105,6 +109,7 @@ class Settings(BaseSettings):
         case_sensitive=True,
         env_file=".env",
         env_file_encoding="utf-8",
+        extra="ignore",
     )
 
     @model_validator(mode="after")

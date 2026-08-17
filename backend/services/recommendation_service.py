@@ -9,16 +9,16 @@ class ExplainDietService:
         recommendations = []
         
         # 1. Nutrition specific checks (Sodium, Sugar, Calories, Fiber)
-        sodium = meal_nutrition_dict.get("sodium", 0.0)
-        sugar = meal_nutrition_dict.get("sugar", 0.0)
-        calories = meal_nutrition_dict.get("calories", 0.0)
-        fiber = meal_nutrition_dict.get("fiber", 0.0)
+        sodium = meal_nutrition_dict.get("sodium") or 0.0
+        sugar = meal_nutrition_dict.get("sugar") or 0.0
+        calories = meal_nutrition_dict.get("calories") or 0.0
+        fiber = meal_nutrition_dict.get("fiber") or 0.0
         
         # 2. Disease risks
-        diab_risk = disease_prediction_dict.get("diabetes_risk", 0.0)
-        ob_risk = disease_prediction_dict.get("obesity_risk", 0.0)
-        hyp_risk = disease_prediction_dict.get("hypertension_risk", 0.0)
-        def_risk = disease_prediction_dict.get("deficiency_risk", 0.0)
+        diab_risk = disease_prediction_dict.get("diabetes_risk") or 0.0
+        ob_risk = disease_prediction_dict.get("obesity_risk") or 0.0
+        hyp_risk = disease_prediction_dict.get("hypertension_risk") or 0.0
+        def_risk = disease_prediction_dict.get("deficiency_risk") or 0.0
 
         # -- General Nutrition and NIS Check --
         # nis is None only when no nutrient data existed at all; then there is

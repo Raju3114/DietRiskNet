@@ -147,9 +147,9 @@ class DiseasePredictionService:
             import numpy as np
             # Features: ['Gender', 'Age', 'Height', 'Weight', 'family_history', 'FAVC', 'FCVC', 'NCP', 'CAEC', 'SMOKE', 'CH2O', 'SCC', 'FAF', 'TUE', 'CALC', 'MTRANS']
             # FAVC: High caloric food consumption. If calories > 700 -> 'yes'
-            favc = 'yes' if meal_nutrition_dict.get("calories", 0) > 700 else 'no'
+            favc = 'yes' if (meal_nutrition_dict.get("calories") or 0) > 700 else 'no'
             # FCVC: Vegetable frequency. Based on fiber. If fiber > 5g -> 3.0, if > 2g -> 2.0, else 1.0
-            fiber = meal_nutrition_dict.get("fiber", 0)
+            fiber = meal_nutrition_dict.get("fiber") or 0.0
             fcvc = 3.0 if fiber > 5.0 else (2.0 if fiber > 2.0 else 1.0)
             
             inp = {
@@ -196,7 +196,7 @@ class DiseasePredictionService:
             import pandas as pd
             # Features: ['Age', 'Salt_Intake', 'Stress_Score', 'BP_History', 'Sleep_Duration', 'BMI', 'Medication', 'Family_History', 'Exercise_Level', 'Smoking_Status']
             # Sodium is in mg. Convert to estimated salt intake in grams (1g salt ~ 400mg sodium)
-            sodium = meal_nutrition_dict.get("sodium", 0.0)
+            sodium = meal_nutrition_dict.get("sodium") or 0.0
             salt_intake = max(1.0, sodium / 400.0)
             
             has_bp_history = 1 if "hypertension" in existing_conditions else 0
@@ -239,10 +239,10 @@ class DiseasePredictionService:
             import numpy as np
             # Features: ['age', 'gender', 'bmi', 'smoking_status', 'alcohol_consumption', 'exercise_level', 'diet_type', 'sun_exposure', 'income_level', 'latitude_region', ...]
             # Compare meal nutrient levels to RDI and calculate RDA percentages
-            vit_c_pct = min(100.0, (meal_nutrition_dict.get("vitamin_c", 0.0) / 90.0) * 100.0)
-            folate_pct = min(100.0, (meal_nutrition_dict.get("folate", 0.0) / 400.0) * 100.0)
-            calcium_pct = min(100.0, (meal_nutrition_dict.get("calcium", 0.0) / 1000.0) * 100.0)
-            iron_pct = min(100.0, (meal_nutrition_dict.get("iron", 0.0) / 18.0) * 100.0)
+            vit_c_pct = min(100.0, ((meal_nutrition_dict.get("vitamin_c") or 0.0) / 90.0) * 100.0)
+            folate_pct = min(100.0, ((meal_nutrition_dict.get("folate") or 0.0) / 400.0) * 100.0)
+            calcium_pct = min(100.0, ((meal_nutrition_dict.get("calcium") or 0.0) / 1000.0) * 100.0)
+            iron_pct = min(100.0, ((meal_nutrition_dict.get("iron") or 0.0) / 18.0) * 100.0)
             
             has_deficiency = 1 if "deficiency" in existing_conditions else 0
             

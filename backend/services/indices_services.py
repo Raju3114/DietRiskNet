@@ -167,7 +167,7 @@ class NISService:
 
         # Meal-level RDI allowance (see docstring).
         daily_cal = rdi.get("Calories", 2000)
-        meal_cal = meal_nutrition_dict.get("calories", 0.0)
+        meal_cal = meal_nutrition_dict.get("calories") or 0.0
         if daily_cal > 0 and meal_cal > 0:
             meal_fraction = min(1.0, meal_cal / daily_cal)
         else:
@@ -176,14 +176,14 @@ class NISService:
 
         deviations = []
         for rdi_key, schema_key in nutrition_map.items():
-            rdi_val = rdi.get(rdi_key, 1.0)
+            rdi_val = rdi.get(rdi_key, 1.0) or 1.0
             # Ensure no division by zero
             if rdi_val <= 0:
                 rdi_val = 1.0
             meal_rdi_val = rdi_val * meal_fraction
             if meal_rdi_val <= 0:
                 meal_rdi_val = 1.0
-            actual_val = meal_nutrition_dict.get(schema_key, 0.0)
+            actual_val = meal_nutrition_dict.get(schema_key) or 0.0
 
             # Relative deviation from the meal-level RDI share
             dev = abs(actual_val - meal_rdi_val) / meal_rdi_val

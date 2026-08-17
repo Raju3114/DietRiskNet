@@ -1,43 +1,93 @@
 # How to Run DietRiskNet
 
-## Step 1 — Open the project
-
-Open a terminal in the project root:
-
-```
-DietRiskNet/
-├── backend/
-├── frontend/
-├── nutrition/
-├── datasets/
-├── docker-compose.yml
-├── requirements.txt
-└── README.md
-```
+A complete step-by-step guide for setting up, running, testing, and troubleshooting DietRiskNet on a new machine.
 
 ---
 
-## Step 2 — Start the backend
+## 1. Prerequisites
 
-Open **Terminal 1**.
+Before setting up DietRiskNet, ensure your environment meets the following requirements:
 
-### 2a — Create a virtual environment
+- **Python**: Version **3.10.x** (3.10.0 to 3.10.11 recommended). Check with `python --version`.
+- **Node.js**: Version **18.x** or **20.x LTS**. Check with `node --version`.
+- **Package Managers**: `pip` (Python) and `npm` (Node).
+- **Git & Git LFS**: Installed on `PATH` to pull large model binary artifacts (`.pth` weights).
+- **OS Notes**:
+  - **Windows**: PowerShell 5.1+ or Windows Terminal recommended. Ensure execution policy allows script execution if needed (`Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`).
+  - **macOS / Linux**: Standard bash or zsh shell. Ensure `python3` and `pip3` alias appropriately.
+
+---
+
+## 2. Model Requirements & Artifacts Verification
+
+DietRiskNet requires machine learning models and configuration files located in `backend/trained_models/` and the nutrition CSV in `nutrition/`:
+
+1. **Check model files**:
+   - `backend/trained_models/DietRiskNet_FoodDetector_YOLOv8.pt` (~22 MB)
+   - `backend/trained_models/DietRiskNet_FoodClassifier_EfficientNetB3.pth` (~131 MB)
+   - `backend/trained_models/DietRiskNet_Diabetes_XGBoost.pkl`
+   - `backend/trained_models/DietRiskNet_Obesity_XGBoost.pkl`
+   - `backend/trained_models/DietRiskNet_Hypertension_XGBoost.pkl`
+   - `backend/trained_models/DietRiskNet_NutritionalDeficiency_XGBoost.pkl`
+   - `backend/trained_models/DietRiskNet_DCI_Config.json`
+   - `backend/trained_models/DietRiskNet_NIS_Config.json`
+   - `backend/trained_models/DietRiskNet_RiskFusion_Config.json`
+   - `backend/trained_models/efficientnet_classes.json`
+   - `nutrition/indian_food_nutrition_processed.csv`
+
+2. **Pull Git LFS assets** (if `.pth` files are text pointers):
+   ```bash
+   git lfs install
+   git lfs pull
+   ```
+
+---
+
+## 3. Environment Variables Configuration
+
+Copy `.env.example` to `.env` in the project root:
+
+**Windows (PowerShell):**
+```powershell
+Copy-Item .env.example .env
+```
+
+**macOS / Linux:**
+```bash
+cp .env.example .env
+```
+
+Key environment variables in `.env`:
+- `SECRET_KEY`: Random string for JWT encoding. (Default: insecure development key; generate a production key with `python -c "import secrets; print(secrets.token_urlsafe(48))"`).
+- `DATABASE_URL`: Defaults to `sqlite:///./dietrisknet.db` (local file database). Optional PostgreSQL connection string: `postgresql://user:pass@localhost:5432/dietrisknet`.
+- `LLM_PROVIDER`: `"ollama"` (default, local) or `"gemini"` (optional cloud).
+- `OLLAMA_URL`: Default `http://localhost:11434`.
+- `OLLAMA_MODEL`: Default `llama3.2:3b`.
+- `GEMINI_API_KEY`: (Optional) Your Google Gemini API key if using Gemini.
+
+---
+
+## 4. Backend Setup
+
+Open **Terminal 1** in the repository root.
+
+### 4a — Create Python Virtual Environment
 
 ```bash
 cd backend
 python -m venv .venv
 ```
 
-### 2b — Activate it
+### 4b — Activate Virtual Environment
+
+**Windows (PowerShell):**
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
 
 **Windows (Command Prompt):**
 ```cmd
 .venv\Scripts\activate.bat
-```
-
-**Windows (PowerShell):**
-```powershell
-.venv\Scripts\Activate.ps1
 ```
 
 **macOS / Linux:**
@@ -45,258 +95,190 @@ python -m venv .venv
 source .venv/bin/activate
 ```
 
-Your prompt should now show `(.venv)`.
+Your prompt will show `(.venv)`.
 
-### 2c — Install dependencies
+### 4c — Install Backend Dependencies
 
 ```bash
 pip install --upgrade pip
-pip install -r ../requirements.txt
+pip install -r requirements.txt
 ```
 
-### 2d — Start the server
+### 4d — Database Initialization
 
-```bash
-uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
-```
+The database schema initializes automatically on backend startup using SQLAlchemy `Base.metadata.create_all(bind=engine)`. No manual migration step is required for local SQLite or initial setup.
 
-Wait about 5 seconds for:
+### 4e — Start Backend Server
 
-```
-Uvicorn running on http://127.0.0.1:8000
-```
+From the project root directory:
 
-### 2e — Verify
-
-Open http://localhost:8000 in your browser or run:
-
-```bash
-curl http://localhost:8000/
-```
-
-Expected response:
-
-```json
-{"app":"DietRiskNet","status":"healthy","message":"Welcome to the DietRiskNet FastAPI Service!"}
-```
-
----
-
-## Step 3 — Start the frontend
-
-Open **Terminal 2** (separate from Terminal 1).
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Wait until you see:
-
-```
-✓ Ready in ~2s
-http://localhost:3000
-```
-
-Open http://localhost:3000 in your browser.
-
----
-
-## Step 4 — Register an account
-
-On the DietRiskNet landing page, click **Get Started**.
-
-Or use the terminal:
-
-```bash
-curl -X POST http://localhost:8000/api/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{"email":"you@example.com","password":"yourpassword","full_name":"Your Name"}'
-```
-
-Save the `access_token` from the response — you will need it for the next steps.
-
----
-
-## Step 5 — AI features (Ollama default / Gemini optional)
-
-The ML pipeline and rule-based recommendations work with **no LLM**. The AI
-features (AI Dietitian, meal chat, AI Nutrition Assistant, Personalized
-Nutrition Coach) use **Ollama by default**:
-
-```bash
-ollama serve               # start the local Ollama server (if not running)
-ollama pull llama3.2:3b    # pull the default model (~2 GB)
-```
-
-Verify the AI health endpoint reports the Ollama provider:
-
-```bash
-curl http://localhost:8000/api/ai/health
-# {"provider":"ollama","model":"llama3.2:3b","status":"ok", ...}
-```
-
-Optionally, set `LLM_PROVIDER=gemini` and a `GEMINI_API_KEY` in `.env` to use
-Gemini as a cloud provider (with automatic fallback to Ollama). With no LLM
-available, `ai_dietitian` is `null`, chat returns a friendly message, and the
-app never crashes.
-
----
-
-## Step 6 — Test the full meal pipeline
-
-Save your token as a variable:
-
-```bash
-TOKEN="<paste your access_token here>"
-```
-
-### 5a — Upload a meal photo
-
-```bash
-curl -X POST http://localhost:8000/api/analyze-meal \
-  -H "Authorization: Bearer $TOKEN" \
-  -F "file=@datasets/sample_meal.png" \
-  -F "notes=Test meal"
-```
-
-This runs the complete pipeline: YOLO detection → EfficientNet classification → nutrition lookup → DCI → NIS → disease predictions → risk fusion → recommendations.
-
-The response includes the meal analysis with nutritional breakdown, risk scores, and dietary recommendations.
-
-### 5b — View your dashboard
-
-```bash
-curl http://localhost:8000/api/dashboard \
-  -H "Authorization: Bearer $TOKEN"
-```
-
-### 5c — View your history
-
-```bash
-curl http://localhost:8000/api/history \
-  -H "Authorization: Bearer $TOKEN"
-```
-
----
-
-## Step 7 — Run the tests
-
-In Terminal 1 (stop the server with `Ctrl+C` first), or in a **new Terminal 3**:
-
-```bash
-cd DietRiskNet
-python -m pytest backend/tests/test_thresholds.py -v
-```
-
-Expected output:
-
-```
-47 passed in 0.19s
-```
-
----
-
-## Step 8 — Stop everything
-
-**Terminal 1:** press `Ctrl+C` to stop the backend.
-
-**Terminal 2:** press `Ctrl+C` to stop the frontend.
-
----
-
-## Troubleshooting
-
-### Frontend pages hang, stay on "Pending", or return 500
-
-This is usually caused by a stale Next.js / Turbopack cache in the `.next` directory.
-
-**Windows (Command Prompt):**
-```cmd
-cd frontend
-rmdir /s /q .next
-npm run dev
+**Windows (PowerShell):**
+```powershell
+$env:PYTHONPATH="."
+& "backend/.venv/Scripts/python.exe" -m uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
 **macOS / Linux:**
 ```bash
+PYTHONPATH=. backend/.venv/bin/uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+Expected output:
+```
+INFO: Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+```
+
+---
+
+## 5. Frontend Setup
+
+Open **Terminal 2** (in parallel with Terminal 1).
+
+### 5a — Install Node Dependencies
+
+```bash
 cd frontend
-rm -rf .next
+npm install
+```
+
+### 5b — Start Frontend Development Server
+
+```bash
 npm run dev
 ```
 
-After clearing the cache, the frontend will recompile all pages from scratch (takes slightly longer on the first load).
-
----
-
-### Port 8000 or 3000 already in use
-
-```bash
-netstat -ano | findstr :8000
-taskkill /PID <PID> /F
+Expected output:
 ```
-
-### "SECRET_KEY is set to an insecure default value"
-
-This is normal for development mode. The app still works. For production, generate a real key:
-
-```bash
-python -c "import secrets; print(secrets.token_urlsafe(48))"
-```
-
-Then set it as `SECRET_KEY` in your `.env` file or as an environment variable.
-
-### Virtual environment not working
-
-Delete it and recreate:
-
-```bash
-rm -r backend/.venv       # macOS / Linux
-rmdir /s backend\.venv     # Windows
-cd backend
-python -m venv .venv
-```
-
-### "No module named 'pytest'"
-
-```bash
-pip install pytest
-```
-
-### Frontend says "Cannot reach backend"
-
-Make sure the backend is running on port 8000. The frontend expects the API at `http://localhost:8000/api`.
-
----
-
-## Using Docker instead
-
-If you have Docker installed, you can skip Steps 2 and 3 and run everything with one command:
-
-```bash
-docker-compose up --build
-```
-
-This starts three containers:
-
-| Container | URL |
-|-----------|-----|
-| Frontend | http://localhost:3000 |
-| Backend | http://localhost:8000 |
-| Swagger UI | http://localhost:8000/docs |
-
-To stop:
-
-```bash
-docker-compose down
+✓ Ready in ~2s
+- Local: http://localhost:3000
 ```
 
 ---
 
-## Where to find API docs
+## 6. Automated One-Command Startup (Windows)
 
-With the backend running, visit:
+On Windows, you can start the entire stack (Backend, Frontend, and optional Ollama) with a single command from the project root:
 
-- **Swagger UI:** http://localhost:8000/docs
-- **ReDoc:** http://localhost:8000/redoc
+```powershell
+.\run_dietrisknet.cmd
+```
+
+To stop all background processes started by the launcher:
+
+```powershell
+.\stop_dietrisknet.cmd
+```
+
+---
+
+## 7. Expected URLs & Endpoints
+
+| Service | Component | URL |
+|---|---|---|
+| Frontend Web UI | Application Dashboard & Pages | `http://localhost:3000` |
+| Backend API | Root Health Endpoint | `http://localhost:8000/` |
+| API Documentation | Interactive Swagger UI | `http://localhost:8000/docs` |
+| API Documentation | ReDoc Documentation | `http://localhost:8000/redoc` |
+| OpenAPI Schema | Raw JSON Schema | `http://localhost:8000/api/openapi.json` |
+
+---
+
+## 8. Verification Steps
+
+To verify that all components are fully functional and pass system checks:
+
+### 8a — Run Backend Unit & Integration Tests
+
+From the project root:
+
+**Windows (PowerShell):**
+```powershell
+$env:PYTHONPATH="."
+& "backend/.venv/Scripts/python.exe" -m pytest backend/tests
+```
+
+**macOS / Linux:**
+```bash
+PYTHONPATH=. backend/.venv/bin/pytest backend/tests
+```
+
+All 193+ tests must pass.
+
+### 8b — Verify Frontend TypeScript Compilation
+
+From the `frontend` directory:
+
+```bash
+cd frontend
+npx tsc --noEmit
+```
+
+Must complete with exit code 0.
+
+### 8c — Verify Frontend Code Quality (ESLint)
+
+From the `frontend` directory:
+
+```bash
+cd frontend
+npm run lint
+```
+
+Must complete without lint errors.
+
+### 8d — Verify Frontend Production Build
+
+From the `frontend` directory:
+
+```bash
+cd frontend
+npm run build
+```
+
+Must complete successfully with all static pages generated.
+
+---
+
+## 9. Common Troubleshooting Steps
+
+### Issue: `ModuleNotFoundError: No module named 'backend'`
+- **Cause**: Python path is not pointing to the project root directory when running backend modules or tests.
+- **Fix**: Set `PYTHONPATH=.` before running `pytest` or `uvicorn` commands, or run from the project root directory.
+
+### Issue: `SECRET_KEY is set to an insecure default value`
+- **Cause**: Warning logged when `.env` is using the default development JWT key.
+- **Fix**: Generate a strong secret key using `python -c "import secrets; print(secrets.token_urlsafe(48))"` and set `SECRET_KEY` in `.env`.
+
+### Issue: Port 8000 or 3000 already in use
+- **Cause**: Previous backend or frontend process was left running.
+- **Fix (Windows)**:
+  ```powershell
+  netstat -ano | findstr :8000
+  taskkill /PID <PID> /F
+  ```
+- **Fix (macOS / Linux)**:
+  ```bash
+  lsof -i :8000
+  kill -9 <PID>
+  ```
+
+### Issue: Stale Next.js Turbopack Cache (`frontend/.next`)
+- **Cause**: Frontend pages fail to render, hang on loading, or return stale build errors.
+- **Fix**:
+  ```bash
+  cd frontend
+  # Windows
+  rmdir /s /q .next
+  # macOS / Linux
+  rm -rf .next
+  
+  npm run dev
+  ```
+
+### Issue: Missing ML Model Weights
+- **Cause**: EfficientNet `.pth` files were cloned as Git LFS text pointers instead of binary weights.
+- **Fix**:
+  ```bash
+  git lfs install
+  git lfs pull
+  ```

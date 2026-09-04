@@ -68,36 +68,41 @@ async function apiFetch(endpoint: string, options: RequestInit & { timeoutMs?: n
     throw fetchErr;
   }
 
-  // Try refreshing token once if unauthorized
-  if (response.status === 401 && refreshToken) {
-    try {
-      const refreshUrl = `${API_BASE}/auth/refresh`;
-      const refreshResponse = await fetch(refreshUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ refresh_token: refreshToken }),
-      });
-
-      if (refreshResponse.ok) {
-        const refreshData = await refreshResponse.json();
-        setAuth(refreshData.access_token, refreshData.refresh_token, {
-          id: refreshData.user_id,
-          email: refreshData.email,
-          full_name: refreshData.full_name,
+  // Try refreshing token once if unauthorized (except for auth endpoints)
+  if (response.status === 401 && !fullUrl.includes('/auth/')) {
+    if (refreshToken) {
+      try {
+        const refreshUrl = `${API_BASE}/auth/refresh`;
+        const refreshResponse = await fetch(refreshUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ refresh_token: refreshToken }),
         });
 
-        // Retry original request
-        headers.set('Authorization', `Bearer ${refreshData.access_token}`);
-        response = await fetch(fullUrl, {
-          ...options,
-          headers,
-        });
-      } else {
-        console.warn(`[apiFetch] Token refresh failed with status ${refreshResponse.status}. Clearing auth.`);
+        if (refreshResponse.ok) {
+          const refreshData = await refreshResponse.json();
+          setAuth(refreshData.access_token, refreshData.refresh_token, {
+            id: refreshData.user_id,
+            email: refreshData.email,
+            full_name: refreshData.full_name,
+          });
+
+          // Retry original request
+          headers.set('Authorization', `Bearer ${refreshData.access_token}`);
+          response = await fetch(fullUrl, {
+            ...options,
+            headers,
+          });
+        } else {
+          console.warn(`[apiFetch] Token refresh failed with status ${refreshResponse.status}. Clearing auth.`);
+          clearAuth();
+        }
+      } catch (refreshErr) {
+        console.error(`[apiFetch] Exception during token refresh:`, refreshErr);
         clearAuth();
       }
-    } catch (refreshErr) {
-      console.error(`[apiFetch] Exception during token refresh:`, refreshErr);
+    } else {
+      console.warn(`[apiFetch] Received 401 Unauthorized without a refresh token. Clearing auth.`);
       clearAuth();
     }
   }
@@ -107,7 +112,17 @@ async function apiFetch(endpoint: string, options: RequestInit & { timeoutMs?: n
     try {
       const errorData = await response.json();
       console.error(`[apiFetch] Error response payload for ${fullUrl}:`, errorData);
-      errorDetail = errorData.detail || errorDetail;
+      if (typeof errorData.detail === 'string') {
+        errorDetail = errorData.detail;
+      } else if (Array.isArray(errorData.detail)) {
+        errorDetail = errorData.detail
+          .map((item: { msg?: string; detail?: string } | string) => (typeof item === 'string' ? item : item.msg || item.detail || JSON.stringify(item)))
+          .join('; ');
+      } else if (errorData.detail && typeof errorData.detail === 'object') {
+        errorDetail = JSON.stringify(errorData.detail);
+      } else if (errorData.message && typeof errorData.message === 'string') {
+        errorDetail = errorData.message;
+      }
     } catch (jsonErr) {
       console.warn(`[apiFetch] Failed to parse error response JSON for ${fullUrl}:`, jsonErr);
     }
@@ -156,6 +171,7 @@ export const api = {
     return apiFetch('/analyze-meal', {
       method: 'POST',
       body: formData,
+      timeoutMs: 90000,
     });
   },
 

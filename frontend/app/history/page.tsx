@@ -8,6 +8,8 @@ import { Calendar, Activity, Apple } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 
+import { useAuthStore } from '../../lib/store';
+
 interface FoodItem {
   name: string;
 }
@@ -30,10 +32,13 @@ interface HistoryMeal {
 
 export default function HistoryPage() {
   const router = useRouter();
+  const token = useAuthStore((state) => state.token);
+  const hasHydrated = useAuthStore((state) => state.hasHydrated);
 
   const { data: history, isLoading, error } = useQuery({
     queryKey: ['history'],
     queryFn: api.getHistory,
+    enabled: hasHydrated && !!token,
   });
 
   if (isLoading) {

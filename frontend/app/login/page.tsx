@@ -18,12 +18,14 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const hasHydrated = useAuthStore((state) => state.hasHydrated);
+
   // Redirect if already logged in
   React.useEffect(() => {
-    if (token) {
-      router.push('/dashboard');
+    if (hasHydrated && token) {
+      router.replace('/dashboard');
     }
-  }, [token, router]);
+  }, [hasHydrated, token]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -10,20 +10,15 @@ import { motion } from 'framer-motion';
 export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const token = useAuthStore((state) => state.token);
-  const [checking, setChecking] = React.useState(true);
+  const hasHydrated = useAuthStore((state) => state.hasHydrated);
 
   useEffect(() => {
-    if (!token) {
-      router.push('/login');
-    } else {
-      const timer = setTimeout(() => {
-        setChecking(false);
-      }, 0);
-      return () => clearTimeout(timer);
+    if (hasHydrated && !token) {
+      router.replace('/login');
     }
-  }, [token, router]);
+  }, [hasHydrated, token]);
 
-  if (checking || !token) {
+  if (!hasHydrated || !token) {
     return (
       <div className="min-h-screen bg-charcoal-dark flex items-center justify-center text-foreground">
         <div className="flex flex-col items-center space-y-4">

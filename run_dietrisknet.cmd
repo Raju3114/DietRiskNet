@@ -46,6 +46,7 @@ set "FRESH=0"
 
 echo.
 echo [2/6] Ollama...
+set "OLLAMA_OK=0"
 call :check_ollama
 if "!OLLAMA_OK!"=="1" (
   echo   [OK] Ollama already running
@@ -64,6 +65,7 @@ if "!OLLAMA_OK!"=="1" (
 
 echo.
 echo [3/6] Backend...
+set "BACKEND_OK=0"
 call :check_backend
 if "!BACKEND_OK!"=="1" (
   echo   [OK] Backend already running
@@ -81,6 +83,7 @@ if "!BACKEND_OK!"=="1" (
 
 echo.
 echo [4/6] Frontend...
+set "FRONTEND_OK=0"
 call :check_frontend
 if "!FRONTEND_OK!"=="1" (
   echo   [OK] Frontend already running

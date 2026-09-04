@@ -17,14 +17,15 @@ interface Recommendation {
 export default function RecommendationsPage() {
   const router = useRouter();
   const currentAnalysis = useAppStore((state) => state.currentAnalysis);
+  const hasHydrated = useAppStore((state) => state.hasHydrated);
 
   useEffect(() => {
-    if (!currentAnalysis) {
+    if (hasHydrated && !currentAnalysis) {
       router.push('/upload');
     }
-  }, [currentAnalysis, router]);
+  }, [hasHydrated, currentAnalysis, router]);
 
-  if (!currentAnalysis) return null;
+  if (!hasHydrated || !currentAnalysis) return null;
 
   const { recommendations } = currentAnalysis;
 

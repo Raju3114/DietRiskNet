@@ -15,6 +15,7 @@ import { API_BASE, api } from '../../services/api';
 export default function AnalysisPage() {
   const router = useRouter();
   const currentAnalysis = useAppStore((state) => state.currentAnalysis);
+  const hasHydrated = useAppStore((state) => state.hasHydrated);
   const imageContainerRef = useRef<HTMLDivElement>(null);
   
   const [scale, setScale] = useState({ x: 1, y: 1 });
@@ -34,12 +35,12 @@ export default function AnalysisPage() {
 
   // Redirect if no analysis data
   useEffect(() => {
-    if (!currentAnalysis) {
+    if (hasHydrated && !currentAnalysis) {
       router.push('/upload');
     }
-  }, [currentAnalysis, router]);
+  }, [hasHydrated, currentAnalysis, router]);
 
-  if (!currentAnalysis) return null;
+  if (!hasHydrated || !currentAnalysis) return null;
 
   const { items, nutrition, dci, dci_level, nis, nis_level, image_path, ai_dietitian } = currentAnalysis;
   // Only aggregate nutrition visually when at least one recognized food has nutrition data —

@@ -9,12 +9,17 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
 } from 'recharts';
 import { TrendingUp, CalendarRange, Activity } from 'lucide-react';
 
+import { useAuthStore } from '../../lib/store';
+
 export default function TrendsPage() {
   const [days, setDays] = useState(30);
+  const token = useAuthStore((state) => state.token);
+  const hasHydrated = useAuthStore((state) => state.hasHydrated);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['trends', days],
     queryFn: () => api.getTrends(days),
+    enabled: hasHydrated && !!token,
   });
 
   const timeframes = [

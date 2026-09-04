@@ -12,14 +12,15 @@ import '../components/landing/landing.css';
 
 export default function LandingPage() {
   const token = useAuthStore((state) => state.token);
+  const hasHydrated = useAuthStore((state) => state.hasHydrated);
   const router = useRouter();
 
   // Redirect already-authenticated users to the dashboard.
   React.useEffect(() => {
-    if (token) {
-      router.push('/dashboard');
+    if (hasHydrated && token) {
+      router.replace('/dashboard');
     }
-  }, [token, router]);
+  }, [hasHydrated, token]);
 
   return (
     <div className="lr-root relative min-h-screen flex flex-col bg-background text-foreground font-sans selection:bg-brand-primary selection:text-white">

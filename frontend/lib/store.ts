@@ -6,6 +6,8 @@ interface AuthState {
   token: string | null;
   refreshToken: string | null;
   user: User | null;
+  hasHydrated: boolean;
+  setHasHydrated: (state: boolean) => void;
   setAuth: (token: string, refreshToken: string, user: User) => void;
   clearAuth: () => void;
   updateUser: (user: Partial<User>) => void;
@@ -17,6 +19,8 @@ export const useAuthStore = create<AuthState>()(
       token: null,
       refreshToken: null,
       user: null,
+      hasHydrated: false,
+      setHasHydrated: (hasHydrated) => set({ hasHydrated }),
       setAuth: (token, refreshToken, user) => set({ token, refreshToken, user }),
       clearAuth: () => set({ token: null, refreshToken: null, user: null }),
       updateUser: (userData) =>
@@ -26,6 +30,9 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: 'dietrisknet-auth',
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
     }
   )
 );
@@ -38,6 +45,8 @@ interface AppState {
   theme: ThemeMode;
   setTheme: (theme: ThemeMode) => void;
   toggleTheme: () => void;
+  hasHydrated: boolean;
+  setHasHydrated: (state: boolean) => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -47,6 +56,8 @@ export const useAppStore = create<AppState>()(
       setCurrentAnalysis: (analysis) => set({ currentAnalysis: analysis }),
       theme: 'system',
       setTheme: (theme) => set({ theme }),
+      hasHydrated: false,
+      setHasHydrated: (hasHydrated) => set({ hasHydrated }),
       // Cycle light -> dark -> system (three-state selector).
       toggleTheme: () =>
         set((state) => ({
@@ -58,6 +69,10 @@ export const useAppStore = create<AppState>()(
     }),
     {
       name: 'dietrisknet-app',
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
     }
   )
 );
+

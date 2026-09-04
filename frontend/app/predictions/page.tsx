@@ -10,14 +10,15 @@ import Link from 'next/link';
 export default function PredictionsPage() {
   const router = useRouter();
   const currentAnalysis = useAppStore((state) => state.currentAnalysis);
+  const hasHydrated = useAppStore((state) => state.hasHydrated);
 
   useEffect(() => {
-    if (!currentAnalysis) {
+    if (hasHydrated && !currentAnalysis) {
       router.push('/upload');
     }
-  }, [currentAnalysis, router]);
+  }, [hasHydrated, currentAnalysis, router]);
 
-  if (!currentAnalysis) return null;
+  if (!hasHydrated || !currentAnalysis) return null;
 
   const { predictions, fusion } = currentAnalysis;
   // Null when the analysed meal had no recognised nutrition data.

@@ -232,10 +232,7 @@ def analyze_meal(file: UploadFile = File(...), notes: str = Form(""), db: Sessio
         api_logger.info(f"End-to-end analysis started for user {current_user.email}, image: {image_path}")
 
         # 2. YOLOv8 detection
-        try:
-            detections = detector_service.detect(image_path)
-        finally:
-            detector_service.unload()
+        detections = detector_service.detect(image_path)
 
         if not detections:
             # No YOLO food boxes: try classifying the FULL image once.
@@ -262,58 +259,55 @@ def analyze_meal(file: UploadFile = File(...), notes: str = Form(""), db: Sessio
 
         # 3. Crop, Classify, & Lookup nutrition
         items_data = []
-        try:
-            for det in detections:
-                x1, y1, x2, y2 = det["box"]
-                try:
-                    crop_bytes = crop_image(image_path, (x1, y1, x2, y2))
-                    classification = classifier_service.classify(crop_bytes)
-                    food_name = classification["class_name"]
-                    conf = classification["confidence"]
-                except Exception as e:
-                    api_logger.error(f"Classification crop failed for box {(x1, y1, x2, y2)}. Skipping detection. Error: {e}")
-                    continue
+        for det in detections:
+            x1, y1, x2, y2 = det["box"]
+            try:
+                crop_bytes = crop_image(image_path, (x1, y1, x2, y2))
+                classification = classifier_service.classify(crop_bytes)
+                food_name = classification["class_name"]
+                conf = classification["confidence"]
+            except Exception as e:
+                api_logger.error(f"Classification crop failed for box {(x1, y1, x2, y2)}. Skipping detection. Error: {e}")
+                continue
 
-                # Confidence gating: reject low-confidence classifications so
-                # non-food images / poor crops are not reported as recognised
-                # foods.  Threshold documented in config.CLASSIFIER_CONFIDENCE_THRESHOLD.
-                if conf < settings.CLASSIFIER_CONFIDENCE_THRESHOLD:
-                    api_logger.info(
-                        f"Rejected low-confidence classification '{food_name}' conf={conf:.3f}"
-                    )
-                    continue
+            # Confidence gating: reject low-confidence classifications so
+            # non-food images / poor crops are not reported as recognised
+            # foods.  Threshold documented in config.CLASSIFIER_CONFIDENCE_THRESHOLD.
+            if conf < settings.CLASSIFIER_CONFIDENCE_THRESHOLD:
+                api_logger.info(
+                    f"Rejected low-confidence classification '{food_name}' conf={conf:.3f}"
+                )
+                continue
 
-                fact = nutrition_service.lookup(food_name)
+            fact = nutrition_service.lookup(food_name)
+            
+            # Lookup the serving size
+            lookup_name = food_name.lower().strip().replace(" ", "_")
+            weight = DEFAULT_SERVING_WEIGHTS.get(lookup_name, 100.0)
                 
-                # Lookup the serving size
-                lookup_name = food_name.lower().strip().replace(" ", "_")
-                weight = DEFAULT_SERVING_WEIGHTS.get(lookup_name, 100.0)
-                    
-                scale = weight / 100.0
-                
-                display_name = nutrition_service.get_display_name(fact["name"])
-                item_entry = {
-                    "name": fact["name"],
-                    "display_name": display_name,
-                    "confidence": conf,
-                    "nutrition_available": fact.get("nutrition_available", True),
-                    "bounding_box": {"x1": x1, "y1": y1, "x2": x2, "y2": y2},
-                    "weight_g": weight,
-                    "calories": fact["calories"] * scale,
-                    "protein": fact["protein"] * scale,
-                    "carbs": fact["carbs"] * scale,
-                    "fats": fact["fats"] * scale,
-                    "sugar": fact["sugar"] * scale,
-                    "fiber": fact["fiber"] * scale,
-                    "sodium": fact["sodium"] * scale,
-                    "calcium": fact["calcium"] * scale,
-                    "iron": fact["iron"] * scale,
-                    "vitamin_c": fact["vitamin_c"] * scale,
-                    "folate": fact["folate"] * scale
-                }
-                items_data.append(item_entry)
-        finally:
-            classifier_service.unload()
+            scale = weight / 100.0
+            
+            display_name = nutrition_service.get_display_name(fact["name"])
+            item_entry = {
+                "name": fact["name"],
+                "display_name": display_name,
+                "confidence": conf,
+                "nutrition_available": fact.get("nutrition_available", True),
+                "bounding_box": {"x1": x1, "y1": y1, "x2": x2, "y2": y2},
+                "weight_g": weight,
+                "calories": fact["calories"] * scale,
+                "protein": fact["protein"] * scale,
+                "carbs": fact["carbs"] * scale,
+                "fats": fact["fats"] * scale,
+                "sugar": fact["sugar"] * scale,
+                "fiber": fact["fiber"] * scale,
+                "sodium": fact["sodium"] * scale,
+                "calcium": fact["calcium"] * scale,
+                "iron": fact["iron"] * scale,
+                "vitamin_c": fact["vitamin_c"] * scale,
+                "folate": fact["folate"] * scale
+            }
+            items_data.append(item_entry)
 
         # If no crop passed the confidence gate, we could not confidently
         # recognise any supported food — return a friendly message instead of
@@ -374,12 +368,9 @@ def analyze_meal(file: UploadFile = File(...), notes: str = Form(""), db: Sessio
             nis, nis_level = nis_service.calculate(nutrition_dict)
 
             # 6. Disease Predictions using XGBoost
-            try:
-                preds = prediction_service.predict_all(
-                    age, gender, height, weight, nutrition_dict, existing_conds
-                )
-            finally:
-                prediction_service.unload()
+            preds = prediction_service.predict_all(
+                age, gender, height, weight, nutrition_dict, existing_conds
+            )
 
             # 7. Risk Fusion
             fused_score, fused_level = fusion_service.fuse(

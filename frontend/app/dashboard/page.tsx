@@ -3,6 +3,7 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../../services/api';
+import { useAuthStore } from '../../lib/store';
 import ProtectedRoute from '../../components/ProtectedRoute';
 import { motion } from 'framer-motion';
 import { 
@@ -24,9 +25,13 @@ interface RecentMealItem {
 }
 
 export default function Dashboard() {
+  const token = useAuthStore((state) => state.token);
+  const hasHydrated = useAuthStore((state) => state.hasHydrated);
+
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['dashboard'],
     queryFn: api.getDashboard,
+    enabled: hasHydrated && !!token,
   });
 
   if (isLoading) {
